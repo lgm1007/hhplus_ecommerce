@@ -36,3 +36,6 @@
 
 ### 📊 요구사항 별 플로우 차트
 [플로우 차트 문서](docs/FLOW_CHART.md)
+
+### 🗃️ ERD
+[ERD 문서](docs/ERD.md)
