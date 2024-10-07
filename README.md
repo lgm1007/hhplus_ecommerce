@@ -40,5 +40,40 @@
 ### 📊 요구사항 별 플로우 차트
 [플로우 차트 문서](docs/FLOW_CHART.md)
 
-### 🗃️ ERD
+### 💽 ERD
 [ERD 문서](docs/ERD.md)
+
+### 🗃️ 프로젝트 구조
+```
+hhplusecommerce
+├─api
+│  ├─balance
+│  ├─cart
+│  ├─order
+│  ├─product
+│  └─statistic
+├─domain
+│  ├─balance
+│  ├─cart
+│  ├─order
+│  ├─product
+│  └─statistic
+├─infrastructure
+│  ├─balance
+│  ├─cart
+│  ├─order
+│  ├─product
+│  └─statistic
+└─usecase
+    ├─balance
+    ├─cart
+    ├─order
+    ├─product
+    └─statistic
+```
+
+### ⚙️ 프로젝트 구성 스택
+* Kotlin: 1.9.25
+* Spring Boot: 2.7.18
+* JPA: 1.9.24
+* H2
