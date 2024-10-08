@@ -1,7 +1,7 @@
 package com.example.hhplus_ecommerce.api.order
 
 import com.example.hhplus_ecommerce.api.order.request.OrderRequest
-import com.example.hhplus_ecommerce.api.order.response.OrderItem
+import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetail
 import com.example.hhplus_ecommerce.api.order.response.OrderResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -25,8 +25,8 @@ class OrderApi() {
 				LocalDate.of(2024, 10, 6),
 				13000,
 				listOf(
-					OrderItem(1L, 2, 10000),
-					OrderItem(2L, 1, 3000)
+					OrderItemDetail(1L, 2, 10000),
+					OrderItemDetail(2L, 1, 3000)
 				)
 			)
 		)

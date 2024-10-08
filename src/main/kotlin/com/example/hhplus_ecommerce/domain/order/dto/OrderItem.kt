@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.api.order.request
+package com.example.hhplus_ecommerce.domain.order.dto
 
 class OrderItem(
 	val productId: Long,
