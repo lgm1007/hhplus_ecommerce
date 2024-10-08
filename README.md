@@ -29,7 +29,7 @@
 * 위 두 기능을 제공하기 위해 어떤 요구사항의 비즈니스 로직을 설계해야할 지 고민해본다.
 
 ### 🪨 프로젝트 Milestone
-![](https://github.com/user-attachments/assets/975be847-ff01-4e1d-975f-1580a779979f)
+[프로젝트 Milestone 문서](docs/Milestone.md)
 
 ### 💫 요구사항 별 시퀀스 다이어그램
 [시퀀스 다이어그램 문서](docs/SEQUENCE_DIAGRAM.md)
