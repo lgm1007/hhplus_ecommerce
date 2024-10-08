@@ -5,27 +5,31 @@ erDiagram
         Long id PK
         String name
         String email
+        Date createdDate
     }
 
     Balance {
         Long id PK
         Long userId
-        Double amount
+        Integer amount
+        Date createdDate
         Date lastModifiedDate
     }
 
     Product {
         Long id PK
         String name
+        Integer price
         String description
+        Date createdDate
     }
 
     ProductDetail {
         Long id PK
         Long productId
-        Double price
         Integer stockQuantity
         String options
+        Date createdDate
         Date lastModifiedDate
     }
 
@@ -33,9 +37,10 @@ erDiagram
         Long id PK
         Long userId
         Date orderDate
-        Double totalPrice
+        Integer totalPrice
         String orderStatus
-        Date createDate
+        Date createdDate
+        Date lastModifiedDate
     }
 
     OrderItem {
@@ -43,7 +48,16 @@ erDiagram
         Long orderId
         Long productDetailId
         Integer quantity
-        Double price
+        Integer price
+        Date createdDate
+    }
+
+    Payment {
+        Long id PK
+        Long userId
+        Long orderId
+        Integer price
+        Date createdDate
     }
 
     Cart {
@@ -51,14 +65,16 @@ erDiagram
         Long userId
         Long productDetailId
         Integer quantity
+        Date createdDate
     }
 
     User ||--o{ Balance : "1:1"
     User ||--o{ Order : "1:N"
+    User ||--o{ Payment : "1:N"
     Order ||--o{ OrderItem : "1:N"
+    Order ||--o{ Payment : "1:1"
     User ||--o{ Cart : "1:1"
     Product ||--o{ ProductDetail : "1:1"
     ProductDetail ||--o{ OrderItem : "N:1"
     ProductDetail ||--o{ Cart : "N:1"
-
 ```
