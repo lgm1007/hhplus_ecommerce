@@ -53,7 +53,7 @@ POST /api/v1/balance/charge
 
 ##### 잔액 조회
 ```
-GET /api/v1/user/{userId}/balance
+GET /api/v1/balance/user/{userId}
 ```
 
 * Request Header
