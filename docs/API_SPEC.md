@@ -114,13 +114,13 @@ GET /api/v1/products
     "id": 1,
     "name": "상품 A",
     "price": 5000,
-    "stock_quantity": 10
+    "stockQuantity": 10
   },
   {
     "id": 2,
     "name": "상품 B",
     "price": 3000,
-    "stock_quantity": 5
+    "stockQuantity": 5
   }
 ]
 ```
