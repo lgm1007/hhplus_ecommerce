@@ -1,0 +1,12 @@
+### 잔액 충전 API
+POST http://localhost:8080/api/v1/balance/charge
+Content-Type: application/json
+
+{
+  "userId": 12345,
+  "amount": 10000
+}
+
+### 잔액 조회 API
+GET http://localhost:8080/api/v1/balance/user/12345
+Content-Type: application/json
