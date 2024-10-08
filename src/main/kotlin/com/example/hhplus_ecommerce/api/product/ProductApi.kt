@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1")
 @RestController
 class ProductApi() {
+	/**
+	 * 상품 조회 API
+	 */
 	@GetMapping("/products")
 	fun getProducts(): ResponseEntity<List<ProductResponse>> {
 		return ResponseEntity.ok(

@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1")
 @RestController
 class StatisticApi {
+	/**
+	 * 상위 상품 조회 API
+	 */
 	@GetMapping("/statistic/products/top")
 	fun topProductsStatistic(): ResponseEntity<List<ProductStatisticResponse>> {
 		return ResponseEntity.ok(
