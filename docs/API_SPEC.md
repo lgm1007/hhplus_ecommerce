@@ -210,7 +210,7 @@ POST /api/v1/orders
 
 #### 4️⃣ 상위 상품 조회 API
 ```
-GET /api/v1/products/top
+GET /api/v1/statistic/products/top
 ```
 
 * Response Body
