@@ -6,7 +6,7 @@
 * 상품 주문 내역을 통해 판매량이 가장 높은 상품을 추천한다.
 
 ### 🪨 프로젝트 Milestone
-[프로젝트 Milestone 문서](docs/Milestone.md)
+[프로젝트 Milestone 문서](docs/MILESTONE.md)
 
 ### 📜 API 스펙
 1️⃣ **잔액 충전 / 조회 API**
