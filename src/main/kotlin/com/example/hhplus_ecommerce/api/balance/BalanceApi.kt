@@ -6,17 +6,21 @@ import com.example.hhplus_ecommerce.api.balance.response.UserBalanceResponse
 import com.example.hhplus_ecommerce.api.error.ErrorBody
 import com.example.hhplus_ecommerce.exception.BadRequestException
 import com.example.hhplus_ecommerce.exception.NotFoundException
+import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
+@Api(tags = ["잔액 API"])
 @RequestMapping("/api/v1")
 @RestController
 class BalanceApi() {
-	/**
-	 * 잔액 충전 API
-	 */
 	@PostMapping("/balances")
+	@ApiOperation(value = "잔액 충전", notes = "사용자의 잔액을 충전한다.")
+	@ApiResponses(value = [
+		ApiResponse(code = 200, message = "OK", response = BalanceChargeResponse::class),
+		ApiResponse(code = 400, message = "충전 금액 에러", response = ErrorBody::class),
+	])
 	fun chargeBalance(@RequestBody chargeRequest: BalanceChargeRequest): ResponseEntity<Any> {
 		try {
 			return ResponseEntity.ok(
@@ -31,6 +35,11 @@ class BalanceApi() {
 	 * 잔액 조회 API
 	 */
 	@GetMapping("/balances/users/{userId}")
+	@ApiOperation(value = "잔액 조회", notes = "사용자의 현재 잔액을 조회한다.")
+	@ApiResponses(value = [
+		ApiResponse(code = 200, message = "OK", response = UserBalanceResponse::class),
+		ApiResponse(code = 404, message = "사용자 없음", response = ErrorBody::class),
+	])
 	fun fetchUserCurrentBalance(@PathVariable userId: Long): ResponseEntity<Any> {
 		try {
 			return ResponseEntity.ok(

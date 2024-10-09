@@ -7,5 +7,5 @@ enum class ErrorStatus(val message: String) {
 	NOT_FOUND_ORDER("주문 정보 없음"),
 	NOT_FOUND_CART("장바구니 없음"),
 	NOT_ENOUGH_BALANCE("잔액 부족"),
-	NOT_ENOUGH_QUANTITY("재고가 없는 상품")
+	NOT_ENOUGH_QUANTITY("재고 부족")
 }

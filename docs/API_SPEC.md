@@ -315,7 +315,7 @@ POST /api/v1/carts
 400 Bad Request (재고가 없는 상품)
 ```
 {
-  "error": "재고가 없는 상품",
+  "error": "재고 부족",
   "status": 400
 }
 ```
