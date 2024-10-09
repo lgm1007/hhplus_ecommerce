@@ -4,7 +4,6 @@ import com.example.hhplus_ecommerce.api.cart.request.CartAddRequest
 import com.example.hhplus_ecommerce.api.cart.response.CartCommandResponse
 import com.example.hhplus_ecommerce.api.cart.response.CartQueryResponse
 import com.example.hhplus_ecommerce.api.error.ErrorBody
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.domain.cart.dto.CartItem
 import com.example.hhplus_ecommerce.exception.BadRequestException
 import com.example.hhplus_ecommerce.exception.NotFoundException
@@ -30,7 +29,7 @@ class CartApi() {
 				)
 			)
 		} catch (e: BadRequestException) {
-			return ResponseEntity(ErrorBody(ErrorStatus.NOT_ENOUGH_QUANTITY.message, 400), HttpStatus.BAD_REQUEST)
+			return ResponseEntity(ErrorBody(e.errorStatus.message, 400), HttpStatus.BAD_REQUEST)
 		}
 	}
 
@@ -51,7 +50,7 @@ class CartApi() {
 				)
 			)
 		} catch (e: NotFoundException) {
-			return ResponseEntity(ErrorBody(ErrorStatus.NOT_FOUND_PRODUCT.message, 404), HttpStatus.NOT_FOUND)
+			return ResponseEntity(ErrorBody(e.errorStatus.message, 404), HttpStatus.NOT_FOUND)
 		}
 	}
 
@@ -71,7 +70,7 @@ class CartApi() {
 				)
 			)
 		} catch (e: NotFoundException) {
-			return ResponseEntity(ErrorBody(ErrorStatus.NOT_FOUND_CART.message, 404), HttpStatus.NOT_FOUND)
+			return ResponseEntity(ErrorBody(e.errorStatus.message, 404), HttpStatus.NOT_FOUND)
 		}
 	}
 }

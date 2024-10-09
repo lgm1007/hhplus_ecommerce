@@ -1,4 +1,6 @@
 package com.example.hhplus_ecommerce.exception
 
-class NotFoundException : RuntimeException() {
+import com.example.hhplus_ecommerce.api.error.ErrorStatus
+
+class NotFoundException(val errorStatus: ErrorStatus) : RuntimeException() {
 }

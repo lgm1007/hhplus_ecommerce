@@ -1,7 +1,6 @@
 package com.example.hhplus_ecommerce.api.payment
 
 import com.example.hhplus_ecommerce.api.error.ErrorBody
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.api.payment.request.PaymentRequest
 import com.example.hhplus_ecommerce.api.payment.response.PaymentResponse
 import com.example.hhplus_ecommerce.exception.BadRequestException
@@ -31,10 +30,10 @@ class PaymentApi() {
 					LocalDateTime.of(2024, 10, 6, 12, 1, 10)
 				)
 			)
-		} catch (badException: BadRequestException) {
-			return ResponseEntity(ErrorBody(ErrorStatus.NOT_ENOUGH_BALANCE.message, 400), HttpStatus.BAD_REQUEST)
+		} catch (badRequestException: BadRequestException) {
+			return ResponseEntity(ErrorBody(badRequestException.errorStatus.message, 400), HttpStatus.BAD_REQUEST)
 		} catch (notFoundException: NotFoundException) {
-			return ResponseEntity(ErrorBody(ErrorStatus.NOT_FOUND_ORDER.message, 404), HttpStatus.NOT_FOUND)
+			return ResponseEntity(ErrorBody(notFoundException.errorStatus.message, 404), HttpStatus.NOT_FOUND)
 		}
 	}
 }

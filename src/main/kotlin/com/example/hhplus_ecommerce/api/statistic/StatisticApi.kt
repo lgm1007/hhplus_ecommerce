@@ -1,7 +1,6 @@
 package com.example.hhplus_ecommerce.api.statistic
 
 import com.example.hhplus_ecommerce.api.error.ErrorBody
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.api.statistic.response.ProductStatisticResponse
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import org.springframework.http.HttpStatus
@@ -26,7 +25,7 @@ class StatisticApi {
 				)
 			)
 		} catch (e: NotFoundException) {
-			return ResponseEntity(ErrorBody(ErrorStatus.NOT_FOUND_PRODUCT.message, 404), HttpStatus.NOT_FOUND)
+			return ResponseEntity(ErrorBody(e.errorStatus.message, 404), HttpStatus.NOT_FOUND)
 		}
 	}
 }

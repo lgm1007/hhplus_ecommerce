@@ -1,7 +1,6 @@
 package com.example.hhplus_ecommerce.api.order
 
 import com.example.hhplus_ecommerce.api.error.ErrorBody
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.api.order.request.OrderRequest
 import com.example.hhplus_ecommerce.api.order.response.OrderResponse
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
@@ -38,7 +37,7 @@ class OrderApi() {
 				)
 			)
 		} catch (e: BadRequestException) {
-			return ResponseEntity(ErrorBody(ErrorStatus.NOT_ENOUGH_BALANCE.message, 400), HttpStatus.BAD_REQUEST)
+			return ResponseEntity(ErrorBody(e.errorStatus.message, 400), HttpStatus.BAD_REQUEST)
 		}
 	}
 }
