@@ -153,7 +153,7 @@ POST /api/v1/orders
   "userId": 12345,
   "orderDate": "2024-10-06 12:00:01",
   "totalPrice": 13000,
-  "status": "주문완료",
+  "status": "ORDER_COMPLETE",
   "orderItems": [
     {
       "productId": 1,
