@@ -382,7 +382,7 @@ GET /api/v1/carts/users/{userId}
 404 Not Found (장바구니 정보 없음)
 ```
 {
-  "error": "장바구니 정보 없음",
+  "error": "장바구니 없음",
   "status": 404
 }
 ```
