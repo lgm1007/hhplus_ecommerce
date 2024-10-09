@@ -1,5 +1,5 @@
 ### 잔액 충전 API
-POST http://localhost:8080/api/v1/balance/charge
+POST http://localhost:8080/api/v1/balances
 Content-Type: application/json
 
 {
@@ -8,5 +8,5 @@ Content-Type: application/json
 }
 
 ### 잔액 조회 API
-GET http://localhost:8080/api/v1/balance/user/12345
+GET http://localhost:8080/api/v1/balances/users/12345
 Content-Type: application/json
