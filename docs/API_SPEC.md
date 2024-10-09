@@ -347,6 +347,14 @@ DELETE /api/v1/carts/users/{userId}/products/{productId}
 }
 ```
 
+404 Not Found (사용자 정보 없음)
+```
+{
+  "error": "사용자 없음",
+  "status": 404
+}
+```
+
 404 Not Found (상품 정보 없음)
 ```
 {
@@ -374,7 +382,7 @@ GET /api/v1/carts/users/{userId}
 ```
 {
   "userId": 12345,
-  "cart": [
+  "carts": [
     {
       "productDetailId": 1,
       "quantity": 2
