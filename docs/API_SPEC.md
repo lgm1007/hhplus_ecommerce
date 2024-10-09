@@ -151,7 +151,7 @@ POST /api/v1/orders
 {
   "orderId": 98765,
   "userId": 12345,
-  "orderDate": "2024-10-06 12:00:01",
+  "orderDate": "2024-10-06T12:00:01",
   "totalPrice": 13000,
   "status": "ORDER_COMPLETE",
   "orderItems": [
@@ -173,6 +173,14 @@ POST /api/v1/orders
 ```
 {
   "error": "잔액 부족",
+  "status": 400
+}
+```
+
+400 Bad Request (재고 부족)
+```
+{
+  "error": "재고 부족",
   "status": 400
 }
 ```
@@ -207,7 +215,7 @@ POST /api/v1/payments
   "paymentId": 123,
   "orderId": 98765,
   "currentBalance": 17000,
-  "paymentDate": "2024-10-06 12:01:10"
+  "paymentDate": "2024-10-06T12:01:10"
 }
 ```
 
