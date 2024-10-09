@@ -237,7 +237,7 @@ POST /api/v1/payments
 
 #### 4️⃣ 상위 상품 조회 API
 ```
-GET /api/v1/statistic/products/top
+GET /api/v1/statistics/products/top
 ```
 
 * Request Header
