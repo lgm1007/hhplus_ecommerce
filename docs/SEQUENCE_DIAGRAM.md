@@ -7,7 +7,7 @@
 
 ```mermaid
 sequenceDiagram
-    participant Client
+    actor Client
     participant BalanceFacade
     participant BalanceService
     participant BalanceRepository
@@ -30,7 +30,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Client
+    actor Client
     participant BalanceFacade
     participant BalanceService
     participant BalanceRepository
@@ -49,7 +49,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Client
+    actor Client
     participant ProductFacade
     participant ProductService
     participant ProductDetailService
@@ -72,7 +72,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Client
+    actor Client
     participant OrderFacade
     participant ProductDetailService
     participant BalanceService
@@ -99,7 +99,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Client
+    actor Client
     participant PaymentFacade
     participant BalanceService
     participant PaymentService
@@ -126,7 +126,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Client
+    actor Client
     participant StatisticService
     participant OrderItemRepository
     participant ProductDetailRepository
@@ -149,7 +149,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Client
+    actor Client
     participant CartFacade
     participant ProductDetailService
     participant CartService
@@ -167,7 +167,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Client
+    actor Client
     participant CartService
 
     Client ->> CartService: 장바구니 상품 삭제 요청 (사용자 ID, 장바구니 ID)
@@ -179,7 +179,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Client
+    actor Client
     participant CartService
 
     Client ->> CartService: 장바구니 목록 조회 요청 (사용자 ID)
