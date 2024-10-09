@@ -76,4 +76,7 @@ hhplusecommerce
 * Kotlin: 1.9.25
 * Spring Boot: 2.7.18
 * JPA: 1.9.24
-* H2
+* DBMS: H2
+* API Docs
+  * [API 명세서](docs/API_SPEC.md)
+  * Swagger-ui
