@@ -2,13 +2,12 @@
 #### 1️⃣ 잔액 충전 / 조회 API
 ##### 잔액 충전
 ```
-POST /api/v1/balance/charge
+POST /api/v1/balances
 ```
 * Request Header
 
 ```
 {
-  "Authorization": "Bearer {token}",
   "Content-Type": "application/json"
 }
 ```
@@ -37,30 +36,20 @@ POST /api/v1/balance/charge
 ```
 {
   "error": "충전 금액 에러",
-  "message": "금액이 정상적으로 충전되지 않았습니다.",
   "status": 400
-}
-```
-
-401 Unauthorized (인증 실패)
-```
-{
-  "error": "인증 실패",
-  "message": "유효하지 않거나 만료된 토큰입니다.",
-  "status": 401
 }
 ```
 
 ##### 잔액 조회
 ```
-GET /api/v1/balance/user/{userId}
+GET /api/v1/balances/users/{userId}
 ```
 
 * Request Header
 
 ```
 {
-  "Authorization": "Bearer {token}"
+  "Content-Type": "application/json"
 }
 ```
 
@@ -74,20 +63,10 @@ GET /api/v1/balance/user/{userId}
 }
 ```
 
-401 Unauthorized (인증 실패)
-```
-{
-  "error": "인증 실패",
-  "message": "유효하지 않거나 만료된 토큰입니다.",
-  "status": 401
-}
-```
-
 404 Not Found (사용자 없음)
 ```
 {
   "error": "사용자 없음",
-  "message": "해당 사용자를 찾을 수 없습니다.",
   "status": 404
 }
 ```
@@ -129,12 +108,12 @@ GET /api/v1/products
 ```
 {
   "error": "상품 없음",
-  "message": "조회할 수 있는 상품이 없습니다.",
   "status": 404
 }
 ```
 
 #### 3️⃣ 주문 / 결제 API
+##### 주문
 ```
 POST /api/v1/orders
 ```
@@ -143,7 +122,6 @@ POST /api/v1/orders
 
 ```
 {
-  "Authorization": "Bearer {token}",
   "Content-Type": "application/json"
 }
 ```
@@ -155,11 +133,11 @@ POST /api/v1/orders
   "userId": 12345,
   "orderItems": [
     {
-      "productId": 1,
+      "productDetailId": 1,
       "quantity": 2
     },
     {
-      "productId": 2,
+      "productDetailId": 2,
       "quantity": 1
     }
   ]
@@ -173,8 +151,9 @@ POST /api/v1/orders
 {
   "orderId": 98765,
   "userId": 12345,
-  "orderDate": "2024-10-06",
+  "orderDate": "2024-10-06 12:00:01",
   "totalPrice": 13000,
+  "status": "주문완료",
   "orderItems": [
     {
       "productId": 1,
@@ -194,23 +173,71 @@ POST /api/v1/orders
 ```
 {
   "error": "잔액 부족",
-  "message": "사용자의 잔액이 부족합니다.",
   "status": 400
 }
 ```
 
-401 Unauthorized (인증 실패)
+##### 결제
+```
+POST /api/v1/payments
+```
+
+* Request Header
+
 ```
 {
-  "error": "인증 실패",
-  "message": "유효하지 않거나 만료된 토큰입니다.",
-  "status": 401
+  "Content-Type": "application/json"
+}
+```
+
+* Request Body
+
+```
+{
+  "userId": 12345,
+  "orderId": 98765
+}
+```
+
+* Response Body
+
+200 OK
+```
+{
+  "paymentId": 123,
+  "orderId": 98765,
+  "currentBalance": 17000,
+  "paymentDate": "2024-10-06 12:01:10"
+}
+```
+
+400 Bad Request (잔액 부족)
+```
+{
+  "error": "잔액 부족",
+  "status": 400
+}
+```
+
+404 Not Found (주문 정보 없음)
+```
+{
+  "error": "주문 정보 없음",
+  "status": 404
 }
 ```
 
 #### 4️⃣ 상위 상품 조회 API
 ```
 GET /api/v1/statistic/products/top
+```
+
+* Request Header
+
+```
+{
+  "Content-Type": "application/json"
+}
 ```
 
 * Response Body
@@ -235,7 +262,6 @@ GET /api/v1/statistic/products/top
 ```
 {
   "error": "상품 없음",
-  "message": "조회할 수 있는 상품이 없습니다.",
   "status": 404
 }
 ```
@@ -243,14 +269,13 @@ GET /api/v1/statistic/products/top
 #### 5️⃣ 장바구니 기능
 ##### 장바구니 상품 추가
 ```
-POST /api/v1/cart
+POST /api/v1/carts
 ```
 
 * Request Header
 
 ```
 {
-  "Authorization": "Bearer {token}",
   "Content-Type": "application/json"
 }
 ```
@@ -271,14 +296,10 @@ POST /api/v1/cart
 ```
 {
   "message": "상품을 장바구니에 추가했습니다.",
+  "userId": 12345,
   "cart": {
-    "userId": 12345,
-    "items": [
-      {
-        "productId": 1,
-        "quantity": 2
-      }
-    ]
+    "productDetailId": 1,
+    "quantity": 2
   }
 }
 ```
@@ -287,30 +308,19 @@ POST /api/v1/cart
 ```
 {
   "error": "재고가 없는 상품",
-  "message": "해당 상품의 재고가 없습니다.",
   "status": 400
-}
-```
-
-401 Unauthorized (인증 실패)
-```
-{
-  "error": "인증 실패",
-  "message": "유효하지 않거나 만료된 토큰입니다.",
-  "status": 401
 }
 ```
 
 ##### 장바구니 상품 삭제
 ```
-DELETE /api/v1/cart/user/{userId}/product/{productId}
+DELETE /api/v1/carts/users/{userId}/products/{productId}
 ```
 
 * Request Header
 
 ```
 {
-  "Authorization": "Bearer {token}",
   "Content-Type": "application/json"
 }
 ```
@@ -321,24 +331,11 @@ DELETE /api/v1/cart/user/{userId}/product/{productId}
 ```
 {
   "message": "장바구니에서 상품을 삭제했습니다.",
+  "userId": 12345,
   "cart": {
-    "userId": 12345,
-    "items": [
-      {
-        "productId": 2,
-        "quantity": 1
-      }
-    ]
+    "productDetailId": 2,
+    "quantity": 1
   }
-}
-```
-
-401 Unauthorized (인증 실패)
-```
-{
-  "error": "인증 실패",
-  "message": "유효하지 않거나 만료된 토큰입니다.",
-  "status": 401
 }
 ```
 
@@ -346,7 +343,46 @@ DELETE /api/v1/cart/user/{userId}/product/{productId}
 ```
 {
   "error": "상품 없음",
-  "message": "장바구니에 담긴 상품의 정보가 존재하지 않습니다.",
+  "status": 404
+}
+```
+
+##### 장바구니 조회
+```
+GET /api/v1/carts/users/{userId}
+```
+
+* Request Header
+
+```
+{
+  "Content-Type": "application/json"
+}
+```
+
+* Response Body
+
+200 OK
+```
+{
+  "userId": 12345,
+  "cart": [
+    {
+      "productDetailId": 1,
+      "quantity": 2
+    },
+    {
+      "productDetailId": 2,
+      "quantity": 1
+    }
+  ],
+}
+```
+
+404 Not Found (장바구니 정보 없음)
+```
+{
+  "error": "장바구니 정보 없음",
   "status": 404
 }
 ```
