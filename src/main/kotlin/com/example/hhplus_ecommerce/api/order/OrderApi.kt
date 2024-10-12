@@ -6,10 +6,12 @@ import com.example.hhplus_ecommerce.api.order.response.OrderResponse
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetail
 import com.example.hhplus_ecommerce.exception.BadRequestException
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
 
-@Api(tags = ["주문 API"])
+@Tag(name = "주문 API")
 @RequestMapping("/api/v1")
 @RestController
 class OrderApi() {
@@ -26,11 +28,12 @@ class OrderApi() {
 	 * 주문 API
 	 */
 	@PostMapping("/orders")
-	@ApiOperation(value = "상품 주문", notes = "상품을 주문한다.")
+	@Operation(summary = "상품 주문", description = "상품을 주문한다.")
 	@ApiResponses(value = [
-		ApiResponse(code = 200, message = "OK", response = OrderResponse::class),
-		ApiResponse(code = 400, message = "잔액 부족", response = ErrorBody::class),
-		ApiResponse(code = 400, message = "재고 부족", response = ErrorBody::class),
+		ApiResponse(responseCode = "200", description = "상품 주문 성공",
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = OrderResponse::class)) ]),
+		ApiResponse(responseCode = "400", description = "잔액/재고 부족",
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun order(@RequestBody orderRequest: OrderRequest): ResponseEntity<Any> {
 		try {

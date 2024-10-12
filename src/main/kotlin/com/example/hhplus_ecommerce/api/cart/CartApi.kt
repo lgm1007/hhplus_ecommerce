@@ -7,15 +7,17 @@ import com.example.hhplus_ecommerce.api.error.ErrorBody
 import com.example.hhplus_ecommerce.domain.cart.dto.CartItem
 import com.example.hhplus_ecommerce.exception.BadRequestException
 import com.example.hhplus_ecommerce.exception.NotFoundException
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-@Api(tags = ["장바구니 API"])
+@Tag(name = "장바구니 API")
 @RequestMapping("/api/v1")
 @RestController
 class CartApi() {
@@ -23,10 +25,12 @@ class CartApi() {
 	 * 장바구니 상품 추가 API
 	 */
 	@PostMapping("/carts")
-	@ApiOperation(value = "장바구니 상품 추가", notes = "상품을 장바구니에 추가한다.")
+	@Operation(summary = "장바구니 상품 추가", description = "상품을 장바구니에 추가한다.")
 	@ApiResponses(value = [
-		ApiResponse(code = 200, message = "OK", response = CartCommandResponse::class),
-		ApiResponse(code = 400, message = "재고 부족", response = ErrorBody::class),
+		ApiResponse(responseCode = "200", description = "장바구니 상품 추가 성공",
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = CartCommandResponse::class)) ]),
+		ApiResponse(responseCode = "400", description = "재고 부족",
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun addCartItem(@RequestBody cartAddRequest: CartAddRequest): ResponseEntity<Any> {
 		try {
@@ -47,11 +51,12 @@ class CartApi() {
 	 * 장바구니 상품 삭제 API
 	 */
 	@DeleteMapping("/carts/users/{userId}/products/{productId}")
-	@ApiOperation(value = "장바구니 상품 삭제", notes = "장바구니에서 상품을 삭제한다.")
+	@Operation(summary = "장바구니 상품 삭제", description = "장바구니에서 상품을 삭제한다.")
 	@ApiResponses(value = [
-		ApiResponse(code = 200, message = "OK", response = CartCommandResponse::class),
-		ApiResponse(code = 404, message = "사용자 정보 없음", response = ErrorBody::class),
-		ApiResponse(code = 404, message = "상품 없음", response = ErrorBody::class),
+		ApiResponse(responseCode = "200", description = "장바구니 상품 삭제 성공",
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = CartCommandResponse::class)) ]),
+		ApiResponse(responseCode = "404", description = "사용자 정보/상품 없음",
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun deleteCartItem(
 		@PathVariable userId: Long,
@@ -74,10 +79,12 @@ class CartApi() {
 	 * 장바구니 조회 API
 	 */
 	@GetMapping("/carts/users/{userId}")
-	@ApiOperation(value = "장바구니 조회", notes = "장바구니에 담은 상품 목록을 조회한다.")
+	@Operation(summary = "장바구니 조회", description = "장바구니에 담은 상품 목록을 조회한다.")
 	@ApiResponses(value = [
-		ApiResponse(code = 200, message = "OK", response = CartQueryResponse::class),
-		ApiResponse(code = 404, message = "장바구니 없음", response = ErrorBody::class),
+		ApiResponse(responseCode = "200", description = "장바구니 조회 성공",
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = CartQueryResponse::class)) ]),
+		ApiResponse(responseCode = "404", description = "장바구니 없음",
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun getCartsByUser(@PathVariable userId: Long): ResponseEntity<Any> {
 		try {
