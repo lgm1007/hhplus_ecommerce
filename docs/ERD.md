@@ -15,6 +15,14 @@ erDiagram
         Date createdDate
         Date lastModifiedDate
     }
+    
+    BalanceHistory {
+        Long id PK
+        Long balanceId
+        Long userId
+        Integer updateAmount
+        Date createdDate
+    }
 
     Product {
         Long id PK
@@ -28,7 +36,7 @@ erDiagram
         Long id PK
         Long productId
         Integer stockQuantity
-        String options
+        String productCategory
         Date createdDate
         Date lastModifiedDate
     }
@@ -57,6 +65,7 @@ erDiagram
         Long userId
         Long orderId
         Integer price
+        String paymentStatus
         Date createdDate
     }
 
@@ -69,12 +78,13 @@ erDiagram
     }
 
     User ||--o{ Balance : "1:1"
+    Balance ||--o{ BalanceHistory : "1:N"
     User ||--o{ Order : "1:N"
     User ||--o{ Payment : "1:N"
     Order ||--o{ OrderItem : "1:N"
     Order ||--o{ Payment : "1:1"
+    OrderItem ||--o{ ProductDetail : "1:1"
     User ||--o{ Cart : "1:1"
     Product ||--o{ ProductDetail : "1:1"
-    ProductDetail ||--o{ OrderItem : "N:1"
     ProductDetail ||--o{ Cart : "N:1"
 ```
