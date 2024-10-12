@@ -88,20 +88,22 @@ GET /api/v1/products
 
 200 OK
 ```
-[
-  {
-    "id": 1,
-    "name": "상품 A",
-    "price": 5000,
-    "stockQuantity": 10
-  },
-  {
-    "id": 2,
-    "name": "상품 B",
-    "price": 3000,
-    "stockQuantity": 5
-  }
-]
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "상품 A",
+      "price": 5000,
+      "stockQuantity": 10
+    },
+    {
+      "id": 2,
+      "name": "상품 B",
+      "price": 10000,
+      "stockQuantity": 5
+    },
+  ]
+}
 ```
 
 404 Not Found (상품 없음)
@@ -252,18 +254,20 @@ GET /api/v1/statistics/products/top
 
 200 OK
 ```
-[
-  {
-    "productId": 1,
-    "name": "상품 A",
-    "totalSold": 50
-  },
-  {
-    "productId": 2,
-    "name": "상품 B",
-    "totalSold": 40
-  }
-]
+{
+  "items": [
+    {
+      "productId": 1,
+      "name": "상품 A",
+      "totalSold": 50
+    }
+    {
+      "productId": 2,
+      "name": "상품 B",
+      "totalSold": 40
+    }
+  ]
+}
 ```
 
 404 Not Found (상품 없음)
