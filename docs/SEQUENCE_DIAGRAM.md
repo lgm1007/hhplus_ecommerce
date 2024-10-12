@@ -50,16 +50,17 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     actor Client
-    participant ProductFacade
     participant ProductService
-    participant ProductDetailService
+    participant ProductRepository
+    participant ProductDetailRepository
 
-    Client ->> ProductFacade: 상품 목록 조회 요청
-    ProductFacade ->> ProductService: 상품 목록 조회
-    ProductService -->> ProductFacade: 상품 목록 정보
-    ProductFacade ->> ProductDetailService: 조회한 상품들의 세부 정보 조회
-    ProductDetailService -->> ProductFacade: 조회한 상품들의 세부 정보
-    ProductFacade -->> Client: 상품 정보 (id, 이름, 가격, 잔여수량) 응답
+    Client ->> ProductService: 상품 목록 조회 요청
+    ProductService ->> ProductRepository: 상품 목록 조회
+    ProductRepository -->> ProductService: 상품 목록 정보
+    ProductService ->> ProductDetailRepository: 조회한 상품들의 세부 정보 조회
+    ProductDetailRepository -->> ProductService: 조회한 상품들의 세부 정보
+    ProductService ->> ProductService: 응답해 줄 상품 정보 가공
+    ProductService -->> Client: 상품 정보 (id, 이름, 가격, 잔여수량) 응답
 ```
 
 #### 주문 / 결제
