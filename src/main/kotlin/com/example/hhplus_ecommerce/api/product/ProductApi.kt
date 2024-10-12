@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -31,7 +32,7 @@ class ProductApi() {
 		ApiResponse(responseCode = "404", description = "상품 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
-	fun getProducts(): ResponseEntity<Any> {
+	fun getProducts(pageable: Pageable): ResponseEntity<Any> {
 		try {
 			return ResponseEntity.ok(
 				ProductResponse(
