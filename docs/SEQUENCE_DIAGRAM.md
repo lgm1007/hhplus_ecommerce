@@ -75,14 +75,11 @@ sequenceDiagram
     actor Client
     participant OrderFacade
     participant ProductDetailService
-    participant BalanceService
     participant OrderService
 
     Client ->> OrderFacade: 주문 요청 (사용자 ID, 상품 ID, 수량)
     OrderFacade ->> ProductDetailService: 상품 재고 조회
     ProductDetailService -->> OrderFacade: 상품 재고 정보
-    OrderFacade ->> BalanceService: 사용자 잔액 조회
-    BalanceService -->> OrderFacade: 사용자 잔액 정보
     OrderFacade ->> OrderService: 주문 정보 저장 요청
     OrderService -->> OrderFacade: 주문 정보 저장 완료
     OrderFacade ->> ProductDetailService: 상품 재고 차감 요청
@@ -107,6 +104,8 @@ sequenceDiagram
     participant ExternalDataPlatform
 
     Client ->> PaymentFacade: 결제 요청 (사용자 ID, 주문 ID)
+    PaymentFacade ->> BalanceService: 사용자 잔액 조회
+    BalanceService -->> PaymentFacade: 사용자 잔액 정보
     PaymentFacade ->> BalanceService: 사용자 잔액 차감 요청
     BalanceService -->> PaymentFacade: 사용자 잔액 차감 완료
     PaymentFacade ->> PaymentService: 결제 정보 저장 요청
