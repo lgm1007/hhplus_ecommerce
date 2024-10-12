@@ -6,7 +6,7 @@
 * 상품 주문 내역을 통해 판매량이 가장 높은 상품을 추천한다.
 
 ### 🪨 프로젝트 Milestone
-[프로젝트 Milestone 문서](docs/MILESTONE.md)
+- [프로젝트 Milestone 문서](docs/MILESTONE.md)
 
 ### 📜 API 스펙
 1️⃣ **잔액 충전 / 조회 API**
@@ -32,16 +32,16 @@
 * 위 두 기능을 제공하기 위해 어떤 요구사항의 비즈니스 로직을 설계해야할 지 고민해본다.
 
 ### 🔎 API 명세
-[API 명세서](docs/API_SPEC.md)
+- [API 명세서](docs/API_SPEC.md)
 
 ### 💫 요구사항 별 시퀀스 다이어그램
-[시퀀스 다이어그램 문서](docs/SEQUENCE_DIAGRAM.md)
+- [시퀀스 다이어그램 문서](docs/SEQUENCE_DIAGRAM.md)
 
 ### 📊 요구사항 별 플로우 차트
-[플로우 차트 문서](docs/FLOW_CHART.md)
+- [플로우 차트 문서](docs/FLOW_CHART.md)
 
 ### 💽 ERD
-[ERD 문서](docs/ERD.md)
+- [ERD 문서](docs/ERD.md)
 
 ### 🗃️ 프로젝트 구조
 ```
