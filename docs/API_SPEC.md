@@ -4,6 +4,9 @@
 ```
 POST /api/v1/balances
 ```
+
+![Swagger-잔액충전-Request](https://github.com/user-attachments/assets/800df643-0858-4300-812c-0c4d26534de3)
+
 * Request Header
 
 ```
@@ -20,6 +23,8 @@ POST /api/v1/balances
   "amount": 10000
 }
 ```
+
+![Swagger-잔액충전-Response](https://github.com/user-attachments/assets/7ddbf785-3957-4463-a4e0-a292a7c3ff68)
 
 * Response Body
 
@@ -45,6 +50,8 @@ POST /api/v1/balances
 GET /api/v1/balances/users/{userId}
 ```
 
+![Swagger-잔액조회-Request](https://github.com/user-attachments/assets/443fbc9c-f5a6-49d5-ac8f-f5b013b1168b)
+
 * Request Header
 
 ```
@@ -52,6 +59,8 @@ GET /api/v1/balances/users/{userId}
   "Content-Type": "application/json"
 }
 ```
+
+![Swagger-잔액조회-Response](https://github.com/user-attachments/assets/9caee68b-ef67-4f4d-bcaa-7db5613638f8)
 
 * Response Body
 
@@ -76,6 +85,8 @@ GET /api/v1/balances/users/{userId}
 GET /api/v1/products
 ```
 
+![Swagger-상품조회-Request](https://github.com/user-attachments/assets/d5b622cc-577b-400a-b160-d7fa0f5773a7)
+
 * Request Header
 
 ```
@@ -83,6 +94,8 @@ GET /api/v1/products
   "Content-Type": "application/json"
 }
 ```
+
+![Swagger-상품조회-Response](https://github.com/user-attachments/assets/175c3fd3-28f8-4b9e-8326-9930c977554b)
 
 * Response Body
 
@@ -118,6 +131,8 @@ GET /api/v1/products
 POST /api/v1/orders
 ```
 
+![Swagger-주문-Request](https://github.com/user-attachments/assets/4bc0d16d-a5fd-4b5f-af28-f54befa01a06)
+
 * Request Header
 
 ```
@@ -143,6 +158,8 @@ POST /api/v1/orders
   ]
 }
 ```
+
+![Swagger-주문-Response](https://github.com/user-attachments/assets/a3d54f0b-316a-4caa-965b-9090e5269eb3)
 
 * Response Body
 
@@ -190,6 +207,8 @@ POST /api/v1/orders
 POST /api/v1/payments
 ```
 
+![Swagger-결제-Request](https://github.com/user-attachments/assets/1fdec8a6-57f0-43a1-9e86-7b1cb96c5c56)
+
 * Request Header
 
 ```
@@ -206,6 +225,8 @@ POST /api/v1/payments
   "orderId": 98765
 }
 ```
+
+![Swagger-결제-Response](https://github.com/user-attachments/assets/1fe9864e-8b37-48c7-9c4a-9283f6155ac9)
 
 * Response Body
 
@@ -240,6 +261,8 @@ POST /api/v1/payments
 GET /api/v1/statistics/products/top
 ```
 
+![Swagger-상위상품조회-Request](https://github.com/user-attachments/assets/781a75f0-2ef6-475a-b2b3-ca3488a078b3)
+
 * Request Header
 
 ```
@@ -247,6 +270,8 @@ GET /api/v1/statistics/products/top
   "Content-Type": "application/json"
 }
 ```
+
+![Swagger-상위상품조회-Response](https://github.com/user-attachments/assets/5d9d653c-0d7d-4d18-8ca1-5adcbde132d2)
 
 * Response Body
 
@@ -280,6 +305,8 @@ GET /api/v1/statistics/products/top
 POST /api/v1/carts
 ```
 
+![Swagger-장바구니추가-Request](https://github.com/user-attachments/assets/8095a508-b04a-4616-b02b-df6774be377d)
+
 * Request Header
 
 ```
@@ -297,6 +324,8 @@ POST /api/v1/carts
   "quantity": 2
 }
 ```
+
+![Swagger-장바구니추가-Response](https://github.com/user-attachments/assets/8c4c2036-24d6-4b54-b1c7-b6cdfa5fb9e7)
 
 * Response Body
 
@@ -325,6 +354,8 @@ POST /api/v1/carts
 DELETE /api/v1/carts/users/{userId}/products/{productId}
 ```
 
+![Swager-장바구니삭제-Request](https://github.com/user-attachments/assets/461838d7-bdf1-414a-b8f0-92d8c9881b36)
+
 * Request Header
 
 ```
@@ -332,6 +363,8 @@ DELETE /api/v1/carts/users/{userId}/products/{productId}
   "Content-Type": "application/json"
 }
 ```
+
+![Swagger-장바구니삭제-Response](https://github.com/user-attachments/assets/9e0aae16-5f18-43a3-9276-eb606d4e0289)
 
 * Response Body
 
@@ -368,6 +401,8 @@ DELETE /api/v1/carts/users/{userId}/products/{productId}
 GET /api/v1/carts/users/{userId}
 ```
 
+![Swagger-장바구니조회-Request](https://github.com/user-attachments/assets/05274300-68e1-4ae3-b587-8d846c65939b)
+
 * Request Header
 
 ```
@@ -375,6 +410,8 @@ GET /api/v1/carts/users/{userId}
   "Content-Type": "application/json"
 }
 ```
+
+![Swagger-장바구니조회-Response](https://github.com/user-attachments/assets/a95d8379-1bb6-4cba-b101-cd1404f54ea5)
 
 * Response Body
 
