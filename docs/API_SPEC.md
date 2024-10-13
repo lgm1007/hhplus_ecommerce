@@ -72,6 +72,7 @@ GET /api/v1/balances/users/{userId}
 ```
 
 #### 2️⃣ 상품 조회 API
+##### 상품 목록 조회
 ```
 GET /api/v1/products
 ```
@@ -103,6 +104,39 @@ GET /api/v1/products
       "stockQuantity": 5
     },
   ]
+}
+```
+
+404 Not Found (상품 없음)
+```
+{
+  "error": "상품 없음",
+  "status": 404
+}
+```
+
+##### 특정 상품 조회
+```
+GET /api/v1/products/{productId}
+```
+
+* Request Header
+
+```
+{
+  "Content-Type": "application/json"
+}
+```
+
+* Response Body
+
+200 OK
+```
+{
+  "id": 1,
+  "name": "상품 A",
+  "price": 5000,
+  "stockQuantity": 10
 }
 ```
 
