@@ -1,6 +1,8 @@
 package com.example.hhplus_ecommerce.domain.product
 
+import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.domain.product.dto.ProductInfo
+import com.example.hhplus_ecommerce.exception.NotFoundException
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
@@ -17,7 +19,13 @@ class ProductService(
 		val productIds = products.map { product -> product.id }
 		val productDetails = productDetailRepository.getAllByProductIdsIn(productIds)
 
-		return ProductInfo.listOf(products, productDetails)
+		val productInfos = ProductInfo.listOf(products, productDetails)
+
+		if (productInfos.isEmpty()) {
+			throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT)
+		}
+
+		return productInfos
 	}
 
 	@Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
