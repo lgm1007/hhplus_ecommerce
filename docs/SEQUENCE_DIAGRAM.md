@@ -44,7 +44,8 @@ sequenceDiagram
 ```
 
 #### 상품 조회
-1. 클라이언트의 상품 조회 요청
+##### 상품 목록 조회
+1. 클라이언트의 상품 목록 조회 요청
 2. 상품 목록 및 재고 반환
 
 ```mermaid
@@ -59,6 +60,26 @@ sequenceDiagram
     ProductRepository -->> ProductService: 상품 목록 정보
     ProductService ->> ProductDetailRepository: 조회한 상품들의 세부 정보 조회
     ProductDetailRepository -->> ProductService: 조회한 상품들의 세부 정보
+    ProductService ->> ProductService: 응답해 줄 상품 목록 정보 가공
+    ProductService -->> Client: 상품 목록 정보 (id, 이름, 가격, 잔여수량) 응답
+```
+
+##### 특정 상품 조회
+1. 클라이언트의 특정 상품 조회 요청
+2. 특정 상품 정보 및 재고 반환
+
+```mermaid
+sequenceDiagram
+    actor Client
+    participant ProductService
+    participant ProductRepository
+    participant ProductDetailRepository
+
+    Client ->> ProductService: 특정 상품 조회 요청
+    ProductService ->> ProductRepository: 특정 상품 조회
+    ProductRepository -->> ProductService: 특정 상품 정보
+    ProductService ->> ProductDetailRepository: 조회한 상품의 세부 정보 조회
+    ProductDetailRepository -->> ProductService: 조회한 상품의 세부 정보
     ProductService ->> ProductService: 응답해 줄 상품 정보 가공
     ProductService -->> Client: 상품 정보 (id, 이름, 가격, 잔여수량) 응답
 ```

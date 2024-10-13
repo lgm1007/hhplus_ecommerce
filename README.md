@@ -5,6 +5,9 @@
 * 사용자는 상품을 여러 개 선택해 주문할 수 있고, 미리 충전한 잔액을 이용한다.
 * 상품 주문 내역을 통해 판매량이 가장 높은 상품을 추천한다.
 
+### 🪨 프로젝트 Milestone
+- [프로젝트 Milestone 문서](docs/MILESTONE.md)
+
 ### 📜 API 스펙
 1️⃣ **잔액 충전 / 조회 API**
 * 결제에 사용될 금액을 충전하는 API 를 작성한다.
@@ -28,11 +31,52 @@
 * 이 기능을 제공하기 위해 `장바구니에 상품 추가/삭제` API 와 `장바구니 조회` API 가 필요하다.
 * 위 두 기능을 제공하기 위해 어떤 요구사항의 비즈니스 로직을 설계해야할 지 고민해본다.
 
-### 🪨 프로젝트 Milestone
-[프로젝트 Milestone 문서](docs/MILESTONE.md)
+### 🔎 API 명세
+- [API 명세서](docs/API_SPEC.md)
 
 ### 💫 요구사항 별 시퀀스 다이어그램
-[시퀀스 다이어그램 문서](docs/SEQUENCE_DIAGRAM.md)
+- [시퀀스 다이어그램 문서](docs/SEQUENCE_DIAGRAM.md)
 
 ### 📊 요구사항 별 플로우 차트
-[플로우 차트 문서](docs/FLOW_CHART.md)
+- [플로우 차트 문서](docs/FLOW_CHART.md)
+
+### 💽 ERD
+- [ERD 문서](docs/ERD.md)
+
+### 🗃️ 프로젝트 구조
+```
+hhplusecommerce
+├─api
+│  ├─balance
+│  ├─cart
+│  ├─order
+│  ├─product
+│  └─statistic
+├─domain
+│  ├─balance
+│  ├─cart
+│  ├─order
+│  ├─product
+│  └─statistic
+├─infrastructure
+│  ├─balance
+│  ├─cart
+│  ├─order
+│  ├─product
+│  └─statistic
+└─usecase
+    ├─balance
+    ├─cart
+    ├─order
+    ├─product
+    └─statistic
+```
+
+### ⚙️ 프로젝트 구성 스택
+* Kotlin: 1.9.25
+* Spring Boot: 2.7.18
+* JPA: 1.9.24
+* DBMS: H2
+* API Docs
+  * [API 명세서](docs/API_SPEC.md)
+  * Swagger-ui
