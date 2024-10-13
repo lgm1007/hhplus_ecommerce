@@ -5,4 +5,6 @@ import org.springframework.data.domain.Pageable
 
 interface ProductRepository {
 	fun getAllByPaging(pageable: Pageable): List<ProductDto>
+
+	fun getById(id: Long): ProductDto
 }
