@@ -86,7 +86,7 @@ GET /api/v1/balances/users/{userId}
 GET /api/v1/products
 ```
 
-![Swagger-상품조회-Request](https://github.com/user-attachments/assets/d5b622cc-577b-400a-b160-d7fa0f5773a7)
+![Swagger-상품목록조회-Request](https://github.com/user-attachments/assets/dd9fcab7-736d-4181-b7fb-600f00a728bc)
 
 * Request Header
 
@@ -96,7 +96,7 @@ GET /api/v1/products
 }
 ```
 
-![Swagger-상품조회-Response](https://github.com/user-attachments/assets/175c3fd3-28f8-4b9e-8326-9930c977554b)
+![Swagger-상품목록조회-Response](https://github.com/user-attachments/assets/9b9cc1d2-713c-451a-bda1-6d85629374e7)
 
 * Response Body
 
@@ -133,6 +133,8 @@ GET /api/v1/products
 GET /api/v1/products/{productId}
 ```
 
+![Swagger-특정상품조회-Request](https://github.com/user-attachments/assets/3796e424-6772-4b7d-adee-bc96605bab04)
+
 * Request Header
 
 ```
@@ -140,6 +142,8 @@ GET /api/v1/products/{productId}
   "Content-Type": "application/json"
 }
 ```
+
+![Swagger-특정상품조회-Response](https://github.com/user-attachments/assets/51778dad-6a25-4d35-a691-928a8a04b262)
 
 * Response Body
 
