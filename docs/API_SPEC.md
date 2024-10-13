@@ -74,7 +74,7 @@ GET /api/v1/balances/users/{userId}
 #### 2️⃣ 상품 조회 API
 ##### 상품 목록 조회
 ```
-GET /api/v1/products
+GET /api/v1/products?page=1&size=10
 ```
 
 * Request Header
