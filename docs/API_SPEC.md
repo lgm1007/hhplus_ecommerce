@@ -83,7 +83,7 @@ GET /api/v1/balances/users/{userId}
 #### 2️⃣ 상품 조회 API
 ##### 상품 목록 조회
 ```
-GET /api/v1/products
+GET /api/v1/products?page=1&size=10
 ```
 
 ![Swagger-상품목록조회-Request](https://github.com/user-attachments/assets/dd9fcab7-736d-4181-b7fb-600f00a728bc)
