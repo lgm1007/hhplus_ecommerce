@@ -6,7 +6,6 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 
 class ProductDetailDtoTest {
 	@Test
@@ -16,8 +15,6 @@ class ProductDetailDtoTest {
 			1L,
 			100,
 			ProductCategory.CLOTHES,
-			LocalDateTime.now(),
-			LocalDateTime.now(),
 		)
 
 		val actual = ProductDetailDto.from(productDetail)
