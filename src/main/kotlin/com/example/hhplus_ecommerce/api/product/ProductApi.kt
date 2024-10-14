@@ -3,7 +3,6 @@ package com.example.hhplus_ecommerce.api.product
 import com.example.hhplus_ecommerce.api.error.ErrorBody
 import com.example.hhplus_ecommerce.api.product.response.ProductResponse
 import com.example.hhplus_ecommerce.api.product.response.ProductResponseItem
-import com.example.hhplus_ecommerce.domain.product.ProductService
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -23,9 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 @Tag(name = "상품 API")
 @RequestMapping("/api/v1")
 @RestController
-class ProductApi(
-	private val productService: ProductService
-) {
+class ProductApi() {
 	/**
 	 * 상품 목록 조회 API
 	 */
@@ -39,7 +36,14 @@ class ProductApi(
 	])
 	fun getProducts(@PageableDefault(size = 10, page = 1) pageable: Pageable): ResponseEntity<Any> {
 		try {
-			return ResponseEntity.ok(productService.getProductListWithPaging(pageable))
+			return ResponseEntity.ok(
+				ProductResponse(
+					listOf(
+						ProductResponseItem(1L, "상품 A", 5000, 10),
+						ProductResponseItem(2L, "상품 B", 3000, 5),
+					)
+				)
+			)
 		} catch (e: NotFoundException) {
 			return ResponseEntity(ErrorBody(e.errorStatus.message, 404), HttpStatus.NOT_FOUND)
 		}
@@ -58,7 +62,9 @@ class ProductApi(
 	])
 	fun getProduct(@PathVariable productId: Long): ResponseEntity<Any> {
 		try {
-			return ResponseEntity.ok(productService.getProductById(productId))
+			return ResponseEntity.ok(
+				ProductResponseItem(1L, "상품 A", 5000, 10),
+			)
 		} catch (e: NotFoundException) {
 			return ResponseEntity(ErrorBody(e.errorStatus.message, 404), HttpStatus.NOT_FOUND)
 		}
