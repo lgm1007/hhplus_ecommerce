@@ -1,6 +1,7 @@
 package com.example.hhplus_ecommerce.api.order.response
 
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
+import com.example.hhplus_ecommerce.domain.order.dto.OrderInfo
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetailInfo
 import java.time.LocalDateTime
 
@@ -12,4 +13,16 @@ class OrderResponse(
 	val status: OrderStatus,
 	val orderItems: List<OrderItemDetailInfo>
 ) {
+	companion object {
+		fun from(orderInfo: OrderInfo): OrderResponse {
+			return OrderResponse(
+				orderInfo.orderId,
+				orderInfo.userId,
+				orderInfo.orderDate,
+				orderInfo.totalPrice,
+				orderInfo.status,
+				orderInfo.orderItems
+			)
+		}
+	}
 }

@@ -5,4 +5,13 @@ class OrderItemDetailInfo(
 	val quantity: Int,
 	val price: Int
 ) {
+	companion object {
+		fun from(orderItemDto: OrderItemDto): OrderItemDetailInfo {
+			return OrderItemDetailInfo(
+				orderItemDto.productDetailId,
+				orderItemDto.quantity,
+				orderItemDto.price
+			)
+		}
+	}
 }
