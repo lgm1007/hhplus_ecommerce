@@ -4,7 +4,7 @@ import com.example.hhplus_ecommerce.api.error.ErrorBody
 import com.example.hhplus_ecommerce.api.order.request.OrderRequest
 import com.example.hhplus_ecommerce.api.order.response.OrderResponse
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
-import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetail
+import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetailInfo
 import com.example.hhplus_ecommerce.exception.BadRequestException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -45,8 +45,8 @@ class OrderApi() {
 					13000,
 					OrderStatus.ORDER_COMPLETE,
 					listOf(
-						OrderItemDetail(1L, 2, 10000),
-						OrderItemDetail(2L, 1, 3000)
+						OrderItemDetailInfo(1L, 2, 10000),
+						OrderItemDetailInfo(2L, 1, 3000)
 					)
 				)
 			)

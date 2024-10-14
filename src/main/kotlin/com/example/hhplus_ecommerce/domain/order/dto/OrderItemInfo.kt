@@ -1,6 +1,6 @@
 package com.example.hhplus_ecommerce.domain.order.dto
 
-class OrderItem(
+class OrderItemInfo(
 	val productId: Long,
 	val quantity: Int
 ) {
