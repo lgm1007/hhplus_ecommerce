@@ -8,20 +8,15 @@
 ```mermaid
 sequenceDiagram
     actor Client
-    participant BalanceFacade
     participant BalanceService
     participant BalanceRepository
 
-    Client ->> BalanceFacade: 충전 요청 (사용자 ID, 충전 금액)
-    BalanceFacade ->> BalanceService: 사용자 잔액 조회
+    Client ->> BalanceService: 충전 요청 (사용자 ID, 충전 금액)
     BalanceService ->> BalanceRepository: 사용자 ID 로 잔액 조회
     BalanceRepository -->> BalanceService: 사용자 ID 별 잔액 정보
-    BalanceService -->> BalanceFacade: 사용자 잔액 정보
-    BalanceFacade ->> BalanceService: 잔액 충전
     BalanceService ->> BalanceRepository: 사용자 ID 의 잔액 업데이트
     BalanceRepository -->> BalanceService: 사용자 ID 의 잔액 업데이트 성공
-    BalanceService -->> BalanceFacade: 잔액 충전 성공
-    BalanceFacade -->> Client: 충전 완료 응답
+    BalanceService -->> Client: 충전 완료 응답
 ```
 
 ###### 잔액 조회
@@ -31,16 +26,13 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     actor Client
-    participant BalanceFacade
     participant BalanceService
     participant BalanceRepository
 
-    Client ->> BalanceFacade: 잔액 조회 요청 (사용자 ID)
-    BalanceFacade ->> BalanceService: 사용자 잔액 조회
+    Client ->> BalanceService: 잔액 조회 요청 (사용자 ID)
     BalanceService ->> BalanceRepository: 사용자 ID 로 잔액 조회
     BalanceRepository -->> BalanceService: 사용자 ID 별 잔액 정보
-    BalanceService -->> BalanceFacade: 사용자 잔액 정보
-    BalanceFacade -->> Client: 잔액 정보 응답
+    BalanceService -->> Client: 잔액 정보 응답
 ```
 
 #### 상품 조회
