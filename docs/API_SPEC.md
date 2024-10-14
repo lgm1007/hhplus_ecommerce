@@ -192,12 +192,12 @@ POST /api/v1/orders
   "status": "ORDER_COMPLETE",
   "orderItems": [
     {
-      "productId": 1,
+      "productDetailId": 1,
       "quantity": 2,
       "price": 10000
     },
     {
-      "productId": 2,
+      "productDetailId": 2,
       "quantity": 1,
       "price": 3000
     }
