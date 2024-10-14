@@ -22,5 +22,20 @@ class OrderItemDto(
 				orderItem.createdDate
 			)
 		}
+
+		fun of(
+			orderId: Long,
+			orderItemInfo: OrderItemInfo,
+			price: Int
+		): OrderItemDto {
+			return OrderItemDto(
+				0,
+				orderId,
+				orderItemInfo.productDetailId,
+				orderItemInfo.quantity,
+				price,
+				LocalDateTime.now()
+			)
+		}
 	}
 }
