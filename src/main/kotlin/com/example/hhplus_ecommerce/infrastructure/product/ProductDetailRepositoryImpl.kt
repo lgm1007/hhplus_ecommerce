@@ -4,12 +4,17 @@ import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.domain.product.ProductDetailRepository
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
 import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
 import org.springframework.stereotype.Repository
 
 @Repository
 class ProductDetailRepositoryImpl(
 	private val productDetailJpaRepository: ProductDetailJpaRepository
 ) : ProductDetailRepository {
+	override fun insert(productDetailDto: ProductDetailDto): ProductDetailDto {
+		return ProductDetailDto.from(productDetailJpaRepository.save(ProductDetail.from(productDetailDto)))
+	}
+
 	override fun getAllByProductIdsIn(productIds: List<Long>): List<ProductDetailDto> {
 		return productDetailJpaRepository.findAllByProductIdIn(productIds)
 			.map(ProductDetailDto.Companion::from)
