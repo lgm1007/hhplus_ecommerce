@@ -11,7 +11,7 @@ class ProductInfo(
 			return ProductInfo(
 				product.id,
 				product.name,
-				product.price,
+				productDetail.price,
 				productDetail.stockQuantity,
 			)
 		}

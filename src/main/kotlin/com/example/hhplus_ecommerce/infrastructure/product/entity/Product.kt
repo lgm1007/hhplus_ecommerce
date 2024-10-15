@@ -10,7 +10,6 @@ import javax.persistence.*
 @EntityListeners(AuditingEntityListener::class)
 class Product(
 	val name: String,
-	val price: Int,
 	val description: String,
 ) {
 	@Id
@@ -25,7 +24,6 @@ class Product(
 		fun from(productDto: ProductDto): Product {
 			return Product(
 				productDto.name,
-				productDto.price,
 				productDto.description
 			)
 		}

@@ -1,6 +1,7 @@
 package com.example.hhplus_ecommerce.domain.product
 
 import com.example.hhplus_ecommerce.api.error.ErrorStatus
+import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
 import com.example.hhplus_ecommerce.domain.product.dto.ProductInfo
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import org.springframework.data.domain.Pageable
@@ -14,7 +15,7 @@ class ProductService(
 	private val productDetailRepository: ProductDetailRepository
 ) {
 	@Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
-	fun getProductListWithPaging(pageable: Pageable): List<ProductInfo> {
+	fun getAllProductInfosWithPaging(pageable: Pageable): List<ProductInfo> {
 		val products = productRepository.getAllByPaging(pageable)
 		val productIds = products.map { product -> product.id }
 		val productDetails = productDetailRepository.getAllByProductIdsIn(productIds)
@@ -29,10 +30,20 @@ class ProductService(
 	}
 
 	@Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
-	fun getProductById(productId: Long): ProductInfo {
+	fun getProductInfoById(productId: Long): ProductInfo {
 		val product = productRepository.getById(productId)
 		val productDetail = productDetailRepository.getByProductIdWithReadLock(productId)
 
 		return ProductInfo.of(product, productDetail)
+	}
+
+	@Transactional(readOnly = true)
+	fun getAllProductDetailsByDetailIdsIn(productDetailIds: List<Long>): List<ProductDetailDto> {
+		return ProductDetailDto.fromList(productDetailRepository.getAllByIdsIn(productDetailIds))
+	}
+
+	@Transactional
+	fun updateProductQuantityDecrease(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
+		return ProductDetailDto.from(productDetailRepository.updateProductQuantityDecrease(productDetailId, orderQuantity))
 	}
 }

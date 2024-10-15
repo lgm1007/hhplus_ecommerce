@@ -28,4 +28,8 @@ class ProductRepositoryImpl(
 
 		return ProductDto.from(product)
 	}
+
+	override fun getAllByIds(ids: List<Long>): List<Product> {
+		return productJpaRepository.findAllByIdIn(ids)
+	}
 }

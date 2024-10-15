@@ -6,7 +6,6 @@ import java.time.LocalDateTime
 class ProductDto(
 	val id: Long,
 	val name: String,
-	val price: Int,
 	val description: String,
 	val createdDate: LocalDateTime
 ) {
@@ -15,10 +14,13 @@ class ProductDto(
 			return ProductDto(
 				product.id,
 				product.name,
-				product.price,
 				product.description,
 				product.createdDate
 			)
+		}
+
+		fun fromList(products: List<Product>): List<ProductDto> {
+			return products.map(::from)
 		}
 	}
 }
