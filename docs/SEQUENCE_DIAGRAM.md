@@ -8,20 +8,15 @@
 ```mermaid
 sequenceDiagram
     actor Client
-    participant BalanceFacade
     participant BalanceService
     participant BalanceRepository
 
-    Client ->> BalanceFacade: 충전 요청 (사용자 ID, 충전 금액)
-    BalanceFacade ->> BalanceService: 사용자 잔액 조회
+    Client ->> BalanceService: 충전 요청 (사용자 ID, 충전 금액)
     BalanceService ->> BalanceRepository: 사용자 ID 로 잔액 조회
     BalanceRepository -->> BalanceService: 사용자 ID 별 잔액 정보
-    BalanceService -->> BalanceFacade: 사용자 잔액 정보
-    BalanceFacade ->> BalanceService: 잔액 충전
     BalanceService ->> BalanceRepository: 사용자 ID 의 잔액 업데이트
     BalanceRepository -->> BalanceService: 사용자 ID 의 잔액 업데이트 성공
-    BalanceService -->> BalanceFacade: 잔액 충전 성공
-    BalanceFacade -->> Client: 충전 완료 응답
+    BalanceService -->> Client: 충전 완료 응답
 ```
 
 ###### 잔액 조회
@@ -31,16 +26,13 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     actor Client
-    participant BalanceFacade
     participant BalanceService
     participant BalanceRepository
 
-    Client ->> BalanceFacade: 잔액 조회 요청 (사용자 ID)
-    BalanceFacade ->> BalanceService: 사용자 잔액 조회
+    Client ->> BalanceService: 잔액 조회 요청 (사용자 ID)
     BalanceService ->> BalanceRepository: 사용자 ID 로 잔액 조회
     BalanceRepository -->> BalanceService: 사용자 ID 별 잔액 정보
-    BalanceService -->> BalanceFacade: 사용자 잔액 정보
-    BalanceFacade -->> Client: 잔액 정보 응답
+    BalanceService -->> Client: 잔액 정보 응답
 ```
 
 #### 상품 조회
@@ -88,9 +80,8 @@ sequenceDiagram
 ##### 주문
 1. 클라이언트가 상품을 주문하고 결제 요청 보냄
 2. 상품의 재고 확인
-3. 사용자의 잔액 조회
-4. 주문 정보 저장
-5. 재고 차감
+3. 주문 정보 저장
+4. 재고 차감
 
 ```mermaid
 sequenceDiagram
@@ -148,19 +139,18 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     actor Client
-    participant StatisticService
-    participant OrderItemRepository
-    participant ProductDetailRepository
-    participant ProductRepository
+    participant StatisticFacade
+    participant OrderService
+    participant ProductService
 
-    Client ->> StatisticService: 최근 3일간 판매량 상위 5개 상품 조회 요청
-    StatisticService ->> OrderItemRepository: 최근 3일간 판매량 상위 5개의 productDetailId 목록 조회
-    OrderItemRepository -->> StatisticService: productDetailId 목록 정보
-    StatisticService ->> ProductDetailRepository: productDetailId 목록으로 ProductDetail 목록 조회
-    ProductDetailRepository -->> StatisticService: ProductDetail 목록 정보
-    StatisticService ->> ProductRepository: ProductId 목록으로 Product 목록 조회
-    ProductRepository -->> StatisticService: Product 목록 정보
-    StatisticService -->> Client: 상위 5개 상품 정보 응답
+    Client ->> StatisticFacade: 최근 3일간 판매량 상위 5개 상품 조회 요청
+    StatisticFacade ->> OrderService: 최근 3일간 판매량 상위 5개의 productDetailId 목록 조회 (OrderItem 내 데이터)
+    OrderService -->> StatisticFacade: productDetailId 목록 정보
+    StatisticFacade ->> ProductService: productDetailId 목록으로 ProductDetail 목록 조회
+    ProductService -->> StatisticFacade: ProductDetail 목록 정보
+    StatisticFacade ->> ProductService: ProductId 목록으로 Product 목록 조회
+    ProductService -->> StatisticFacade: Product 목록 정보
+    StatisticFacade -->> Client: 상위 5개 상품 정보 응답
 ```
 
 #### 장바구니 기능

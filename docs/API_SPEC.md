@@ -188,16 +188,16 @@ POST /api/v1/orders
   "orderId": 98765,
   "userId": 12345,
   "orderDate": "2024-10-06T12:00:01",
-  "totalPrice": 13000,
+  "totalPrice": 23000,
   "status": "ORDER_COMPLETE",
   "orderItems": [
     {
-      "productId": 1,
+      "productDetailId": 1,
       "quantity": 2,
       "price": 10000
     },
     {
-      "productId": 2,
+      "productDetailId": 2,
       "quantity": 1,
       "price": 3000
     }
