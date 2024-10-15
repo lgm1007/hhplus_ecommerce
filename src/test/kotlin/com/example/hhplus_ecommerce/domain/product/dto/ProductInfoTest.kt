@@ -14,7 +14,6 @@ class ProductInfoTest {
 		val productDto = ProductDto(
 			1L,
 			"상품A",
-			10000,
 			"상품A 설명",
 			LocalDateTime.now(),
 		)
@@ -22,6 +21,7 @@ class ProductInfoTest {
 		val productDetailDto = ProductDetailDto(
 			1L,
 			1L,
+			10000,
 			100,
 			ProductCategory.CLOTHES,
 			LocalDateTime.now(),
@@ -41,12 +41,12 @@ class ProductInfoTest {
 	@DisplayName("ProductDto 목록과 ProductDetailDto 목록으로 ProductInfo 목록을 생성하는 정적 팩토리 메서드 기능 테스트")
 	fun productInfoListOf() {
 		val productDtos = listOf(
-			ProductDto(1L, "상품A", 10000, "상품A 설명", LocalDateTime.now()),
-			ProductDto(2L, "상품B", 5000, "상품B 설명", LocalDateTime.now()),
+			ProductDto(1L, "상품A", "상품A 설명", LocalDateTime.now()),
+			ProductDto(2L, "상품B", "상품B 설명", LocalDateTime.now()),
 		)
 		val productDetailDtos = listOf(
-			ProductDetailDto(1L, 1L, 100, ProductCategory.CLOTHES, LocalDateTime.now(), LocalDateTime.now()),
-			ProductDetailDto(2L, 2L, 30, ProductCategory.COSMETICS, LocalDateTime.now(), LocalDateTime.now()),
+			ProductDetailDto(1L, 1L, 10000, 100, ProductCategory.CLOTHES, LocalDateTime.now(), LocalDateTime.now()),
+			ProductDetailDto(2L, 2L, 5000, 30, ProductCategory.COSMETICS, LocalDateTime.now(), LocalDateTime.now()),
 		)
 
 		val actual = ProductInfo.listOf(productDtos, productDetailDtos)

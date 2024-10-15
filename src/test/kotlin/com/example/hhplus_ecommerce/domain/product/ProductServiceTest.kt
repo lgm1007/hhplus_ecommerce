@@ -33,20 +33,20 @@ class ProductServiceTest {
 		`when`(productRepository.getAllByPaging(any()))
 			.thenReturn(
 				listOf(
-					ProductDto(1L, "상품A", 10000, "상품A 설명", LocalDateTime.now()),
-					ProductDto(2L, "상품B", 5000, "상품B 설명", LocalDateTime.now()),
+					ProductDto(1L, "상품A", "상품A 설명", LocalDateTime.now()),
+					ProductDto(2L, "상품B", "상품B 설명", LocalDateTime.now()),
 				)
 			)
 
 		`when`(productDetailRepository.getAllByProductIdsIn(any()))
 			.thenReturn(
 				listOf(
-					ProductDetailDto(1L, 1L, 100, ProductCategory.CLOTHES, LocalDateTime.now(), LocalDateTime.now()),
-					ProductDetailDto(2L, 2L, 30, ProductCategory.COSMETICS, LocalDateTime.now(), LocalDateTime.now()),
+					ProductDetailDto(1L, 1L, 10000, 100, ProductCategory.CLOTHES, LocalDateTime.now(), LocalDateTime.now()),
+					ProductDetailDto(2L, 2L, 5000, 30, ProductCategory.COSMETICS, LocalDateTime.now(), LocalDateTime.now()),
 				)
 			)
 
-		val actual = productService.getProductListWithPaging(PageRequest.of(1, 10))
+		val actual = productService.getAllProductInfosWithPaging(PageRequest.of(1, 10))
 
 		assertThat(actual.size).isEqualTo(2)
 		assertThat(actual[0].productId).isEqualTo(1L)
@@ -66,7 +66,6 @@ class ProductServiceTest {
 			ProductDto(
 				invocation.getArgument(0),
 				"상품A",
-				10000,
 				"상품A 설명",
 				LocalDateTime.now()
 			)
@@ -76,14 +75,15 @@ class ProductServiceTest {
 			ProductDetailDto(
 				1L,
 				1L,
+				10000,
 				100,
 				ProductCategory.CLOTHES,
 				LocalDateTime.now(),
 				LocalDateTime.now()
 			)
-		}.`when`(productDetailRepository).getByProductIdWithReadLock(anyLong())
+		}.`when`(productDetailRepository).getByProductId(anyLong())
 
-		val actual = productService.getProductById(1L)
+		val actual = productService.getProductInfoById(1L)
 
 		assertThat(actual).isNotNull
 		assertThat(actual.productId).isEqualTo(1L)

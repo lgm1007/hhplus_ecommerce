@@ -12,7 +12,6 @@ class ProductDtoTest {
 	fun productDtoFromEntity() {
 		val product = Product(
 			"상품A",
-			10000,
 			"상품A 설명",
 		)
 
@@ -20,7 +19,6 @@ class ProductDtoTest {
 
 		assertThat(actual).isNotNull
 		assertThat(actual.name).isEqualTo("상품A")
-		assertThat(actual.price).isEqualTo(10000)
 		assertThat(actual.description).isEqualTo("상품A 설명")
 	}
 }

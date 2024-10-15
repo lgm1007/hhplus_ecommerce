@@ -13,6 +13,7 @@ class ProductDetailDtoTest {
 	fun productDetailDtoFromEntity() {
 		val productDetail = ProductDetail(
 			1L,
+			10000,
 			100,
 			ProductCategory.CLOTHES,
 		)
@@ -21,6 +22,7 @@ class ProductDetailDtoTest {
 
 		assertThat(actual).isNotNull
 		assertThat(actual.productId).isEqualTo(1L)
+		assertThat(actual.price).isEqualTo(10000)
 		assertThat(actual.stockQuantity).isEqualTo(100)
 		assertThat(actual.productCategory).isEqualTo(ProductCategory.CLOTHES)
 	}
