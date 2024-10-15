@@ -14,11 +14,15 @@ class Product(
 ) {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	val id: Long = 0
+	var id: Long = 0
 
 	@CreatedDate
 	var createdDate: LocalDateTime = LocalDateTime.now()
 		private set
+
+	constructor(id: Long, name: String, description: String) : this(name, description) {
+		this.id = id
+	}
 
 	companion object {
 		fun from(productDto: ProductDto): Product {

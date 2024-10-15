@@ -13,20 +13,17 @@ import org.springframework.stereotype.Repository
 class ProductRepositoryImpl(
 	val productJpaRepository: ProductJpaRepository
 ) : ProductRepository {
-	override fun insert(productDto: ProductDto): ProductDto {
-		return ProductDto.from(productJpaRepository.save(Product.from(productDto)))
+	override fun insert(productDto: ProductDto): Product {
+		return productJpaRepository.save(Product.from(productDto))
 	}
 
-	override fun getAllByPaging(pageable: Pageable): List<ProductDto> {
+	override fun getAllByPaging(pageable: Pageable): List<Product> {
 		return productJpaRepository.findAllWithPaging(pageable)
-			.map(ProductDto.Companion::from)
 	}
 
-	override fun getById(id: Long): ProductDto {
-		val product = productJpaRepository.findByIdOrNull(id)
+	override fun getById(id: Long): Product {
+		return productJpaRepository.findByIdOrNull(id)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT)
-
-		return ProductDto.from(product)
 	}
 
 	override fun getAllByIds(ids: List<Long>): List<Product> {

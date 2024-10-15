@@ -1,7 +1,7 @@
 package com.example.hhplus_ecommerce.domain.product
 
-import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
-import com.example.hhplus_ecommerce.domain.product.dto.ProductDto
+import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.springframework.data.domain.PageRequest
-import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
 class ProductServiceTest {
@@ -33,16 +32,16 @@ class ProductServiceTest {
 		`when`(productRepository.getAllByPaging(any()))
 			.thenReturn(
 				listOf(
-					ProductDto(1L, "상품A", "상품A 설명", LocalDateTime.now()),
-					ProductDto(2L, "상품B", "상품B 설명", LocalDateTime.now()),
+					Product(1L, "상품A", "상품A 설명"),
+					Product(2L, "상품B", "상품B 설명"),
 				)
 			)
 
 		`when`(productDetailRepository.getAllByProductIdsIn(any()))
 			.thenReturn(
 				listOf(
-					ProductDetailDto(1L, 1L, 10000, 100, ProductCategory.CLOTHES, LocalDateTime.now(), LocalDateTime.now()),
-					ProductDetailDto(2L, 2L, 5000, 30, ProductCategory.COSMETICS, LocalDateTime.now(), LocalDateTime.now()),
+					ProductDetail(1L, 10000, 100, ProductCategory.CLOTHES),
+					ProductDetail(2L, 5000, 30, ProductCategory.COSMETICS),
 				)
 			)
 
@@ -63,23 +62,19 @@ class ProductServiceTest {
 	@DisplayName("특정 상품 조회 비즈니스 로직 단위 테스트")
 	fun getProductById() {
 		doAnswer { invocation ->
-			ProductDto(
-				invocation.getArgument(0),
+			Product(
+				1L,
 				"상품A",
 				"상품A 설명",
-				LocalDateTime.now()
 			)
 		}.`when`(productRepository).getById(anyLong())
 
 		doAnswer { invocation ->
-			ProductDetailDto(
-				1L,
+			ProductDetail(
 				1L,
 				10000,
 				100,
 				ProductCategory.CLOTHES,
-				LocalDateTime.now(),
-				LocalDateTime.now()
 			)
 		}.`when`(productDetailRepository).getByProductId(anyLong())
 

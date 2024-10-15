@@ -9,7 +9,7 @@ class ProductInfo(
 	companion object {
 		fun of(product: ProductDto, productDetail: ProductDetailDto): ProductInfo {
 			return ProductInfo(
-				product.id,
+				productDetail.productId,
 				product.name,
 				productDetail.price,
 				productDetail.stockQuantity,
