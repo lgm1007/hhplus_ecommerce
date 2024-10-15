@@ -27,7 +27,6 @@ erDiagram
     Product {
         Long id PK
         String name
-        Integer price
         String description
         Date createdDate
     }
@@ -35,6 +34,7 @@ erDiagram
     ProductDetail {
         Long id PK
         Long productId
+        Integer price
         Integer stockQuantity
         String productCategory
         Date createdDate
