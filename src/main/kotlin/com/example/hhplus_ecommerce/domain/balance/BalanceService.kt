@@ -9,6 +9,6 @@ class BalanceService(
 	private val balanceHistoryRepository: BalanceHistoryRepository
 ) {
 	fun getByUserId(userId: Long): BalanceDto {
-		return balanceRepository.getByUserId(userId)
+		return BalanceDto.from(balanceRepository.getByUserId(userId))
 	}
 }

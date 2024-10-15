@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class OrderRepositoryImpl(private val orderJpaRepository: OrderJpaRepository) : OrderRepository {
-	override fun insert(orderDto: OrderDto): OrderDto {
-		return OrderDto.from(orderJpaRepository.save(Order.from(orderDto)))
+	override fun insert(orderDto: OrderDto): Order {
+		return orderJpaRepository.save(Order.from(orderDto))
 	}
 }

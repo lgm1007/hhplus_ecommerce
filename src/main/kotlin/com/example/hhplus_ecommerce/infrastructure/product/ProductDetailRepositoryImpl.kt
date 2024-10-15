@@ -12,29 +12,24 @@ import org.springframework.transaction.annotation.Transactional
 class ProductDetailRepositoryImpl(
 	private val productDetailJpaRepository: ProductDetailJpaRepository
 ) : ProductDetailRepository {
-	override fun insert(productDetailDto: ProductDetailDto): ProductDetailDto {
-		return ProductDetailDto.from(productDetailJpaRepository.save(ProductDetail.from(productDetailDto)))
+	override fun insert(productDetailDto: ProductDetailDto): ProductDetail {
+		return productDetailJpaRepository.save(ProductDetail.from(productDetailDto))
 	}
 
-	override fun getAllByProductIdsIn(productIds: List<Long>): List<ProductDetailDto> {
+	override fun getAllByProductIdsIn(productIds: List<Long>): List<ProductDetail> {
 		return productDetailJpaRepository.findAllByProductIdIn(productIds)
-			.map(ProductDetailDto.Companion::from)
 	}
 
 	@Transactional(readOnly = true)
-	override fun getByProductId(productId: Long): ProductDetailDto {
-		val productDetail = (productDetailJpaRepository.findByProductId(productId)
-			?: throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT))
-
-		return ProductDetailDto.from(productDetail)
+	override fun getByProductId(productId: Long): ProductDetail {
+		return productDetailJpaRepository.findByProductId(productId)
+			?: throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT)
 	}
 
 	@Transactional
-	override fun getByIdWithWriteLock(id: Long): ProductDetailDto {
-		val productDetail = productDetailJpaRepository.findByIdWithLock(id)
+	override fun getByIdWithWriteLock(id: Long): ProductDetail {
+		return productDetailJpaRepository.findByIdWithLock(id)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT)
-
-		return ProductDetailDto.from(productDetail)
 	}
 
 	override fun getAllByIdsInWithLock(ids: List<Long>): List<ProductDetail> {

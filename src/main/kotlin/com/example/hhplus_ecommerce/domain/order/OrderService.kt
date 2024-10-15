@@ -10,11 +10,13 @@ class OrderService(
 	private val orderItemRepository: OrderItemRepository
 ) {
 	fun registerOrder(orderDto: OrderDto): OrderDto {
-		return orderRepository.insert(orderDto)
+		return OrderDto.from(orderRepository.insert(orderDto))
 	}
 
 	fun registerOrderItems(orderItemDtos: List<OrderItemDto>): List<OrderItemDto> {
-		return orderItemRepository.insertAll(orderItemDtos)
+		return orderItemRepository.insertAll(orderItemDtos).map { orderItem ->
+			OrderItemDto.from(orderItem)
+		}
 	}
 
 }

@@ -2,6 +2,7 @@ package com.example.hhplus_ecommerce.domain.product
 
 import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
+import com.example.hhplus_ecommerce.domain.product.dto.ProductDto
 import com.example.hhplus_ecommerce.domain.product.dto.ProductInfo
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import org.springframework.data.domain.Pageable
@@ -15,9 +16,9 @@ class ProductService(
 ) {
 	@Transactional(readOnly = true)
 	fun getAllProductInfosWithPaging(pageable: Pageable): List<ProductInfo> {
-		val products = productRepository.getAllByPaging(pageable)
+		val products = productRepository.getAllByPaging(pageable).map(ProductDto.Companion::from)
 		val productIds = products.map { product -> product.id }
-		val productDetails = productDetailRepository.getAllByProductIdsIn(productIds)
+		val productDetails = productDetailRepository.getAllByProductIdsIn(productIds).map(ProductDetailDto.Companion::from)
 
 		val productInfos = ProductInfo.listOf(products, productDetails)
 
@@ -30,8 +31,8 @@ class ProductService(
 
 	@Transactional(readOnly = true)
 	fun getProductInfoById(productId: Long): ProductInfo {
-		val product = productRepository.getById(productId)
-		val productDetail = productDetailRepository.getByProductId(productId)
+		val product = ProductDto.from(productRepository.getById(productId))
+		val productDetail = ProductDetailDto.from(productDetailRepository.getByProductId(productId))
 
 		return ProductInfo.of(product, productDetail)
 	}
