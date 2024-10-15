@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class BalanceRepositoryImpl(private val balanceJpaRepository: BalanceJpaRepository) : BalanceRepository {
-	override fun getByUserId(userId: Long): Balance {
-		return balanceJpaRepository.findByUserId(userId)
+	override fun getByUserIdWithLock(userId: Long): Balance {
+		return balanceJpaRepository.findByUserIdWithLock(userId)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_USER_BALANCE)
 	}
 
