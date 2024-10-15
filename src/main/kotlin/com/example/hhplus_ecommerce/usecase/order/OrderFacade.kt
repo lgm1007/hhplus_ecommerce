@@ -1,6 +1,5 @@
 package com.example.hhplus_ecommerce.usecase.order
 
-import com.example.hhplus_ecommerce.domain.balance.BalanceService
 import com.example.hhplus_ecommerce.domain.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
 import com.example.hhplus_ecommerce.domain.order.dto.*
@@ -11,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class OrderFacade(
 	private val orderService: OrderService,
-	private val productService: ProductService,
-	private val balanceService: BalanceService
+	private val productService: ProductService
 ) {
 	@Transactional
 	fun productOrder(userId: Long, orderItemInfos: List<OrderItemInfo>): OrderInfo {
