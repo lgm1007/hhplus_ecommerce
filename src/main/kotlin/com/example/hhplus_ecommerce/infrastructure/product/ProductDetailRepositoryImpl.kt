@@ -22,8 +22,8 @@ class ProductDetailRepositoryImpl(
 	}
 
 	@Transactional(readOnly = true)
-	override fun getByProductIdWithReadLock(productId: Long): ProductDetailDto {
-		val productDetail = (productDetailJpaRepository.findByProductIdWithReadLock(productId)
+	override fun getByProductId(productId: Long): ProductDetailDto {
+		val productDetail = (productDetailJpaRepository.findByProductId(productId)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT))
 
 		return ProductDetailDto.from(productDetail)

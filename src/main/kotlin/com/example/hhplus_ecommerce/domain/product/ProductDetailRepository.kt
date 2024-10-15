@@ -8,7 +8,7 @@ interface ProductDetailRepository {
 
 	fun getAllByProductIdsIn(productIds: List<Long>): List<ProductDetailDto>
 
-	fun getByProductIdWithReadLock(productId: Long): ProductDetailDto
+	fun getByProductId(productId: Long): ProductDetailDto
 
 	fun getByIdWithWriteLock(id: Long): ProductDetailDto
 

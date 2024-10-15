@@ -10,9 +10,7 @@ import javax.persistence.LockModeType
 interface ProductDetailJpaRepository : JpaRepository<ProductDetail, Long> {
 	fun findAllByProductIdIn(productIds: List<Long>): List<ProductDetail>
 
-	@Lock(LockModeType.PESSIMISTIC_READ)
-	@Query("SELECT pd FROM ProductDetail pd WHERE pd.productId = :productId")
-	fun findByProductIdWithReadLock(@Param("productId") productId: Long): ProductDetail?
+	fun findByProductId(productId: Long): ProductDetail?
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@Query("SELECT pd FROM ProductDetail pd WHERE pd.id = :id")
