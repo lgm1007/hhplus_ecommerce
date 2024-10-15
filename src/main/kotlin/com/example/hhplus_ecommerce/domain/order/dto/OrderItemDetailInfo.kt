@@ -7,6 +7,10 @@ class OrderItemDetailInfo(
 	val quantity: Int,
 	val price: Int
 ) {
+	fun calculateOrderPrice(): Int {
+		return quantity * price;
+	}
+
 	companion object {
 		fun from(orderItemDto: OrderItemDto): OrderItemDetailInfo {
 			return OrderItemDetailInfo(

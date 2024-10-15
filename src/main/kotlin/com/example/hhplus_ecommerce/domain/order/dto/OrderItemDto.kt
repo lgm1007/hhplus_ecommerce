@@ -23,19 +23,17 @@ class OrderItemDto(
 			)
 		}
 
-		fun of(
-			orderId: Long,
-			orderItemInfo: OrderItemInfo,
-			price: Int
-		): OrderItemDto {
-			return OrderItemDto(
-				0,
-				orderId,
-				orderItemInfo.productDetailId,
-				orderItemInfo.quantity,
-				price,
-				LocalDateTime.now()
-			)
+		fun listOf(orderId: Long, orderItemDetailInfos: List<OrderItemDetailInfo>): List<OrderItemDto> {
+			return orderItemDetailInfos.map { orderItemDetailInfo ->
+				OrderItemDto(
+					0,
+					orderId,
+					orderItemDetailInfo.productDetailId,
+					orderItemDetailInfo.quantity,
+					orderItemDetailInfo.price,
+					LocalDateTime.now()
+				)
+			}
 		}
 	}
 }

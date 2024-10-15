@@ -12,7 +12,7 @@ interface ProductDetailRepository {
 
 	fun getByIdWithWriteLock(id: Long): ProductDetailDto
 
-	fun getAllByIdsIn(ids: List<Long>): List<ProductDetail>
+	fun getAllByIdsInWithLock(ids: List<Long>): List<ProductDetail>
 
 	fun updateProductQuantityDecrease(id: Long, orderQuantity: Int): ProductDetail
 }

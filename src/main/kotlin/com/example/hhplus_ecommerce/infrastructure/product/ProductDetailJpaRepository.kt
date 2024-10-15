@@ -14,7 +14,9 @@ interface ProductDetailJpaRepository : JpaRepository<ProductDetail, Long> {
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@Query("SELECT pd FROM ProductDetail pd WHERE pd.id = :id")
-	fun findByIdWithWriteLock(@Param("id") id: Long): ProductDetail?
+	fun findByIdWithLock(@Param("id") id: Long): ProductDetail?
 
-	fun findAllByIdIn(ids: List<Long>): List<ProductDetail>
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Query("SELECT pd FROM ProductDetail pd WHERE pd.id IN (:ids)")
+	fun findAllByIdInWithLock(ids: List<Long>): List<ProductDetail>
 }

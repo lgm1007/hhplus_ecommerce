@@ -31,19 +31,19 @@ class ProductDetailRepositoryImpl(
 
 	@Transactional
 	override fun getByIdWithWriteLock(id: Long): ProductDetailDto {
-		val productDetail = productDetailJpaRepository.findByIdWithWriteLock(id)
+		val productDetail = productDetailJpaRepository.findByIdWithLock(id)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT)
 
 		return ProductDetailDto.from(productDetail)
 	}
 
-	override fun getAllByIdsIn(ids: List<Long>): List<ProductDetail> {
-		return productDetailJpaRepository.findAllByIdIn(ids)
+	override fun getAllByIdsInWithLock(ids: List<Long>): List<ProductDetail> {
+		return productDetailJpaRepository.findAllByIdInWithLock(ids)
 	}
 
 	@Transactional
 	override fun updateProductQuantityDecrease(id: Long, orderQuantity: Int): ProductDetail {
-		val productDetail = (productDetailJpaRepository.findByIdWithWriteLock(id)
+		val productDetail = (productDetailJpaRepository.findByIdWithLock(id)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT))
 
 		productDetail.decreaseQuantity(orderQuantity)

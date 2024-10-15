@@ -22,19 +22,4 @@ class OrderItemDtoTest {
 		assertThat(actual.price).isEqualTo(5000)
 	}
 
-	@Test
-	@DisplayName("주문 ID, 주문 아이템 데이터, 가격 정보들로 OrderItemDto 생성하는 정적 팩토리 메서드 기능 테스트")
-	fun orderItemOfIdItemPrice() {
-		val orderItemInfo = OrderItemInfo(2L, 30)
-
-		val actual = OrderItemDto.of(1L, orderItemInfo, 3000)
-
-		assertThat(actual).isNotNull
-		assertThat(actual.id).isEqualTo(0)
-		assertThat(actual.orderId).isEqualTo(1L)
-		assertThat(actual.productDetailId).isEqualTo(2L)
-		assertThat(actual.quantity).isEqualTo(30)
-		assertThat(actual.price).isEqualTo(3000)
-	}
-
 }

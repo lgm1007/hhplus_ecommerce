@@ -37,8 +37,8 @@ class ProductService(
 	}
 
 	@Transactional(readOnly = true)
-	fun getAllProductDetailsByDetailIdsIn(productDetailIds: List<Long>): List<ProductDetailDto> {
-		return ProductDetailDto.fromList(productDetailRepository.getAllByIdsIn(productDetailIds))
+	fun getAllProductDetailsByDetailIdsInWithLock(productDetailIds: List<Long>): List<ProductDetailDto> {
+		return ProductDetailDto.fromList(productDetailRepository.getAllByIdsInWithLock(productDetailIds))
 	}
 
 	@Transactional

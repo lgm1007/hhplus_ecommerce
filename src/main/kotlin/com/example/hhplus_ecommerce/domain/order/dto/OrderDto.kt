@@ -13,8 +13,10 @@ class OrderDto(
 	val createdDate: LocalDateTime,
 	val lastModifiedDate: LocalDateTime
 ) {
-	fun addTotalPrice(itemPrice: Int) {
-		this.totalPrice += itemPrice
+	fun addTotalPrice(prices: List<Int>) {
+		prices.forEach {price ->
+			this.totalPrice += price
+		}
 	}
 
 	fun updateOrderStatus(orderStatus: OrderStatus) {
@@ -31,6 +33,18 @@ class OrderDto(
 				order.orderStatus,
 				order.createdDate,
 				order.lastModifiedDate
+			)
+		}
+
+		fun from(userId: Long): OrderDto {
+			return OrderDto(
+				0,
+				userId,
+				LocalDateTime.now(),
+				0,
+				OrderStatus.ORDER_WAIT,
+				LocalDateTime.now(),
+				LocalDateTime.now(),
 			)
 		}
 	}
