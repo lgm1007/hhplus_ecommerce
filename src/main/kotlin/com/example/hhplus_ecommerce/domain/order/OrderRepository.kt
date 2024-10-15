@@ -5,4 +5,6 @@ import com.example.hhplus_ecommerce.infrastructure.order.entity.Order
 
 interface OrderRepository {
 	fun insert(orderDto: OrderDto): Order
+
+	fun getById(orderId: Long): Order
 }
