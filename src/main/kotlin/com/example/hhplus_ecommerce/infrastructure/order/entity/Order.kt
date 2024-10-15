@@ -14,7 +14,7 @@ class Order(
 	val userId: Long,
 	val orderDate: LocalDateTime,
 	val totalPrice: Int,
-	val orderStatus: OrderStatus,
+	var orderStatus: OrderStatus,
 ) {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,10 @@ class Order(
 	@LastModifiedDate
 	var lastModifiedDate: LocalDateTime = LocalDateTime.now()
 		private set
+
+	fun updateStatus(orderStatus: OrderStatus) {
+		this.orderStatus = orderStatus
+	}
 
 	companion object {
 		fun from(orderDto: OrderDto): Order {

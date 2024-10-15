@@ -7,4 +7,6 @@ interface OrderRepository {
 	fun insert(orderDto: OrderDto): Order
 
 	fun getById(orderId: Long): Order
+
+	fun updateOrderStatus(orderId: Long, orderStatus: OrderStatus): Order
 }

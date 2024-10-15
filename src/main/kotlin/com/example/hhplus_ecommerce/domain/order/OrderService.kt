@@ -22,4 +22,8 @@ class OrderService(
 	fun getOrderById(orderId: Long): OrderDto {
 		return OrderDto.from(orderRepository.getById(orderId))
 	}
+
+	fun updateOrderStatus(orderId: Long, orderStatus: OrderStatus): OrderDto {
+		return OrderDto.from(orderRepository.updateOrderStatus(orderId, orderStatus))
+	}
 }

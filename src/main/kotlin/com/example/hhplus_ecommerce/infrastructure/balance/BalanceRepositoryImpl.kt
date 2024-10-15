@@ -17,4 +17,13 @@ class BalanceRepositoryImpl(private val balanceJpaRepository: BalanceJpaReposito
 	override fun insert(balanceDto: BalanceDto): Balance {
 		return balanceJpaRepository.save(Balance.from(balanceDto))
 	}
+
+	override fun updateAmountDecrease(userId: Long, amount: Int): Balance {
+		val balance = (balanceJpaRepository.findByUserIdWithLock(userId)
+			?: throw NotFoundException(ErrorStatus.NOT_FOUND_USER_BALANCE))
+
+		balance.decreaseAmount(amount)
+
+		return balanceJpaRepository.save(balance)
+	}
 }

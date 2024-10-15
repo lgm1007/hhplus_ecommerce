@@ -1,6 +1,8 @@
 package com.example.hhplus_ecommerce.infrastructure.balance.entity
 
+import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.domain.balance.dto.BalanceDto
+import com.example.hhplus_ecommerce.exception.BadRequestException
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -11,7 +13,7 @@ import javax.persistence.*
 @EntityListeners(AuditingEntityListener::class)
 class Balance(
 	val userId: Long,
-	val amount: Int,
+	var amount: Int,
 ) {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +26,14 @@ class Balance(
 	@LastModifiedDate
 	var lastModifiedDate: LocalDateTime = LocalDateTime.now()
 		private set
+
+	fun decreaseAmount(amount: Int) {
+		if (this.amount - amount < 0) {
+			throw BadRequestException(ErrorStatus.NOT_ENOUGH_BALANCE)
+		}
+
+		this.amount -= amount
+	}
 
 	companion object {
 		fun from(balanceDto: BalanceDto): Balance {

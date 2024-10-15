@@ -11,4 +11,8 @@ class BalanceService(
 	fun getByUserIdWithLock(userId: Long): BalanceDto {
 		return BalanceDto.from(balanceRepository.getByUserIdWithLock(userId))
 	}
+
+	fun updateAmountDecrease(userId: Long, amount: Int): BalanceDto {
+		return BalanceDto.from(balanceRepository.updateAmountDecrease(userId, amount))
+	}
 }

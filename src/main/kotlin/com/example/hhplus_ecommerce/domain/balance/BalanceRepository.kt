@@ -7,4 +7,6 @@ interface BalanceRepository {
 	fun getByUserIdWithLock(userId: Long): Balance
 
 	fun insert(balanceDto: BalanceDto): Balance
+
+	fun updateAmountDecrease(userId: Long, amount: Int): Balance
 }
