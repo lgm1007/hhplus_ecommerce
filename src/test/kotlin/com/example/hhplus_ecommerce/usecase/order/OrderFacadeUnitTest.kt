@@ -31,7 +31,7 @@ class OrderFacadeUnitTest {
     lateinit var orderFacade: OrderFacade
 
     @Test
-    @DisplayName("상품 여러 건에 대해 주문 성공하는 기능 테스트")
+    @DisplayName("상품 여러 건에 대해 주문하는 대역 단위테스트")
     fun orderSuccess2Products() {
         `when`(productService.getAllProductDetailsByDetailIdsInWithLock(any()))
             .thenReturn(
