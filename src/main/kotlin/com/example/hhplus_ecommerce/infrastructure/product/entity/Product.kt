@@ -15,6 +15,7 @@ class Product(
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	var id: Long = 0
+		private set
 
 	@CreatedDate
 	var createdDate: LocalDateTime = LocalDateTime.now()

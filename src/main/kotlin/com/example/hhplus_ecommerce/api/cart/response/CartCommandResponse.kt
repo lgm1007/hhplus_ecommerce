@@ -1,10 +1,18 @@
 package com.example.hhplus_ecommerce.api.cart.response
 
-import com.example.hhplus_ecommerce.domain.cart.dto.CartItem
+import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
+import com.example.hhplus_ecommerce.domain.cart.dto.CartResponseItem
 
 class CartCommandResponse(
 	val message: String,
 	val userId: Long,
-	val cart: CartItem
+	val cart: CartResponseItem
 ) {
+	fun of(message: String, cartDto: CartDto): CartCommandResponse {
+		return CartCommandResponse(
+			message,
+			cartDto.userId,
+			CartResponseItem.from(cartDto)
+		)
+	}
 }
