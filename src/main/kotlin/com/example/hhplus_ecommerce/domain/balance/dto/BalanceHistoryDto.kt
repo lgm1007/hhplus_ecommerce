@@ -20,5 +20,15 @@ class BalanceHistoryDto(
 				balanceHistory.createdDate
 			)
 		}
+
+		fun of(balanceId: Long, userId: Long, updateAmount: Int): BalanceHistoryDto {
+			return BalanceHistoryDto(
+				0,
+				balanceId,
+				userId,
+				updateAmount,
+				LocalDateTime.now()
+			)
+		}
 	}
 }
