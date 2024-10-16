@@ -8,5 +8,7 @@ interface CartRepository {
 
 	fun deleteByUserIdAndProductId(userId: Long, productDetailId: Long): Cart
 
+	fun deleteAllByUserId(userId: Long): List<Cart>
+
 	fun getAllByUserId(userId: Long): List<Cart>
 }

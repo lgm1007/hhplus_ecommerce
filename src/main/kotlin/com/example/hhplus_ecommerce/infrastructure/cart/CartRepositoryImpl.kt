@@ -22,6 +22,14 @@ class CartRepositoryImpl(private val cartJpaRepository: CartJpaRepository) : Car
 		return cart
 	}
 
+	override fun deleteAllByUserId(userId: Long): List<Cart> {
+		val carts = cartJpaRepository.findAllByUserId(userId)
+
+		cartJpaRepository.deleteAll(carts)
+
+		return carts
+	}
+
 	override fun getAllByUserId(userId: Long): List<Cart> {
 		return cartJpaRepository.findAllByUserId(userId)
 	}

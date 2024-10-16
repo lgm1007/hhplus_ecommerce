@@ -16,6 +16,11 @@ class CartService(private val cartRepository: CartRepository) {
 		return CartDto.from(cartRepository.deleteByUserIdAndProductId(userId, productDetailId))
 	}
 
+	@Transactional
+	fun deleteCartByUser(userId: Long): List<CartDto> {
+		return CartDto.fromList(cartRepository.deleteAllByUserId(userId))
+	}
+
 	@Transactional(readOnly = true)
 	fun getAllCartsByUser(userId: Long): List<CartDto> {
 		return CartDto.fromList(cartRepository.getAllByUserId(userId))
