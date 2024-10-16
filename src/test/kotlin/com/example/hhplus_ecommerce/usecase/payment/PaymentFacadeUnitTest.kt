@@ -18,6 +18,8 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
@@ -30,6 +32,9 @@ class PaymentFacadeUnitTest {
 
     @Mock
     lateinit var paymentService: PaymentService
+
+    @Mock
+    lateinit var eventPublisher: ApplicationEventPublisher
 
     @InjectMocks
     lateinit var paymentFacade: PaymentFacade
