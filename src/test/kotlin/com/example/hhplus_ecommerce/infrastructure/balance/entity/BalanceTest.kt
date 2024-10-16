@@ -28,4 +28,25 @@ class BalanceTest {
             .extracting("errorStatus")
             .isEqualTo(ErrorStatus.NOT_ENOUGH_BALANCE)
     }
+
+    @Test
+    @DisplayName("잔액 충전 기능 테스트")
+    fun chargeAmount() {
+        val balance = Balance(1L, 10000)
+
+        balance.chargeAmount(5000)
+
+        assertThat(balance.amount).isEqualTo(15000)
+    }
+
+    @Test
+    @DisplayName("잔액 충전 시 충전 금액이 음수인 경우 예외케이스 테스트")
+    fun shouldFailWhenAmountNegative() {
+        val balance = Balance(1L, 10000)
+
+        assertThatThrownBy { balance.chargeAmount(-1000) }
+            .isInstanceOf(BadRequestException::class.java)
+            .extracting("errorStatus")
+            .isEqualTo(ErrorStatus.CHARGED_AMOUNT_ERROR)
+    }
 }
