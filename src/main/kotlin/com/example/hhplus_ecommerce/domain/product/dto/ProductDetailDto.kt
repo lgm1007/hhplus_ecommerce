@@ -1,8 +1,6 @@
 package com.example.hhplus_ecommerce.domain.product.dto
 
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.domain.product.ProductCategory
-import com.example.hhplus_ecommerce.exception.BadRequestException
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
@@ -19,14 +17,6 @@ class ProductDetailDto(
 	@LastModifiedDate
 	val lastModifiedDate: LocalDateTime,
 ) {
-	fun decreaseQuantity(orderQuantity: Int) {
-		if (stockQuantity < orderQuantity) {
-			throw BadRequestException(ErrorStatus.NOT_ENOUGH_QUANTITY)
-		}
-
-		stockQuantity -= orderQuantity
-	}
-
 	companion object {
 		fun from(productDetail: ProductDetail): ProductDetailDto {
 			return ProductDetailDto(
