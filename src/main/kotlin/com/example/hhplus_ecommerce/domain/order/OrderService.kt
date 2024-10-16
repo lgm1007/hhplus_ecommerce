@@ -2,6 +2,7 @@ package com.example.hhplus_ecommerce.domain.order
 
 import com.example.hhplus_ecommerce.domain.order.dto.OrderDto
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDto
+import com.example.hhplus_ecommerce.domain.order.dto.OrderQuantityStatisticsInfo
 import org.springframework.stereotype.Service
 
 @Service
@@ -25,5 +26,9 @@ class OrderService(
 
 	fun updateOrderStatus(orderId: Long, orderStatus: OrderStatus): OrderDto {
 		return OrderDto.from(orderRepository.updateOrderStatus(orderId, orderStatus))
+	}
+
+	fun getAllOrderItemsTopMoreThanDay(day: Int, limit: Int): List<OrderQuantityStatisticsInfo> {
+		return orderItemRepository.getAllOrderItemsTopMoreThanDay(day, limit)
 	}
 }

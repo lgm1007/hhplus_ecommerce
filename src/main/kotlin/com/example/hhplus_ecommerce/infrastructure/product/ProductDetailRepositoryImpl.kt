@@ -36,6 +36,10 @@ class ProductDetailRepositoryImpl(
 		return productDetailJpaRepository.findAllByIdInWithLock(ids)
 	}
 
+	override fun getAllByIdsIn(ids: List<Long>): List<ProductDetail> {
+		return productDetailJpaRepository.findAllByIdIn(ids)
+	}
+
 	@Transactional
 	override fun updateProductQuantityDecrease(id: Long, orderQuantity: Int): ProductDetail {
 		val productDetail = (productDetailJpaRepository.findByIdWithLock(id)

@@ -23,6 +23,10 @@ class OrderItemDto(
 			)
 		}
 
+		fun fromList(orderItems: List<OrderItem>): List<OrderItemDto> {
+			return orderItems.map(::from)
+		}
+
 		fun listOf(orderId: Long, orderItemDetailInfos: List<OrderItemDetailInfo>): List<OrderItemDto> {
 			return orderItemDetailInfos.map { orderItemDetailInfo ->
 				OrderItemDto(

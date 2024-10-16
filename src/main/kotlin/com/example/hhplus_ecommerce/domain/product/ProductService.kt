@@ -4,6 +4,7 @@ import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDto
 import com.example.hhplus_ecommerce.domain.product.dto.ProductInfo
+import com.example.hhplus_ecommerce.domain.product.dto.ProductStatisticsInfo
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -40,6 +41,16 @@ class ProductService(
 	@Transactional(readOnly = true)
 	fun getAllProductDetailsByDetailIdsInWithLock(productDetailIds: List<Long>): List<ProductDetailDto> {
 		return ProductDetailDto.fromList(productDetailRepository.getAllByIdsInWithLock(productDetailIds))
+	}
+
+	@Transactional(readOnly = true)
+	fun getAllProductStatisticsInfos(productDetailIds: List<Long>): List<ProductStatisticsInfo> {
+		val productDetailDtos = ProductDetailDto.fromList(productDetailRepository.getAllByIdsIn(productDetailIds))
+		val productIds = productDetailDtos.map { it.productId }
+
+		val productDtos = ProductDto.fromList(productRepository.getAllByIds(productIds))
+
+		return ProductStatisticsInfo.listOf(productDtos, productDetailDtos)
 	}
 
 	@Transactional

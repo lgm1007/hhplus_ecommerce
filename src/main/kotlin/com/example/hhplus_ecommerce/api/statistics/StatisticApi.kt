@@ -1,8 +1,8 @@
-package com.example.hhplus_ecommerce.api.statistic
+package com.example.hhplus_ecommerce.api.statistics
 
 import com.example.hhplus_ecommerce.api.error.ErrorBody
-import com.example.hhplus_ecommerce.api.statistic.response.ProductStatisticResponse
-import com.example.hhplus_ecommerce.api.statistic.response.ProductStatisticResponseItem
+import com.example.hhplus_ecommerce.api.statistics.response.OrderProductStatisticsResponse
+import com.example.hhplus_ecommerce.domain.statistics.dto.OrderProductStatisticsResponseItem
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -27,17 +27,17 @@ class StatisticApi {
 	@Operation(summary = "최근 3일간 가장 많이 팔린 상위 5개 상품 통계", description = "최근 3일간 가장 많이 팔린 상위 5개 상품 정보를 조회한다.")
 	@ApiResponses(value = [
 		ApiResponse(responseCode = "200", description = "상위 상품 조회 성공",
-			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ProductStatisticResponse::class)) ]),
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = OrderProductStatisticsResponse::class)) ]),
 		ApiResponse(responseCode = "404", description = "상품 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun topProductsStatistic(): ResponseEntity<Any> {
 		try {
 			return ResponseEntity.ok(
-				ProductStatisticResponse(
+				OrderProductStatisticsResponse(
 					listOf(
-						ProductStatisticResponseItem(1L, "상품 A", 50),
-						ProductStatisticResponseItem(2L, "상품 B", 40)
+						OrderProductStatisticsResponseItem(1L, "상품 A", 50),
+						OrderProductStatisticsResponseItem(2L, "상품 B", 40)
 					)
 				)
 			)
