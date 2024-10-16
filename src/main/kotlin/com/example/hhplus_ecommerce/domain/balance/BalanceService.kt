@@ -14,6 +14,7 @@ class BalanceService(
 		return BalanceDto.from(balanceRepository.getByUserIdWithLock(userId))
 	}
 
+	@Transactional
 	fun updateAmountDecrease(userId: Long, amount: Int): BalanceDto {
 		val balanceDto = BalanceDto.from(balanceRepository.updateDecreaseAmount(userId, amount))
 		balanceHistoryRepository.insert(BalanceHistoryDto.of(balanceDto.balanceId, userId, (amount * -1)))
