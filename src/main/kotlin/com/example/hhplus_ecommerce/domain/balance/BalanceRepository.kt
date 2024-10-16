@@ -8,5 +8,7 @@ interface BalanceRepository {
 
 	fun insert(balanceDto: BalanceDto): Balance
 
-	fun updateAmountDecrease(userId: Long, amount: Int): Balance
+	fun updateDecreaseAmount(userId: Long, amount: Int): Balance
+
+	fun updateChargeAmount(userId: Long, amount: Int): Balance
 }

@@ -35,6 +35,14 @@ class Balance(
 		this.amount -= amount
 	}
 
+	fun chargeAmount(amount: Int) {
+		if (amount < 0) {
+			throw BadRequestException(ErrorStatus.CHARGED_AMOUNT_ERROR)
+		}
+
+		this.amount += amount
+	}
+
 	companion object {
 		fun from(balanceDto: BalanceDto): Balance {
 			return Balance(
