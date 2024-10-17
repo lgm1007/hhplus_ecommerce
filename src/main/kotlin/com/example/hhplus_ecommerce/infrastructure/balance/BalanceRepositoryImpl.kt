@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 class BalanceRepositoryImpl(private val balanceJpaRepository: BalanceJpaRepository) : BalanceRepository {
+	@Transactional
 	override fun getByUserIdWithLock(userId: Long): Balance {
 		return balanceJpaRepository.findByUserIdWithLock(userId)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_USER_BALANCE)
