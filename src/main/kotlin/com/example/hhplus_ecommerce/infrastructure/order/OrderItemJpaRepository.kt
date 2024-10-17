@@ -11,4 +11,6 @@ import java.time.LocalDateTime
 interface OrderItemJpaRepository : JpaRepository<OrderItem, Long> {
 	@Query("SELECT new com.example.hhplus_ecommerce.domain.order.dto.OrderQuantityStatisticsInfo(oi.productDetailId, SUM(oi.quantity)) FROM OrderItem oi WHERE oi.createdDate >= :standardDate ORDER BY SUM(oi.quantity) DESC")
 	fun findTopQuantityByCreatedDateMoreThan(@Param("standardDate") standardDate: LocalDateTime, pageable: Pageable): List<OrderQuantityStatisticsInfo>
+
+	fun findAllByOrderId(orderId: Long): List<OrderItem>
 }

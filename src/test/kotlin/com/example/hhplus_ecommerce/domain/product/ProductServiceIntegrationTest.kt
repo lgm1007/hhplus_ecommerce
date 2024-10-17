@@ -6,6 +6,7 @@ import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,8 +19,14 @@ import java.util.concurrent.atomic.AtomicInteger
 @SpringBootTest
 class ProductServiceIntegrationTest {
 	@Autowired private lateinit var productService: ProductService
-	@Autowired private lateinit var productJpaRepository: ProductJpaRepository
-	@Autowired private lateinit var productDetailJpaRepository: ProductDetailJpaRepository
+	@Autowired private lateinit var productRepository: ProductJpaRepository
+	@Autowired private lateinit var productDetailRepository: ProductDetailJpaRepository
+
+	@BeforeEach
+	fun clearDB() {
+		productRepository.deleteAll()
+		productDetailRepository.deleteAll()
+	}
 
 	@Test
 	@DisplayName("상품 목록 조회 - 페이징하여 상품 목록 조회")
@@ -33,16 +40,16 @@ class ProductServiceIntegrationTest {
 
 	private fun givenProducts(size: Int) {
 		for (i in 1..size) {
-			val productId = productJpaRepository.save(Product("상품${i}", "{i}번 상품")).id
-			productDetailJpaRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES))
+			val productId = productRepository.save(Product("상품${i}", "{i}번 상품")).id
+			productDetailRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES))
 		}
 	}
 
 	@Test
 	@DisplayName("특정 상품 조회하기")
 	fun getProductInfo() {
-		val productId = productJpaRepository.save(Product("상품 A", "A 상품")).id
-		productDetailJpaRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES))
+		val productId = productRepository.save(Product("상품 A", "A 상품")).id
+		productDetailRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES))
 
 		val actual = productService.getProductInfoById(productId)
 
@@ -56,8 +63,8 @@ class ProductServiceIntegrationTest {
 	fun quantityDecreaseConcurrency() {
 		// 상품 재고 3개에 대해 5번 동시 차감 요청 시
 		// 예상 성공 카운트 3, 실패 카운트 2, 남은 재고양 0
-		val productId = productJpaRepository.save(Product("상품 A", "A 상품")).id
-		val detailId = productDetailJpaRepository.save(ProductDetail(productId, 1000, 3, ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(Product("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 3, ProductCategory.CLOTHES)).id
 
 		val executor = Executors.newFixedThreadPool(5)
 		val countDownLatch = CountDownLatch(5)
