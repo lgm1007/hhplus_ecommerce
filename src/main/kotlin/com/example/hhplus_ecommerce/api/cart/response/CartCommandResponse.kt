@@ -8,11 +8,13 @@ class CartCommandResponse(
 	val userId: Long,
 	val cart: CartResponseItem
 ) {
-	fun of(message: String, cartDto: CartDto): CartCommandResponse {
-		return CartCommandResponse(
-			message,
-			cartDto.userId,
-			CartResponseItem.from(cartDto)
-		)
+	companion object {
+		fun of(message: String, cartDto: CartDto): CartCommandResponse {
+			return CartCommandResponse(
+				message,
+				cartDto.userId,
+				CartResponseItem.from(cartDto)
+			)
+		}
 	}
 }
