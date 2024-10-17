@@ -9,6 +9,7 @@ import com.example.hhplus_ecommerce.domain.payment.dto.PaymentResultInfo
 import com.example.hhplus_ecommerce.event.DataPlatformEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class PaymentFacade(
@@ -17,6 +18,7 @@ class PaymentFacade(
 	private val paymentService: PaymentService,
 	private val eventPublisher: ApplicationEventPublisher
 ) {
+	@Transactional
 	fun orderPayment(userId: Long, orderId: Long): PaymentResultInfo {
 		// 주문 정보 조회
 		val orderDto = orderService.getOrderById(orderId)
