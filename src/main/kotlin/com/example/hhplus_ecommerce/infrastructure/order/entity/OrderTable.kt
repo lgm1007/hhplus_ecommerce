@@ -10,7 +10,7 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class Order(
+class OrderTable(
 	val userId: Long,
 	val orderDate: LocalDateTime,
 	val totalPrice: Int,
@@ -33,8 +33,8 @@ class Order(
 	}
 
 	companion object {
-		fun from(orderDto: OrderDto): Order {
-			return Order(
+		fun from(orderDto: OrderDto): OrderTable {
+			return OrderTable(
 				orderDto.userId,
 				orderDto.orderDate,
 				orderDto.totalPrice,
