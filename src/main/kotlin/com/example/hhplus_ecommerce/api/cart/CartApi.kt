@@ -4,7 +4,7 @@ import com.example.hhplus_ecommerce.api.cart.request.CartAddRequest
 import com.example.hhplus_ecommerce.api.cart.response.CartCommandResponse
 import com.example.hhplus_ecommerce.api.cart.response.CartQueryResponse
 import com.example.hhplus_ecommerce.api.error.ErrorBody
-import com.example.hhplus_ecommerce.domain.cart.dto.CartItem
+import com.example.hhplus_ecommerce.domain.cart.dto.CartResponseItem
 import com.example.hhplus_ecommerce.exception.BadRequestException
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import io.swagger.v3.oas.annotations.Operation
@@ -38,7 +38,7 @@ class CartApi() {
 				CartCommandResponse(
 					"상품을 장바구니에 추가했습니다.",
 					12345L,
-					CartItem(1L, 2
+					CartResponseItem(1L, 2
 					)
 				)
 			)
@@ -67,7 +67,7 @@ class CartApi() {
 				CartCommandResponse(
 					"장바구니에서 상품을 삭제했습니다.",
 					12345L,
-					CartItem(2L, 1)
+					CartResponseItem(2L, 1)
 				)
 			)
 		} catch (e: NotFoundException) {
@@ -92,8 +92,8 @@ class CartApi() {
 				CartQueryResponse(
 					12345L,
 					listOf(
-						CartItem(1L, 2),
-						CartItem(2L, 1)
+						CartResponseItem(1L, 2),
+						CartResponseItem(2L, 1)
 					)
 				)
 			)
