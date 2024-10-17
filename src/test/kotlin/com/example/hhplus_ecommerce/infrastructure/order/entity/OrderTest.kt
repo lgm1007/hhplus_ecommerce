@@ -10,7 +10,7 @@ class OrderTest {
     @Test
     @DisplayName("주문 상태 업데이트 기능 테스트")
     fun updateOrderStatus() {
-        val order = Order(
+        val order = OrderTable(
             1L,
             LocalDateTime.now(),
             5000,
