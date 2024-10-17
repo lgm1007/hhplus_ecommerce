@@ -5,6 +5,7 @@ import com.example.hhplus_ecommerce.api.payment.request.PaymentRequest
 import com.example.hhplus_ecommerce.api.payment.response.PaymentResponse
 import com.example.hhplus_ecommerce.exception.BadRequestException
 import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.usecase.payment.PaymentFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -17,12 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDateTime
 
 @Tag(name = "결제 API")
 @RequestMapping("/api/v1")
 @RestController
-class PaymentApi() {
+class PaymentApi(private val paymentFacade: PaymentFacade) {
 	/**
 	 * 결제 API
 	 */
@@ -39,12 +39,7 @@ class PaymentApi() {
 	fun payment(@RequestBody paymentRequest: PaymentRequest): ResponseEntity<Any> {
 		try {
 			return ResponseEntity.ok(
-				PaymentResponse(
-					123L,
-					98765L,
-					17000,
-					LocalDateTime.of(2024, 10, 6, 12, 1, 10)
-				)
+				PaymentResponse.from(paymentFacade.orderPayment(paymentRequest.userId, paymentRequest.orderId))
 			)
 		} catch (badRequestException: BadRequestException) {
 			return ResponseEntity(ErrorBody(badRequestException.errorStatus.message, 400), HttpStatus.BAD_REQUEST)

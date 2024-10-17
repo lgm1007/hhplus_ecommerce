@@ -2,8 +2,8 @@ package com.example.hhplus_ecommerce.api.statistics
 
 import com.example.hhplus_ecommerce.api.error.ErrorBody
 import com.example.hhplus_ecommerce.api.statistics.response.OrderProductStatisticsResponse
-import com.example.hhplus_ecommerce.domain.statistics.dto.OrderProductStatisticsResponseItem
 import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.usecase.statistics.StatisticsFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @Tag(name = "통계 API")
 @RequestMapping("/api/v1")
 @RestController
-class StatisticApi {
+class StatisticApi(private val statisticsFacade: StatisticsFacade) {
 	/**
 	 * 상위 상품 조회 API
 	 */
@@ -35,10 +35,8 @@ class StatisticApi {
 		try {
 			return ResponseEntity.ok(
 				OrderProductStatisticsResponse(
-					listOf(
-						OrderProductStatisticsResponseItem(1L, "상품 A", 50),
-						OrderProductStatisticsResponseItem(2L, "상품 B", 40)
-					)
+					// 최근 3일 간 가장 많이 주문한 상품 상위 5개
+					statisticsFacade.getTopOrderProductStatistics(3, 5)
 				)
 			)
 		} catch (e: NotFoundException) {
