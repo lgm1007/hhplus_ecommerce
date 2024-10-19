@@ -1,5 +1,6 @@
 package com.example.hhplus_ecommerce.usecase.order
 
+import com.example.hhplus_ecommerce.domain.cart.CartService
 import com.example.hhplus_ecommerce.domain.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.dto.OrderDto
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDto
@@ -26,6 +27,9 @@ class OrderFacadeUnitTest {
 
     @Mock
     lateinit var productService: ProductService
+
+    @Mock
+    lateinit var cartService: CartService
 
     @InjectMocks
     lateinit var orderFacade: OrderFacade
