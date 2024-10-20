@@ -4,8 +4,9 @@ import com.example.hhplus_ecommerce.api.error.ErrorBody
 import com.example.hhplus_ecommerce.api.order.request.OrderRequest
 import com.example.hhplus_ecommerce.api.order.response.OrderResponse
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
-import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetail
+import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetailInfo
 import com.example.hhplus_ecommerce.exception.BadRequestException
+import com.example.hhplus_ecommerce.exception.NotFoundException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -34,6 +35,8 @@ class OrderApi() {
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = OrderResponse::class)) ]),
 		ApiResponse(responseCode = "400", description = "잔액/재고 부족",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
+		ApiResponse(responseCode = "404", description = "사용자의 비용 정보 없음",
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun order(@RequestBody orderRequest: OrderRequest): ResponseEntity<Any> {
 		try {
@@ -45,13 +48,15 @@ class OrderApi() {
 					13000,
 					OrderStatus.ORDER_COMPLETE,
 					listOf(
-						OrderItemDetail(1L, 2, 10000),
-						OrderItemDetail(2L, 1, 3000)
+						OrderItemDetailInfo(1L, 2, 10000),
+						OrderItemDetailInfo(2L, 1, 3000)
 					)
 				)
 			)
-		} catch (e: BadRequestException) {
-			return ResponseEntity(ErrorBody(e.errorStatus.message, 400), HttpStatus.BAD_REQUEST)
+		} catch (badRequestException: BadRequestException) {
+			return ResponseEntity(ErrorBody(badRequestException.errorStatus.message, 400), HttpStatus.BAD_REQUEST)
+		} catch (notFoundException: NotFoundException) {
+			return ResponseEntity(ErrorBody(notFoundException.errorStatus.message, 404), HttpStatus.NOT_FOUND)
 		}
 	}
 }

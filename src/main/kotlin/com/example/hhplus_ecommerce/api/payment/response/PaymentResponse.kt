@@ -1,5 +1,6 @@
 package com.example.hhplus_ecommerce.api.payment.response
 
+import com.example.hhplus_ecommerce.domain.payment.dto.PaymentResultInfo
 import java.time.LocalDateTime
 
 class PaymentResponse(
@@ -8,4 +9,14 @@ class PaymentResponse(
 	val currentBalance: Int,
 	val paymentDate: LocalDateTime
 ) {
+	companion object {
+		fun from(paymentResultInfo: PaymentResultInfo): PaymentResponse {
+			return PaymentResponse(
+				paymentResultInfo.paymentId,
+				paymentResultInfo.orderId,
+				paymentResultInfo.currentBalance,
+				paymentResultInfo.paymentDate
+			)
+		}
+	}
 }
