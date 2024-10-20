@@ -4,7 +4,8 @@ import com.example.hhplus_ecommerce.api.cart.request.CartAddRequest
 import com.example.hhplus_ecommerce.api.cart.response.CartCommandResponse
 import com.example.hhplus_ecommerce.api.cart.response.CartQueryResponse
 import com.example.hhplus_ecommerce.api.error.ErrorBody
-import com.example.hhplus_ecommerce.domain.cart.dto.CartItem
+import com.example.hhplus_ecommerce.domain.cart.CartService
+import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
 import com.example.hhplus_ecommerce.exception.BadRequestException
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import io.swagger.v3.oas.annotations.Operation
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "장바구니 API")
 @RequestMapping("/api/v1")
 @RestController
-class CartApi() {
+class CartApi(private val cartService: CartService) {
 	/**
 	 * 장바구니 상품 추가 API
 	 */
@@ -35,11 +36,9 @@ class CartApi() {
 	fun addCartItem(@RequestBody cartAddRequest: CartAddRequest): ResponseEntity<Any> {
 		try {
 			return ResponseEntity.ok(
-				CartCommandResponse(
+				CartCommandResponse.of(
 					"상품을 장바구니에 추가했습니다.",
-					12345L,
-					CartItem(1L, 2
-					)
+					cartService.addProductCart(CartDto.from(cartAddRequest))
 				)
 			)
 		} catch (e: BadRequestException) {
@@ -64,10 +63,9 @@ class CartApi() {
 	): ResponseEntity<Any> {
 		try {
 			return ResponseEntity.ok(
-				CartCommandResponse(
+				CartCommandResponse.of(
 					"장바구니에서 상품을 삭제했습니다.",
-					12345L,
-					CartItem(2L, 1)
+					cartService.deleteCartByUserProduct(userId, productId)
 				)
 			)
 		} catch (e: NotFoundException) {
@@ -89,12 +87,9 @@ class CartApi() {
 	fun getCartsByUser(@PathVariable userId: Long): ResponseEntity<Any> {
 		try {
 			return ResponseEntity.ok(
-				CartQueryResponse(
-					12345L,
-					listOf(
-						CartItem(1L, 2),
-						CartItem(2L, 1)
-					)
+				CartQueryResponse.of(
+					userId,
+					cartService.getAllCartsByUser(userId)
 				)
 			)
 		} catch (e: NotFoundException) {
