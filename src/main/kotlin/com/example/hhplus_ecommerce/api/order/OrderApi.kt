@@ -31,7 +31,7 @@ class OrderApi(private val orderFacade: OrderFacade) {
 	@ApiResponses(value = [
 		ApiResponse(responseCode = "200", description = "상품 주문 성공",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = OrderResponse::class)) ]),
-		ApiResponse(responseCode = "400", description = "잔액/재고 부족",
+		ApiResponse(responseCode = "400", description = "재고 부족",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 		ApiResponse(responseCode = "404", description = "사용자의 비용 정보 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
