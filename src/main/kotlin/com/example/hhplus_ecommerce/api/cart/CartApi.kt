@@ -54,7 +54,7 @@ class CartApi(private val cartService: CartService) {
 	@ApiResponses(value = [
 		ApiResponse(responseCode = "200", description = "장바구니 상품 삭제 성공",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = CartCommandResponse::class)) ]),
-		ApiResponse(responseCode = "404", description = "사용자 정보/상품 없음",
+		ApiResponse(responseCode = "404", description = "장바구니 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun deleteCartItem(

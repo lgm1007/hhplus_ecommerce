@@ -28,6 +28,8 @@ class BalanceApi(private val balanceService: BalanceService) {
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = BalanceChargeResponse::class)) ]),
 		ApiResponse(responseCode = "400", description = "충전 금액 에러",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
+		ApiResponse(responseCode = "404", description = "사용자 잔액 정보 없음",
+			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun chargeBalance(@RequestBody chargeRequest: BalanceChargeRequest): ResponseEntity<Any> {
 		try {
@@ -50,7 +52,7 @@ class BalanceApi(private val balanceService: BalanceService) {
 	@ApiResponses(value = [
 		ApiResponse(responseCode = "200", description = "잔액 조회 성공",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = UserBalanceResponse::class)) ]),
-		ApiResponse(responseCode = "404", description = "사용자 없음",
+		ApiResponse(responseCode = "404", description = "사용자 잔액 정보 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun fetchUserCurrentBalance(@PathVariable userId: Long): ResponseEntity<Any> {
