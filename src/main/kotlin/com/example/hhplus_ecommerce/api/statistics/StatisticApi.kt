@@ -2,7 +2,6 @@ package com.example.hhplus_ecommerce.api.statistics
 
 import com.example.hhplus_ecommerce.api.error.ErrorBody
 import com.example.hhplus_ecommerce.api.statistics.response.OrderProductStatisticsResponse
-import com.example.hhplus_ecommerce.exception.NotFoundException
 import com.example.hhplus_ecommerce.usecase.statistics.StatisticsFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -10,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -31,16 +29,12 @@ class StatisticApi(private val statisticsFacade: StatisticsFacade) {
 		ApiResponse(responseCode = "404", description = "상품 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
-	fun topProductsStatistic(): ResponseEntity<Any> {
-		try {
-			return ResponseEntity.ok(
-				OrderProductStatisticsResponse(
-					// 최근 3일 간 가장 많이 주문한 상품 상위 5개
-					statisticsFacade.getTopOrderProductStatistics(3, 5)
-				)
+	fun topProductsStatistic(): ResponseEntity<OrderProductStatisticsResponse> {
+		return ResponseEntity.ok(
+			OrderProductStatisticsResponse(
+				// 최근 3일 간 가장 많이 주문한 상품 상위 5개
+				statisticsFacade.getTopOrderProductStatistics(3, 5)
 			)
-		} catch (e: NotFoundException) {
-			return ResponseEntity(ErrorBody(e.errorStatus.message, 404), HttpStatus.NOT_FOUND)
-		}
+		)
 	}
 }

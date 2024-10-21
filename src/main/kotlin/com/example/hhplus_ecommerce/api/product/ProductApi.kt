@@ -4,7 +4,6 @@ import com.example.hhplus_ecommerce.api.error.ErrorBody
 import com.example.hhplus_ecommerce.api.product.response.ProductResponse
 import com.example.hhplus_ecommerce.api.product.response.ProductResponseItem
 import com.example.hhplus_ecommerce.domain.product.ProductService
-import com.example.hhplus_ecommerce.exception.NotFoundException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -13,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -35,14 +33,10 @@ class ProductApi(private val productService: ProductService) {
 		ApiResponse(responseCode = "404", description = "상품 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
-	fun getProducts(@PageableDefault(size = 10, page = 1) pageable: Pageable): ResponseEntity<Any> {
-		try {
-			return ResponseEntity.ok(
-				ProductResponse.from(productService.getAllProductInfosWithPaging(pageable))
-			)
-		} catch (e: NotFoundException) {
-			return ResponseEntity(ErrorBody(e.errorStatus.message, 404), HttpStatus.NOT_FOUND)
-		}
+	fun getProducts(@PageableDefault(size = 10, page = 1) pageable: Pageable): ResponseEntity<ProductResponse> {
+		return ResponseEntity.ok(
+			ProductResponse.from(productService.getAllProductInfosWithPaging(pageable))
+		)
 	}
 
 	/**
@@ -56,14 +50,10 @@ class ProductApi(private val productService: ProductService) {
 		ApiResponse(responseCode = "404", description = "상품 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
-	fun getProduct(@PathVariable productId: Long): ResponseEntity<Any> {
-		try {
-			return ResponseEntity.ok(
-				ProductResponseItem.from(productService.getProductInfoById(productId))
-			)
-		} catch (e: NotFoundException) {
-			return ResponseEntity(ErrorBody(e.errorStatus.message, 404), HttpStatus.NOT_FOUND)
-		}
+	fun getProduct(@PathVariable productId: Long): ResponseEntity<ProductResponseItem> {
+		return ResponseEntity.ok(
+			ProductResponseItem.from(productService.getProductInfoById(productId))
+		)
 	}
 
 }

@@ -3,8 +3,6 @@ package com.example.hhplus_ecommerce.api.order
 import com.example.hhplus_ecommerce.api.error.ErrorBody
 import com.example.hhplus_ecommerce.api.order.request.OrderRequest
 import com.example.hhplus_ecommerce.api.order.response.OrderResponse
-import com.example.hhplus_ecommerce.exception.BadRequestException
-import com.example.hhplus_ecommerce.exception.NotFoundException
 import com.example.hhplus_ecommerce.usecase.order.OrderFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -12,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -36,17 +33,11 @@ class OrderApi(private val orderFacade: OrderFacade) {
 		ApiResponse(responseCode = "404", description = "사용자의 비용 정보 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
-	fun order(@RequestBody orderRequest: OrderRequest): ResponseEntity<Any> {
-		try {
-			return ResponseEntity.ok(
-				OrderResponse.from(
-					orderFacade.productOrder(orderRequest.userId, orderRequest.orderItemInfos)
-				)
+	fun order(@RequestBody orderRequest: OrderRequest): ResponseEntity<OrderResponse> {
+		return ResponseEntity.ok(
+			OrderResponse.from(
+				orderFacade.productOrder(orderRequest.userId, orderRequest.orderItemInfos)
 			)
-		} catch (badRequestException: BadRequestException) {
-			return ResponseEntity(ErrorBody(badRequestException.errorStatus.message, 400), HttpStatus.BAD_REQUEST)
-		} catch (notFoundException: NotFoundException) {
-			return ResponseEntity(ErrorBody(notFoundException.errorStatus.message, 404), HttpStatus.NOT_FOUND)
-		}
+		)
 	}
 }
