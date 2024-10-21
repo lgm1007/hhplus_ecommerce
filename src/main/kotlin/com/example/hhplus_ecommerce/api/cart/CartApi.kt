@@ -27,8 +27,6 @@ class CartApi(private val cartService: CartService) {
 	@ApiResponses(value = [
 		ApiResponse(responseCode = "200", description = "장바구니 상품 추가 성공",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = CartCommandResponse::class)) ]),
-		ApiResponse(responseCode = "400", description = "재고 부족",
-			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun addCartItem(@RequestBody cartAddRequest: CartAddRequest): ResponseEntity<CartCommandResponse> {
 		return ResponseEntity.ok(
