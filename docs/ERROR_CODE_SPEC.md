@@ -1,6 +1,7 @@
-## Error Code 정의서
-해당 서비스에서 관리하는 에러 코드에 대해 정리한 문서이다.
+# Error 관리 정의서
+해당 서비스에서 관리하는 에러를 관리하기 위한 문서이다.
 
+## 발생 가능 에러
 ### 400 Error
 #### 설명
 * 비즈니스에 대해 올바른 요청이 아닐 경우 발생하는 에러
@@ -101,3 +102,42 @@ Content-Type: application/json
 
 * 통계 API
   * 상품 정보를 찾지 못하는 경우
+
+## 관리 방법
+### (공통) 에러 메시지 관리용 Enum
+* `ErrorStatus` Enum
+```kotlin
+enum class ErrorStatus(val message: String) {
+    CHARGED_AMOUNT_ERROR("충전 금액 에러"),
+    NOT_FOUND_USER("사용자 없음"),
+    NOT_FOUND_USER_BALANCE("사용자에 대한 비용 정보 없음"),
+    NOT_FOUND_PRODUCT("상품 없음"),
+    NOT_FOUND_ORDER("주문 정보 없음"),
+    NOT_FOUND_CART("장바구니 없음"),
+    NOT_ENOUGH_BALANCE("잔액 부족"),
+    NOT_ENOUGH_QUANTITY("재고 부족")
+}
+```
+
+### (공통) 에러 응답 Body 용 클래스
+* 에러 응답 Body 클래스: `ErrorBody`
+* 필드
+  * `error`: String (에러 메시지)
+  * `status`: Int (HTTP 상태 코드)
+
+### 예외 클래스
+* 400 Error 예외: `BadRequestException`
+* 404 Error 예외: `NotFoundException`
+* 필드 (공통)
+  * `errorStatus`: ErrorStatus
+
+* 사용 예제
+```kotlin
+try {
+    return ResponseEntity.ok(
+      orderFacade.productOrder(userId, orderItemInfos)
+    )
+} catch (e: BadRequestException) {
+    return ResponseEntity(ErrorBody(e.errorStatus.message, 400), HttpStatus.BAD_REQUEST)
+}
+```
