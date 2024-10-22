@@ -83,7 +83,7 @@ class StatisticsFacadeIntegrationTest {
 			OrderItemDto(0, 4L, detailId6, 5, 5000, LocalDateTime.now()),
 			OrderItemDto(0, 5L, detailId1, 5, 250000, LocalDateTime.now()),
 		)
-		orderService.registerOrderItems(orderItemDtos)
+		orderService.insertAllOrderItems(orderItemDtos)
 	}
 
 	@Test
@@ -107,6 +107,6 @@ class StatisticsFacadeIntegrationTest {
 			OrderItemDto(0, 4L, 6L, 5, 5000, LocalDateTime.now()),
 			OrderItemDto(0, 5L, 1L, 5, 250000, LocalDateTime.now()),
 		)
-		orderService.registerOrderItems(orderItemDtos)
+		orderService.insertAllOrderItems(orderItemDtos)
 	}
 }
