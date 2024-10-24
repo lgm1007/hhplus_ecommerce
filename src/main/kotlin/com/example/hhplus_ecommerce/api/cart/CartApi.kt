@@ -6,15 +6,12 @@ import com.example.hhplus_ecommerce.api.cart.response.CartQueryResponse
 import com.example.hhplus_ecommerce.api.error.ErrorBody
 import com.example.hhplus_ecommerce.domain.cart.CartService
 import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
-import com.example.hhplus_ecommerce.exception.BadRequestException
-import com.example.hhplus_ecommerce.exception.NotFoundException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -31,17 +28,13 @@ class CartApi(private val cartService: CartService) {
 		ApiResponse(responseCode = "200", description = "장바구니 상품 추가 성공",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = CartCommandResponse::class)) ]),
 	])
-	fun addCartItem(@RequestBody cartAddRequest: CartAddRequest): ResponseEntity<Any> {
-		try {
-			return ResponseEntity.ok(
-				CartCommandResponse.of(
-					"상품을 장바구니에 추가했습니다.",
-					cartService.addProductCart(CartDto.from(cartAddRequest))
-				)
+	fun addCartItem(@RequestBody cartAddRequest: CartAddRequest): ResponseEntity<CartCommandResponse> {
+		return ResponseEntity.ok(
+			CartCommandResponse.of(
+				"상품을 장바구니에 추가했습니다.",
+				cartService.addProductCart(CartDto.from(cartAddRequest))
 			)
-		} catch (e: BadRequestException) {
-			return ResponseEntity(ErrorBody(e.errorStatus.message, 400), HttpStatus.BAD_REQUEST)
-		}
+		)
 	}
 
 	/**
@@ -52,23 +45,19 @@ class CartApi(private val cartService: CartService) {
 	@ApiResponses(value = [
 		ApiResponse(responseCode = "200", description = "장바구니 상품 삭제 성공",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = CartCommandResponse::class)) ]),
-		ApiResponse(responseCode = "404", description = "사용자 정보/상품 없음",
+		ApiResponse(responseCode = "404", description = "장바구니 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
 	fun deleteCartItem(
 		@PathVariable userId: Long,
 		@PathVariable productId: Long
-	): ResponseEntity<Any> {
-		try {
-			return ResponseEntity.ok(
-				CartCommandResponse.of(
-					"장바구니에서 상품을 삭제했습니다.",
-					cartService.deleteCartByUserProduct(userId, productId)
-				)
+	): ResponseEntity<CartCommandResponse> {
+		return ResponseEntity.ok(
+			CartCommandResponse.of(
+				"장바구니에서 상품을 삭제했습니다.",
+				cartService.deleteCartByUserProduct(userId, productId)
 			)
-		} catch (e: NotFoundException) {
-			return ResponseEntity(ErrorBody(e.errorStatus.message, 404), HttpStatus.NOT_FOUND)
-		}
+		)
 	}
 
 	/**
@@ -82,16 +71,12 @@ class CartApi(private val cartService: CartService) {
 		ApiResponse(responseCode = "404", description = "장바구니 없음",
 			content = [ Content(mediaType = "application/json", schema = Schema(implementation = ErrorBody::class)) ]),
 	])
-	fun getCartsByUser(@PathVariable userId: Long): ResponseEntity<Any> {
-		try {
-			return ResponseEntity.ok(
-				CartQueryResponse.of(
-					userId,
-					cartService.getAllCartsByUser(userId)
-				)
+	fun getCartsByUser(@PathVariable userId: Long): ResponseEntity<CartQueryResponse> {
+		return ResponseEntity.ok(
+			CartQueryResponse.of(
+				userId,
+				cartService.getAllCartsByUser(userId)
 			)
-		} catch (e: NotFoundException) {
-			return ResponseEntity(ErrorBody(e.errorStatus.message, 404), HttpStatus.NOT_FOUND)
-		}
+		)
 	}
 }

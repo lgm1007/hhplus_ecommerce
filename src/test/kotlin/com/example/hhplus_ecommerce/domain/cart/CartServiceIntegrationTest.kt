@@ -1,8 +1,11 @@
 package com.example.hhplus_ecommerce.domain.cart
 
+import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
+import com.example.hhplus_ecommerce.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.cart.CartJpaRepository
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -64,8 +67,9 @@ class CartServiceIntegrationTest {
 
 		cartService.deleteCartByUser(userId)
 
-		val actual = cartService.getAllCartsByUser(userId)
-
-		assertThat(actual.size).isEqualTo(0)
+		assertThatThrownBy { cartService.getAllCartsByUser(userId) }
+			.isInstanceOf(NotFoundException::class.java)
+			.extracting("errorStatus")
+			.isEqualTo(ErrorStatus.NOT_FOUND_CART)
 	}
 }

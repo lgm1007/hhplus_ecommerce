@@ -1,9 +1,11 @@
 package com.example.hhplus_ecommerce.usecase.statistics
 
+import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.domain.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDto
 import com.example.hhplus_ecommerce.domain.product.ProductCategory
 import com.example.hhplus_ecommerce.domain.product.ProductService
+import com.example.hhplus_ecommerce.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.order.OrderItemJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.order.OrderJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepository
@@ -11,6 +13,7 @@ import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -80,6 +83,30 @@ class StatisticsFacadeIntegrationTest {
 			OrderItemDto(0, 4L, detailId6, 5, 5000, LocalDateTime.now()),
 			OrderItemDto(0, 5L, detailId1, 5, 250000, LocalDateTime.now()),
 		)
-		orderService.registerOrderItems(orderItemDtos)
+		orderService.insertAllOrderItems(orderItemDtos)
+	}
+
+	@Test
+	@DisplayName("통계성 상위 상품 조회 - 상품 정보가 존재하지 않는 경우 예외케이스")
+	fun getTopProductStatisticsNotFoundProduct() {
+		givenOrderItemsNoProduct()
+
+		assertThatThrownBy { statisticsFacade.getTopOrderProductStatistics(3, 5) }
+			.isInstanceOf(NotFoundException::class.java)
+			.extracting("errorStatus")
+			.isEqualTo(ErrorStatus.NOT_FOUND_PRODUCT)
+	}
+
+	private fun givenOrderItemsNoProduct() {
+		val orderItemDtos = listOf(
+			OrderItemDto(0, 1L, 1L, 50, 2500000, LocalDateTime.now()),
+			OrderItemDto(0, 1L, 2L, 40, 1200000, LocalDateTime.now()),
+			OrderItemDto(0, 2L, 3L, 30, 3000000, LocalDateTime.now()),
+			OrderItemDto(0, 3L, 4L, 20, 20000, LocalDateTime.now()),
+			OrderItemDto(0, 4L, 5L, 10, 10000, LocalDateTime.now()),
+			OrderItemDto(0, 4L, 6L, 5, 5000, LocalDateTime.now()),
+			OrderItemDto(0, 5L, 1L, 5, 250000, LocalDateTime.now()),
+		)
+		orderService.insertAllOrderItems(orderItemDtos)
 	}
 }

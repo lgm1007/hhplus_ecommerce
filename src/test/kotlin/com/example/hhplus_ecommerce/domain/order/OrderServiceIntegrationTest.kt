@@ -37,7 +37,7 @@ class OrderServiceIntegrationTest {
 			LocalDateTime.now()
 		)
 
-		val orderId = orderService.registerOrder(orderDto).id
+		val orderId = orderService.insertOrder(orderDto).id
 
 		val actual = orderService.getOrderById(orderId)
 
@@ -53,7 +53,7 @@ class OrderServiceIntegrationTest {
 			OrderItemDto(0, 1L, 2L, 2, 5000, LocalDateTime.now()),
 		)
 
-		orderService.registerOrderItems(orderItemDtos)
+		orderService.insertAllOrderItems(orderItemDtos)
 
 		val actual = orderItemRepository.findAllByOrderId(1L)
 
@@ -72,7 +72,7 @@ class OrderServiceIntegrationTest {
 			LocalDateTime.now(),
 			LocalDateTime.now()
 		)
-		val orderId = orderService.registerOrder(orderDto).id
+		val orderId = orderService.insertOrder(orderDto).id
 
 		orderService.updateOrderStatus(orderId, OrderStatus.ORDER_COMPLETE)
 

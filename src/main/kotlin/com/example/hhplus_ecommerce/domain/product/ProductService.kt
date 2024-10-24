@@ -46,6 +46,11 @@ class ProductService(
 	@Transactional(readOnly = true)
 	fun getAllProductStatisticsInfos(productDetailIds: List<Long>): List<ProductStatisticsInfo> {
 		val productDetailDtos = ProductDetailDto.fromList(productDetailRepository.getAllByIdsIn(productDetailIds))
+
+		if (productDetailDtos.isEmpty()) {
+			throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT)
+		}
+
 		val productIds = productDetailDtos.map { it.productId }
 
 		val productDtos = ProductDto.fromList(productRepository.getAllByIds(productIds))

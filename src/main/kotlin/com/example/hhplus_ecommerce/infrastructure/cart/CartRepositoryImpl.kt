@@ -31,6 +31,12 @@ class CartRepositoryImpl(private val cartJpaRepository: CartJpaRepository) : Car
 	}
 
 	override fun getAllByUserId(userId: Long): List<Cart> {
-		return cartJpaRepository.findAllByUserId(userId)
+		val carts = cartJpaRepository.findAllByUserId(userId)
+
+		if (carts.isEmpty()) {
+			throw NotFoundException(ErrorStatus.NOT_FOUND_CART)
+		}
+
+		return carts
 	}
 }
