@@ -1,6 +1,7 @@
 package com.example.hhplus_ecommerce.domain.order
 
 import com.example.hhplus_ecommerce.domain.order.dto.OrderDto
+import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetailInfo
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDto
 import com.example.hhplus_ecommerce.domain.order.dto.OrderQuantityStatisticsInfo
 import org.springframework.stereotype.Service
@@ -10,11 +11,30 @@ class OrderService(
 	private val orderRepository: OrderRepository,
 	private val orderItemRepository: OrderItemRepository
 ) {
-	fun registerOrder(orderDto: OrderDto): OrderDto {
+	/**
+	 * 주문 정보 저장
+	 */
+	fun doOrder(
+		userId: Long,
+		orderItemDetailInfos: List<OrderItemDetailInfo>
+	): Pair<OrderDto, List<OrderItemDto>> {
+		val totalPrices = orderItemDetailInfos.map { orderItemDetailInfo -> orderItemDetailInfo.calculateOrderPrice() }
+		val orderDto = OrderDto.from(userId)
+
+		orderDto.addTotalPrice(totalPrices)
+		orderDto.updateOrderStatus(OrderStatus.ORDER_COMPLETE)
+		val savedOrder = insertOrder(orderDto)
+
+		val orderItemDtos = OrderItemDto.listOf(savedOrder.id, orderItemDetailInfos)
+		val savedOrderItems = insertAllOrderItems(orderItemDtos)
+		return Pair(savedOrder, savedOrderItems)
+	}
+
+	fun insertOrder(orderDto: OrderDto): OrderDto {
 		return OrderDto.from(orderRepository.insert(orderDto))
 	}
 
-	fun registerOrderItems(orderItemDtos: List<OrderItemDto>): List<OrderItemDto> {
+	fun insertAllOrderItems(orderItemDtos: List<OrderItemDto>): List<OrderItemDto> {
 		return orderItemRepository.insertAll(orderItemDtos).map { orderItem ->
 			OrderItemDto.from(orderItem)
 		}
