@@ -5,6 +5,7 @@ import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetailInfo
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDto
 import com.example.hhplus_ecommerce.domain.order.dto.OrderQuantityStatisticsInfo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class OrderService(
@@ -14,6 +15,7 @@ class OrderService(
 	/**
 	 * 주문 정보 저장
 	 */
+	@Transactional
 	fun doOrder(
 		userId: Long,
 		orderItemDetailInfos: List<OrderItemDetailInfo>

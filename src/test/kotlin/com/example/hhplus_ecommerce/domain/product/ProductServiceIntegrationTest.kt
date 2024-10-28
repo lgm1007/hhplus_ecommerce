@@ -75,7 +75,7 @@ class ProductServiceIntegrationTest {
 			repeat(5) {
 				executor.submit {
 					try {
-						productService.updateProductQuantityDecrease(detailId, 1)
+						productService.updateProductQuantityDecreaseWithDBLock(detailId, 1)
 						successCount.incrementAndGet()
 					} catch (e: BadRequestException) {
 						failCount.incrementAndGet()

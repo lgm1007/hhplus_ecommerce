@@ -25,7 +25,47 @@ class OrderFacade(
 
 		// 재고 확인 및 재고 차감
 		orderItemInfos.forEach { orderItemInfo ->
-			productService.updateProductQuantityDecrease(
+			productService.updateProductQuantityDecreaseWithDBLock(
+				orderItemInfo.productDetailId, orderItemInfo.quantity
+			)
+		}
+
+		// 장바구니 삭제
+		cartService.deleteCartByUser(userId)
+
+		return OrderInfo.of(savedOrder, savedOrderItems)
+	}
+
+	fun productOrderWithLettuce(userId: Long, orderItemInfos: List<OrderItemInfo>): OrderInfo {
+		val productDetailIds = orderItemInfos.map { orderItemInfo -> orderItemInfo.productDetailId }
+		val productDetails = productService.getAllProductDetailsByIdsIn(productDetailIds)
+		val orderItemDetailInfos = OrderItemDetailInfo.ofList(productDetails, orderItemInfos)
+		// 주문 정보 등록
+		val (savedOrder, savedOrderItems) = orderService.doOrder(userId, orderItemDetailInfos)
+
+		// 재고 확인 및 재고 차감
+		for (orderItemInfo in orderItemInfos) {
+			productService.updateProductQuantityDecreaseWithLettuce(
+				orderItemInfo.productDetailId, orderItemInfo.quantity
+			)
+		}
+
+		// 장바구니 삭제
+		cartService.deleteCartByUser(userId)
+
+		return OrderInfo.of(savedOrder, savedOrderItems)
+	}
+
+	fun productOrderWithRedisson(userId: Long, orderItemInfos: List<OrderItemInfo>): OrderInfo {
+		val productDetailIds = orderItemInfos.map { orderItemInfo -> orderItemInfo.productDetailId }
+		val productDetails = productService.getAllProductDetailsByIdsIn(productDetailIds)
+		val orderItemDetailInfos = OrderItemDetailInfo.ofList(productDetails, orderItemInfos)
+		// 주문 정보 등록
+		val (savedOrder, savedOrderItems) = orderService.doOrder(userId, orderItemDetailInfos)
+
+		// 재고 확인 및 재고 차감
+		for (orderItemInfo in orderItemInfos) {
+			productService.updateProductQuantityDecreaseWithRedisson(
 				orderItemInfo.productDetailId, orderItemInfo.quantity
 			)
 		}
