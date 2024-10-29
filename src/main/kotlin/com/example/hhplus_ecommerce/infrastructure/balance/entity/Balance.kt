@@ -27,6 +27,9 @@ class Balance(
 	var lastModifiedDate: LocalDateTime = LocalDateTime.now()
 		private set
 
+	@Version
+	var version: Long = 0
+
 	fun decreaseAmount(amount: Int) {
 		if (this.amount - amount < 0) {
 			throw BadRequestException(ErrorStatus.NOT_ENOUGH_BALANCE)

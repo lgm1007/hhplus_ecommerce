@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 class BalanceRepositoryImpl(private val balanceJpaRepository: BalanceJpaRepository) : BalanceRepository {
 	@Transactional
-	override fun getByUserIdWithLock(userId: Long): Balance {
-		return balanceJpaRepository.findByUserIdWithLock(userId)
+	override fun getByUserId(userId: Long): Balance {
+		return balanceJpaRepository.findByUserId(userId)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_USER_BALANCE)
 	}
 
@@ -22,7 +22,7 @@ class BalanceRepositoryImpl(private val balanceJpaRepository: BalanceJpaReposito
 
 	@Transactional
 	override fun updateDecreaseAmount(userId: Long, amount: Int): Balance {
-		val balance = (balanceJpaRepository.findByUserIdWithLock(userId)
+		val balance = (balanceJpaRepository.findByUserId(userId)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_USER_BALANCE))
 
 		balance.decreaseAmount(amount)
@@ -32,7 +32,7 @@ class BalanceRepositoryImpl(private val balanceJpaRepository: BalanceJpaReposito
 
 	@Transactional
 	override fun updateChargeAmount(userId: Long, amount: Int): Balance {
-		val balance = balanceJpaRepository.findByUserIdWithLock(userId)
+		val balance = balanceJpaRepository.findByUserId(userId)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_USER_BALANCE)
 
 		balance.chargeAmount(amount)

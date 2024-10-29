@@ -50,7 +50,7 @@ class BalanceApi(private val balanceService: BalanceService) {
 	])
 	fun fetchUserCurrentBalance(@PathVariable userId: Long): ResponseEntity<UserBalanceResponse> {
 		return ResponseEntity.ok(
-			UserBalanceResponse.from(balanceService.getByUserIdWithLock(userId))
+			UserBalanceResponse.from(balanceService.getByUserId(userId))
 		)
 	}
 
