@@ -483,11 +483,11 @@ fun productOrderEventListen(event: ProductOrderMessageEvent) {
 }
 ```
 
-위 방식의 성능을 측정하려고 통합 테스트를 작성했는데, 생각해보니 테스트 환경 용 컨슈머가 없기 때문에, 이벤트가 발행되고 파티션에 메시지가 쌓이는 것 까지는 확인할 수 있었지만 컨슈밍 동작까지는 수행하지 못했다. 추후 `spring-kafka-test`를 도입해서 Kafka 동작 전체를 테스트하는 걸 고려해봐야겠다.
+위 방식의 성능을 측정하려고 통합 테스트를 작성했다. Kafka 통합 테스트는 `spring-kafka-test` 의존성을 받아 테스트 환경에서 Kafka의 Producer와 Consumer가 정상적으로 동작하도록 구성했다.
 
 ```kotlin
 @Test
-@DisplayName("주문에 대한 동시 주문 요청 테스트 Kafka MQ 기능 사용하여 구현한 방식")
+@DisplayName("주문에 대한 동시 주문 요청 Kafka 이벤트 발행 기능 테스트")
 fun productOrderConcurrencyWithKafka() {
     val productId = productRepository.save(Product("상품 A", "A 상품")).id
     val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 20, ProductCategory.CLOTHES)).id
@@ -501,7 +501,7 @@ fun productOrderConcurrencyWithKafka() {
             executor.submit {
                 try {
                     orderFacade.productOrderWithKafka(1L, listOf(OrderItemInfo(detailId, 1)))
-                } catch (e: BadRequestException) {
+                } catch (e: Exception) {
                     logger.info("예외 발생!")
                 } finally {
                     countDownLatch.countDown()
@@ -514,9 +514,10 @@ fun productOrderConcurrencyWithKafka() {
         val endTime = System.currentTimeMillis()
         logger.info("실행 시간: ${endTime - startTime} milliseconds")
 
-        Thread.sleep(3000)
+        Thread.sleep(2000)
 
         val actual = productService.getProductInfoById(productId)
+
         assertThat(actual.stockQuantity).isEqualTo(0)
     } finally {
         executor.shutdown()
@@ -524,16 +525,12 @@ fun productOrderConcurrencyWithKafka() {
 }
 ```
 
-아래는 실제 Kafka 파티션에 쌓인 메시지이다.
-
-![스크린샷 2024-10-30 213650](https://github.com/user-attachments/assets/38b20868-1fc5-4a37-b4af-9ee4d92f0679)
-
 #### 성능
-우선 이벤트 발행하는 부분까지 실행 시간을 측정해본 결과는 다음과 같다.
+상품 주문 기능을 수행하고 재고 차감 이벤트 발행하는 부분까지 실행 시간을 측정해본 결과는 다음과 같다.
 
-![](https://github.com/user-attachments/assets/3b059f9f-ba5a-469f-bfc9-16fe7f9f59ab)
+![](https://github.com/user-attachments/assets/97785588-4b50-4455-a738-012abf144423)
 
-실행 시간은 **386 ms** 가 소요됐다.
+실행 시간은 **377 ms** 가 소요됐다.
 
 #### 복잡성
 이번에 구현해 본 방법들 중 가장 복잡했다.
