@@ -328,7 +328,7 @@ Lettuce는 스핀락 방식으로 락이 해제되었는지 주기적으로 retr
 락을 획득하고 해제하는 과정이 짧다면 Lettuce를 활용하는 방식이 괜찮을 수 있지만, 그렇지 않은 경우에는 부하를 고려해야 한다.
 
 ### Redis 분산락 - Pub/Sub (Redisson)
-Redisson 활용하여 락을 획득하는 부분은 다음과 같이 구현했다. 락을 획득하기 위해 구독하는 시간을 10초, 락 점유 시간을 최대 1초로 설정했다. 
+Redisson 활용하여 락을 획득하는 부분은 다음과 같이 구현했다. 락을 획득하기 위해 구독하는 시간을 10초, 락 점유 시간을 최대 1초로 설정했다.
 
 일반적으로 TTL은 작업이 수백 ms 정도 걸리는 경우 1초로 설정하므로 락 점유 최대 시간을 1초로 설정했고, 주문 요청 대기 시간을 최대 10초로 설정하기 위해 락 획득 구독 시간을 10초로 설정했다.
 
@@ -443,3 +443,106 @@ Redisson은 Pub/Sub 방식이기 때문에 락이 해제되면 락 해제를 기
 
 락에 대해 구독하는 스레드들 중 먼저 점유한 작업만 락 해제가 가능하기 때문에 안정적으로 원자적 처리가 가능하다.
 
+### Kafka MQ 기능 사용
+주문 로직 중 상품 재고 차감 부분을 Kafka로 컨슈밍할 이벤트로 지정했다.
+
+우선 토픽은 다음과 같이 만들어줬다.
+
+![](https://github.com/user-attachments/assets/d1722084-695c-41db-a17b-dcf23a20ae04)
+
+파티션은 3개로 생성해줬고, 이벤트를 발행할 때 같은 상품에 대한 재고 차감 이벤트를 순서 보장을 지키며 처리하기 위해 파티션 key로 상품 정보의 id 값을 넣어줬다.
+
+```kotlin
+fun sendProductOrderMessage(message: ProductMessage) {
+    kafkaTemplate.send(PRODUCT_ORDER_TOPIC, message.productDetailId.toString(), message)
+}
+```
+
+해당 토픽으로 발행한 이벤트를 컨슈밍하면 상품 재고 차감 로직을 수행한다.
+
+```kotlin
+@KafkaListener(groupId = "\${spring.kafka.consumer.group-id}", topics = [PRODUCT_ORDER_TOPIC])
+fun listenProductOrderEvent(@Payload message: ProductMessage) {
+    productService.updateProductQuantityDecrease(message.productDetailId, message.orderQuantity)
+}
+```
+
+해당 Kafka 이벤트의 발행은 트랜잭션 이벤트로 주문 정보 저장 로직의 트랜잭션이 커밋된 이후 (AFTER_COMMIT) 발행해주도록 했다.
+
+```kotlin
+@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+fun productOrderEventListen(event: ProductOrderMessageEvent) {
+    for (orderItemInfo in event.orderItemInfos) {
+        messageProducer.sendProductOrderMessage(
+            ProductMessage(
+                orderItemInfo.productDetailId,
+                orderItemInfo.quantity
+            )
+        )
+    }
+}
+```
+
+위 방식의 성능을 측정하려고 통합 테스트를 작성했는데, 생각해보니 테스트 환경 용 컨슈머가 없기 때문에, 이벤트가 발행되고 파티션에 메시지가 쌓이는 것 까지는 확인할 수 있었지만 컨슈밍 동작까지는 수행하지 못했다. 추후 `spring-kafka-test`를 도입해서 Kafka 동작 전체를 테스트하는 걸 고려해봐야겠다.
+
+```kotlin
+@Test
+@DisplayName("주문에 대한 동시 주문 요청 테스트 Kafka MQ 기능 사용하여 구현한 방식")
+fun productOrderConcurrencyWithKafka() {
+    val productId = productRepository.save(Product("상품 A", "A 상품")).id
+    val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 20, ProductCategory.CLOTHES)).id
+
+    val executor = Executors.newFixedThreadPool(30)
+    val countDownLatch = CountDownLatch(30)
+
+    try {
+        val startTime = System.currentTimeMillis()
+        repeat(30) {
+            executor.submit {
+                try {
+                    orderFacade.productOrderWithKafka(1L, listOf(OrderItemInfo(detailId, 1)))
+                } catch (e: BadRequestException) {
+                    logger.info("예외 발생!")
+                } finally {
+                    countDownLatch.countDown()
+                }
+            }
+        }
+
+        countDownLatch.await()
+
+        val endTime = System.currentTimeMillis()
+        logger.info("실행 시간: ${endTime - startTime} milliseconds")
+
+        Thread.sleep(3000)
+
+        val actual = productService.getProductInfoById(productId)
+        assertThat(actual.stockQuantity).isEqualTo(0)
+    } finally {
+        executor.shutdown()
+    }
+}
+```
+
+아래는 실제 Kafka 파티션에 쌓인 메시지이다.
+
+![스크린샷 2024-10-30 213650](https://github.com/user-attachments/assets/38b20868-1fc5-4a37-b4af-9ee4d92f0679)
+
+#### 성능
+우선 이벤트 발행하는 부분까지 실행 시간을 측정해본 결과는 다음과 같다.
+
+![](https://github.com/user-attachments/assets/3b059f9f-ba5a-469f-bfc9-16fe7f9f59ab)
+
+실행 시간은 **386 ms** 가 소요됐다.
+
+#### 복잡성
+이번에 구현해 본 방법들 중 가장 복잡했다.
+
+특히 Producer와 Consumer에 대해 설정해줘야 하는 사항들이 굉장히 많고 복잡해서 처음 환경을 구축할 때 꽤 많은 리소스가 들 것으로 예상된다.
+
+또한 Kafka가 워낙 범용성이 뛰어나다보니 적절하게 사용하는 전략을 잘 세워야 하는 것도 중요하다. 이번 실습에서는 단순히 한 동작에 대한 이벤트만 발행해봤는데, 어떻게 이벤트의 신뢰성을 보장할 수 있을지 등 잘 사용하기 위한 방법들을 고려해봐야 한다.
+
+#### 효율성
+한 번에 많은 트래픽이 몰리는 케이스에서는 우수한 효율성을 보여준다.
+
+환경 구축이 완료되고 사용 전략만 잘 구상된다면 다양한 시나리오에서 응용할 수 있는 방식이라고 생각한다.
