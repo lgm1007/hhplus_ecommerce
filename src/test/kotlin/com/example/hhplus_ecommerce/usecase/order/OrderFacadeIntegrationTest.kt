@@ -209,6 +209,8 @@ class OrderFacadeIntegrationTest {
 	@Test
 	@DisplayName("주문에 대한 동시 주문 요청 Kafka 이벤트 발행 기능 테스트")
 	fun productOrderConcurrencyWithKafka() {
+		// 재고 20개 존재하는 상품에 대해 30번 주문 요청
+		// 예상 남은 재고량 0
 		val productId = productRepository.save(Product("상품 A", "A 상품")).id
 		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 20, ProductCategory.CLOTHES)).id
 
