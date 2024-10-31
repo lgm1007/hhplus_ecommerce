@@ -199,22 +199,32 @@ Redis 분산락을 활용한 방식은 Redis 클러스터와 함께 사용하므
 Lettuce를 활용하여 락을 획득하는 부분은 다음과 같이 구현했다. 락 획득에 실패하여 재시도할 때 대기 시간을 10 ms로 설정하였다. 스레드 점유를 최소한으로 가져가고 싶어 대기 시간을 통합 테스트가 통과하는 최소한의 시간으로 설정했기 때문이다.
 
 ```kotlin
-@Repository
-class RedisLockRepository(private val redisTemplate: RedisTemplate<String, String>) : LockRepository {
-	/**
-	 * Lettuce 사용하여 락 습득, 해제 구현
-	 */
-	override fun lock(key: Any, timeout: Long): Boolean {
-		// key: key.toString(), value: lock, ttl: 3000 millis
-		return redisTemplate
-			.opsForValue()
-			.setIfAbsent(key.toString(), "lock", Duration.ofMillis(timeout))
-			?: false
-	}
+@Component
+class RedisLockSupporter(
+    private val redisTemplate: RedisTemplate<String, String>,
+    private val redissonClient: RedissonClient
+) {
+    /**
+     * Lettuce 사용하여 락 습득, 해제 구현
+     */
+    fun lock(key: Any, timeout: Long = 3000): Boolean {
+        // key: key.toString(), value: lock, ttl: 3000 millis
+        return redisTemplate
+            .opsForValue()
+            .setIfAbsent(key.toString(), "lock", Duration.ofMillis(timeout))
+            ?: false
+    }
 
-	override fun unlock(key: Any): Boolean {
-		return redisTemplate.delete(key.toString())
-	}
+    fun unlock(key: Any): Boolean {
+        return redisTemplate.delete(key.toString())
+    }
+
+    /**
+     * Redisson 으로 Pub&Sub RLock 제공
+     */
+    fun getRLock(key: String): RLock {
+        return redissonClient.getLock(key)
+    }
 }
 
 @Service
@@ -224,7 +234,7 @@ class ProductService(
     private val lockRepository: LockRepository,
 ) {
     fun updateProductQuantityDecreaseWithLettuce(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
-        while (!lockRepository.lock(productDetailId)) {
+        while (!redisLockSupporter.lock(productDetailId)) {
             LockSupport.parkNanos(10_000_000)   // 10 ms, 10 * 1_000_000 ns
         }
 
@@ -235,7 +245,7 @@ class ProductService(
                 )
             )
         } finally {
-            lockRepository.unlock(productDetailId)
+            redisLockSupporter.unlock(productDetailId)
         }
     }
 }
@@ -328,7 +338,7 @@ Lettuce는 스핀락 방식으로 락이 해제되었는지 주기적으로 retr
 락을 획득하고 해제하는 과정이 짧다면 Lettuce를 활용하는 방식이 괜찮을 수 있지만, 그렇지 않은 경우에는 부하를 고려해야 한다.
 
 ### Redis 분산락 - Pub/Sub (Redisson)
-Redisson 활용하여 락을 획득하는 부분은 다음과 같이 구현했다. 락을 획득하기 위해 구독하는 시간을 10초, 락 점유 시간을 최대 1초로 설정했다. 
+Redisson 활용하여 락을 획득하는 부분은 다음과 같이 구현했다. 락을 획득하기 위해 구독하는 시간을 10초, 락 점유 시간을 최대 1초로 설정했다.
 
 일반적으로 TTL은 작업이 수백 ms 정도 걸리는 경우 1초로 설정하므로 락 점유 최대 시간을 1초로 설정했고, 주문 요청 대기 시간을 최대 10초로 설정하기 위해 락 획득 구독 시간을 10초로 설정했다.
 
@@ -340,7 +350,7 @@ class ProductService(
     private val redissonClient: RedissonClient
 ) {
     fun updateProductQuantityDecreaseWithRedisson(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
-        val rLock = redissonClient.getLock(productDetailId.toString())
+        val rLock = redisLockSupporter.getRLock(productDetailId.toString())
 
         try {
             val acquireLock = rLock.tryLock(10, 1, TimeUnit.SECONDS)
@@ -443,3 +453,103 @@ Redisson은 Pub/Sub 방식이기 때문에 락이 해제되면 락 해제를 기
 
 락에 대해 구독하는 스레드들 중 먼저 점유한 작업만 락 해제가 가능하기 때문에 안정적으로 원자적 처리가 가능하다.
 
+### Kafka MQ 기능 사용
+주문 로직 중 상품 재고 차감 부분을 Kafka로 컨슈밍할 이벤트로 지정했다.
+
+우선 토픽은 다음과 같이 만들어줬다.
+
+![](https://github.com/user-attachments/assets/d1722084-695c-41db-a17b-dcf23a20ae04)
+
+파티션은 3개로 생성해줬고, 이벤트를 발행할 때 같은 상품에 대한 재고 차감 이벤트를 순서 보장을 지키며 처리하기 위해 파티션 key로 상품 정보의 id 값을 넣어줬다.
+
+```kotlin
+fun sendProductOrderMessage(message: ProductMessage) {
+    kafkaTemplate.send(PRODUCT_ORDER_TOPIC, message.productDetailId.toString(), message)
+}
+```
+
+해당 토픽으로 발행한 이벤트를 컨슈밍하면 상품 재고 차감 로직을 수행한다.
+
+```kotlin
+@KafkaListener(groupId = "\${spring.kafka.consumer.group-id}", topics = [PRODUCT_ORDER_TOPIC])
+fun listenProductOrderEvent(@Payload message: ProductMessage) {
+    productService.updateProductQuantityDecrease(message.productDetailId, message.orderQuantity)
+}
+```
+
+해당 Kafka 이벤트의 발행은 트랜잭션 이벤트로 주문 정보 저장 로직의 트랜잭션이 커밋된 이후 (AFTER_COMMIT) 발행해주도록 했다.
+
+```kotlin
+@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+fun productOrderEventListen(event: ProductOrderMessageEvent) {
+    for (orderItemInfo in event.orderItemInfos) {
+        messageProducer.sendProductOrderMessage(
+            ProductMessage(
+                orderItemInfo.productDetailId,
+                orderItemInfo.quantity
+            )
+        )
+    }
+}
+```
+
+위 방식의 성능을 측정하려고 통합 테스트를 작성했다. Kafka 통합 테스트는 `spring-kafka-test` 의존성을 받아 테스트 환경에서 Kafka의 Producer와 Consumer가 정상적으로 동작하도록 구성했다.
+
+```kotlin
+@Test
+@DisplayName("주문에 대한 동시 주문 요청 Kafka 이벤트 발행 기능 테스트")
+fun productOrderConcurrencyWithKafka() {
+    val productId = productRepository.save(Product("상품 A", "A 상품")).id
+    val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 20, ProductCategory.CLOTHES)).id
+
+    val executor = Executors.newFixedThreadPool(30)
+    val countDownLatch = CountDownLatch(30)
+
+    try {
+        val startTime = System.currentTimeMillis()
+        repeat(30) {
+            executor.submit {
+                try {
+                    orderFacade.productOrderWithKafka(1L, listOf(OrderItemInfo(detailId, 1)))
+                } catch (e: Exception) {
+                    logger.info("예외 발생!")
+                } finally {
+                    countDownLatch.countDown()
+                }
+            }
+        }
+
+        countDownLatch.await()
+
+        val endTime = System.currentTimeMillis()
+        logger.info("실행 시간: ${endTime - startTime} milliseconds")
+
+        Thread.sleep(2000)
+
+        val actual = productService.getProductInfoById(productId)
+
+        assertThat(actual.stockQuantity).isEqualTo(0)
+    } finally {
+        executor.shutdown()
+    }
+}
+```
+
+#### 성능
+상품 주문 기능을 수행하고 재고 차감 이벤트 발행하는 부분까지 실행 시간을 측정해본 결과는 다음과 같다.
+
+![](https://github.com/user-attachments/assets/97785588-4b50-4455-a738-012abf144423)
+
+실행 시간은 **377 ms** 가 소요됐다.
+
+#### 복잡성
+이번에 구현해 본 방법들 중 가장 복잡했다.
+
+특히 Producer와 Consumer에 대해 설정해줘야 하는 사항들이 굉장히 많고 복잡해서 처음 환경을 구축할 때 꽤 많은 리소스가 들 것으로 예상된다.
+
+또한 Kafka가 워낙 범용성이 뛰어나다보니 적절하게 사용하는 전략을 잘 세워야 하는 것도 중요하다. 이번 실습에서는 단순히 한 동작에 대한 이벤트만 발행해봤는데, 어떻게 이벤트의 신뢰성을 보장할 수 있을지 등 잘 사용하기 위한 방법들을 고려해봐야 한다.
+
+#### 효율성
+한 번에 많은 트래픽이 몰리는 케이스에서는 우수한 효율성을 보여준다.
+
+환경 구축이 완료되고 사용 전략만 잘 구상된다면 다양한 시나리오에서 응용할 수 있는 방식이라고 생각한다.
