@@ -199,22 +199,32 @@ Redis 분산락을 활용한 방식은 Redis 클러스터와 함께 사용하므
 Lettuce를 활용하여 락을 획득하는 부분은 다음과 같이 구현했다. 락 획득에 실패하여 재시도할 때 대기 시간을 10 ms로 설정하였다. 스레드 점유를 최소한으로 가져가고 싶어 대기 시간을 통합 테스트가 통과하는 최소한의 시간으로 설정했기 때문이다.
 
 ```kotlin
-@Repository
-class RedisLockRepository(private val redisTemplate: RedisTemplate<String, String>) : LockRepository {
-	/**
-	 * Lettuce 사용하여 락 습득, 해제 구현
-	 */
-	override fun lock(key: Any, timeout: Long): Boolean {
-		// key: key.toString(), value: lock, ttl: 3000 millis
-		return redisTemplate
-			.opsForValue()
-			.setIfAbsent(key.toString(), "lock", Duration.ofMillis(timeout))
-			?: false
-	}
+@Component
+class RedisLockSupporter(
+    private val redisTemplate: RedisTemplate<String, String>,
+    private val redissonClient: RedissonClient
+) {
+    /**
+     * Lettuce 사용하여 락 습득, 해제 구현
+     */
+    fun lock(key: Any, timeout: Long = 3000): Boolean {
+        // key: key.toString(), value: lock, ttl: 3000 millis
+        return redisTemplate
+            .opsForValue()
+            .setIfAbsent(key.toString(), "lock", Duration.ofMillis(timeout))
+            ?: false
+    }
 
-	override fun unlock(key: Any): Boolean {
-		return redisTemplate.delete(key.toString())
-	}
+    fun unlock(key: Any): Boolean {
+        return redisTemplate.delete(key.toString())
+    }
+
+    /**
+     * Redisson 으로 Pub&Sub RLock 제공
+     */
+    fun getRLock(key: String): RLock {
+        return redissonClient.getLock(key)
+    }
 }
 
 @Service
@@ -224,7 +234,7 @@ class ProductService(
     private val lockRepository: LockRepository,
 ) {
     fun updateProductQuantityDecreaseWithLettuce(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
-        while (!lockRepository.lock(productDetailId)) {
+        while (!redisLockSupporter.lock(productDetailId)) {
             LockSupport.parkNanos(10_000_000)   // 10 ms, 10 * 1_000_000 ns
         }
 
@@ -235,7 +245,7 @@ class ProductService(
                 )
             )
         } finally {
-            lockRepository.unlock(productDetailId)
+            redisLockSupporter.unlock(productDetailId)
         }
     }
 }
@@ -340,7 +350,7 @@ class ProductService(
     private val redissonClient: RedissonClient
 ) {
     fun updateProductQuantityDecreaseWithRedisson(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
-        val rLock = redissonClient.getLock(productDetailId.toString())
+        val rLock = redisLockSupporter.getRLock(productDetailId.toString())
 
         try {
             val acquireLock = rLock.tryLock(10, 1, TimeUnit.SECONDS)
