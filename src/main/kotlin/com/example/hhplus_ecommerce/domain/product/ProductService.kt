@@ -1,12 +1,12 @@
 package com.example.hhplus_ecommerce.domain.product
 
 import com.example.hhplus_ecommerce.api.error.ErrorStatus
-import com.example.hhplus_ecommerce.domain.lock.LockRepository
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDto
 import com.example.hhplus_ecommerce.domain.product.dto.ProductInfo
 import com.example.hhplus_ecommerce.domain.product.dto.ProductStatisticsInfo
 import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.infrastructure.lock.RedisLockSupporter
 import org.redisson.api.RedissonClient
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -18,7 +18,7 @@ import java.util.concurrent.locks.LockSupport
 class ProductService(
 	private val productRepository: ProductRepository,
 	private val productDetailRepository: ProductDetailRepository,
-	private val lockRepository: LockRepository,
+	private val redisLockSupporter: RedisLockSupporter,
 	private val redissonClient: RedissonClient
 ) {
 	@Transactional(readOnly = true)
@@ -75,7 +75,7 @@ class ProductService(
 	}
 
 	fun updateProductQuantityDecreaseWithLettuce(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
-		while (!lockRepository.lock(productDetailId)) {
+		while (!redisLockSupporter.lock(productDetailId)) {
 			LockSupport.parkNanos(10_000_000)   // 10 ms, 10 * 1_000_000 ns
 		}
 
@@ -86,12 +86,12 @@ class ProductService(
 				)
 			)
 		} finally {
-			lockRepository.unlock(productDetailId)
+			redisLockSupporter.unlock(productDetailId)
 		}
 	}
 
 	fun updateProductQuantityDecreaseWithRedisson(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
-		val rLock = redissonClient.getLock(productDetailId.toString())
+		val rLock = redisLockSupporter.getRLock(productDetailId.toString())
 
 		try {
 			val acquireLock = rLock.tryLock(10, 1, TimeUnit.SECONDS)
