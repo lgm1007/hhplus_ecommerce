@@ -75,7 +75,8 @@ class ProductService(
 	}
 
 	fun updateProductQuantityDecreaseWithLettuce(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
-		while (!redisLockSupporter.lock(productDetailId)) {
+		val lockKey = "product:${productDetailId}"
+		while (!redisLockSupporter.lock(lockKey)) {
 			LockSupport.parkNanos(10_000_000)   // 10 ms, 10 * 1_000_000 ns
 		}
 
@@ -86,12 +87,12 @@ class ProductService(
 				)
 			)
 		} finally {
-			redisLockSupporter.unlock(productDetailId)
+			redisLockSupporter.unlock(lockKey)
 		}
 	}
 
 	fun updateProductQuantityDecreaseWithRedisson(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
-		val rLock = redisLockSupporter.getRLock(productDetailId.toString())
+		val rLock = redisLockSupporter.getRLock("product:${productDetailId}")
 
 		try {
 			val acquireLock = rLock.tryLock(10, 1, TimeUnit.SECONDS)
