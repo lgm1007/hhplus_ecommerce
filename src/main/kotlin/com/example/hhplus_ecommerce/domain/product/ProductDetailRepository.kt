@@ -16,5 +16,7 @@ interface ProductDetailRepository {
 
 	fun getAllByIdsIn(ids: List<Long>): List<ProductDetail>
 
+	fun updateProductQuantityDecreaseWithLock(id: Long, orderQuantity: Int): ProductDetail
+
 	fun updateProductQuantityDecrease(id: Long, orderQuantity: Int): ProductDetail
 }

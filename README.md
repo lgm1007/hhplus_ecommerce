@@ -43,6 +43,9 @@
 ### 💽 ERD
 - [ERD 문서](docs/ERD.md)
 
+### 🔒 동시성 제어 시나리오 분석
+- [동시성 제어 시나리오 분석 보고서](docs/CONCURRENCY_CONTROL.md)
+
 ### 🗃️ 프로젝트 구조
 ```
 hhplusecommerce

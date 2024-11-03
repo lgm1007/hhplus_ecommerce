@@ -5,6 +5,7 @@ import com.example.hhplus_ecommerce.domain.product.ProductDetailRepository
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
@@ -41,8 +42,18 @@ class ProductDetailRepositoryImpl(
 	}
 
 	@Transactional
-	override fun updateProductQuantityDecrease(id: Long, orderQuantity: Int): ProductDetail {
+	override fun updateProductQuantityDecreaseWithLock(id: Long, orderQuantity: Int): ProductDetail {
 		val productDetail = (productDetailJpaRepository.findByIdWithLock(id)
+			?: throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT))
+
+		productDetail.decreaseQuantity(orderQuantity)
+
+		return productDetailJpaRepository.save(productDetail)
+	}
+
+	@Transactional
+	override fun updateProductQuantityDecrease(id: Long, orderQuantity: Int): ProductDetail {
+		val productDetail = (productDetailJpaRepository.findByIdOrNull(id)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT))
 
 		productDetail.decreaseQuantity(orderQuantity)
