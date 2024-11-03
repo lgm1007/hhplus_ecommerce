@@ -106,4 +106,11 @@ class ProductService(
 			rLock.unlock()
 		}
 	}
+
+	@Transactional
+	fun updateProductQuantityDecrease(productDetailId: Long, orderQuantity: Int) {
+		productDetailRepository.updateProductQuantityDecrease(
+			productDetailId, orderQuantity
+		)
+	}
 }

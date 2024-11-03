@@ -3,7 +3,6 @@ package com.example.hhplus_ecommerce.usecase.payment
 import com.example.hhplus_ecommerce.domain.balance.BalanceService
 import com.example.hhplus_ecommerce.domain.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
-import com.example.hhplus_ecommerce.exception.BadRequestException
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceHistoryJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.orm.ObjectOptimisticLockingFailureException
 import java.time.LocalDateTime
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
@@ -48,7 +48,7 @@ class PaymentFacadeIntegrationTest {
 
 		paymentFacade.orderPayment(userId, orderId)
 		val orderDto = orderService.getOrderById(orderId)
-		val balanceDto = balanceService.getByUserIdWithLock(userId)
+		val balanceDto = balanceService.getByUserId(userId)
 
 		// 기존 잔액 10000 - 결제 금액 10000 = 남은 잔액 0
 		assertThat(balanceDto.amount).isEqualTo(0)
@@ -57,10 +57,11 @@ class PaymentFacadeIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("결제 요청 - 동시에 결제 요청 시 동시성 제어 테스트")
+	@DisplayName("결제 요청 - 동시에 결제 요청 시 한 번만 성공시키고 나머지는 실패 처리한다")
 	fun orderPaymentConcurrency() {
-		// 잔액 50000이 있고, 주문할 금액이 12000씩 10번 동시에 요청할 때
-		// 예상 성공 카운트 4, 실패 카운트 6, 남은 잔액 2000
+		// 잔액 50,000이 있고, 주문할 금액이 12,000씩 10번 동시에 요청할 때
+		// 같은 주문에 대해 동시에 결제 요청이 들어오는 경우 한 번만 성공시키며 나머지는 실패 처리한다.
+		// 예상 성공 카운트 1, 실패 카운트 9, 남은 잔액 38,000
 		val userId = 1L
 		val orderId = orderRepository.save(OrderTable(userId, LocalDateTime.now(), 12000, OrderStatus.ORDER_COMPLETE)).id
 		balanceRepository.save(Balance(userId, 50000))
@@ -76,7 +77,7 @@ class PaymentFacadeIntegrationTest {
 					try {
 						paymentFacade.orderPayment(userId, orderId)
 						successCount.incrementAndGet()
-					} catch (e: BadRequestException) {
+					} catch (e: ObjectOptimisticLockingFailureException) {
 						failCount.incrementAndGet()
 					} finally {
 						countDownLatch.countDown()
@@ -85,11 +86,11 @@ class PaymentFacadeIntegrationTest {
 			}
 			countDownLatch.await()
 
-			val balanceDto = balanceService.getByUserIdWithLock(userId)
+			val balanceDto = balanceService.getByUserId(userId)
 
-			assertThat(balanceDto.amount).isEqualTo(2000)
-			assertThat(successCount.get()).isEqualTo(4)
-			assertThat(failCount.get()).isEqualTo(6)
+			assertThat(balanceDto.amount).isEqualTo(38000)
+			assertThat(successCount.get()).isEqualTo(1)
+			assertThat(failCount.get()).isEqualTo(9)
 		} finally {
 			executor.shutdown()
 		}

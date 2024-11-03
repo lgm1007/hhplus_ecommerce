@@ -10,8 +10,8 @@ class BalanceService(
 	private val balanceRepository: BalanceRepository,
 	private val balanceHistoryRepository: BalanceHistoryRepository
 ) {
-	fun getByUserIdWithLock(userId: Long): BalanceDto {
-		return BalanceDto.from(balanceRepository.getByUserIdWithLock(userId))
+	fun getByUserId(userId: Long): BalanceDto {
+		return BalanceDto.from(balanceRepository.getByUserId(userId))
 	}
 
 	@Transactional
