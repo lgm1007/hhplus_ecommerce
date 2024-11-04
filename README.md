@@ -5,8 +5,43 @@
 * 사용자는 상품을 여러 개 선택해 주문할 수 있고, 미리 충전한 잔액을 이용한다.
 * 상품 주문 내역을 통해 판매량이 가장 높은 상품을 추천한다.
 
-### 🪨 프로젝트 Milestone
-- [프로젝트 Milestone 문서](docs/MILESTONE.md)
+### ⚙️ 프로젝트 구성 스택
+* Kotlin: 1.9.25
+* Spring Boot: 2.7.18
+* JPA: 1.9.24
+* DBMS: H2
+* API Docs
+  * [API 명세서](docs/API_SPEC.md)
+  * Swagger-ui
+
+### 🗃️ 프로젝트 구조
+```
+hhplusecommerce
+├─api
+│  ├─balance
+│  ├─cart
+│  ├─order
+│  ├─product
+│  └─statistic
+├─domain
+│  ├─balance
+│  ├─cart
+│  ├─order
+│  ├─product
+│  └─statistic
+├─infrastructure
+│  ├─balance
+│  ├─cart
+│  ├─order
+│  ├─product
+│  └─statistic
+└─usecase
+    ├─balance
+    ├─cart
+    ├─order
+    ├─product
+    └─statistic
+```
 
 ### 📜 API 스펙
 1️⃣ **잔액 충전 / 조회 API**
@@ -45,41 +80,3 @@
 
 ### 🔒 동시성 제어 시나리오 분석
 - [동시성 제어 시나리오 분석 보고서](docs/CONCURRENCY_CONTROL.md)
-
-### 🗃️ 프로젝트 구조
-```
-hhplusecommerce
-├─api
-│  ├─balance
-│  ├─cart
-│  ├─order
-│  ├─product
-│  └─statistic
-├─domain
-│  ├─balance
-│  ├─cart
-│  ├─order
-│  ├─product
-│  └─statistic
-├─infrastructure
-│  ├─balance
-│  ├─cart
-│  ├─order
-│  ├─product
-│  └─statistic
-└─usecase
-    ├─balance
-    ├─cart
-    ├─order
-    ├─product
-    └─statistic
-```
-
-### ⚙️ 프로젝트 구성 스택
-* Kotlin: 1.9.25
-* Spring Boot: 2.7.18
-* JPA: 1.9.24
-* DBMS: H2
-* API Docs
-  * [API 명세서](docs/API_SPEC.md)
-  * Swagger-ui
