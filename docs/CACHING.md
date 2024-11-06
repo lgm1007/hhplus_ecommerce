@@ -95,3 +95,26 @@
 - **캐시 TTL (Time To Live) 설정**
     - 설정 시간: 1일
     - 이유: 변경이 일어나지 않는 데이터로 비교적 오랜 시간동안 캐시에 저장해도 무방할 것이라고 판단했다.
+
+#### 캐싱 적용 테스트
+##### 캐시 존재하지 않을 경우 조회 동작
+
+![](https://github.com/user-attachments/assets/acb89b66-2e31-49d8-817b-e735bcd3715c)
+
+- Redis Monitor: 해당 키에 캐시 데이터 Setting
+
+![](https://github.com/user-attachments/assets/420be155-2adf-4344-9e79-47de48d4ad4e)
+
+- 메서드 실행 시간: **190 ms**
+
+##### 캐시 존재하는 경우 조회 동작
+
+![](https://github.com/user-attachments/assets/b3562f0e-ffe6-4817-b931-2f192bbb996c)
+
+- Redis Monitor: 캐시의 키에서 데이터 가져옴
+
+![](https://github.com/user-attachments/assets/c5e63e41-1fbf-4d6f-931a-542e27c9b62c)
+
+- 메서드 실행 시간: **97 ms**
+
+- 해당 메서드도 실행 시간이 **2배 이상 감소**된 점을 확인할 수 있었다.
