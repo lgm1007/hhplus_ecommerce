@@ -24,7 +24,9 @@ class CacheConfig {
 		val cacheConfigurationMap = mapOf(
 			// 상위 주문 상품 통계 캐시 TTL 5분
 			"topOrderProductStatistics" to RedisCacheConfiguration.defaultCacheConfig()
-				.entryTtl(Duration.ofMinutes(5))
+				.entryTtl(Duration.ofMinutes(5)),
+			"productInfo" to RedisCacheConfiguration.defaultCacheConfig()
+				.entryTtl(Duration.ofDays(1))
 		)
 
 		return RedisCacheManager.builder(redisConnectionFactory)
