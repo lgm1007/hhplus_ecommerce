@@ -12,11 +12,21 @@ sequenceDiagram
     participant BalanceRepository
 
     Client ->> BalanceService: 충전 요청 (사용자 ID, 충전 금액)
+    activate BalanceService
     BalanceService ->> BalanceRepository: 사용자 ID 로 잔액 조회
-    BalanceRepository -->> BalanceService: 사용자 ID 별 잔액 정보
+    activate BalanceRepository
+    alt 잔액 정보 찾지 못함
+        BalanceRepository -->> BalanceService: throw NotFoundException
+    else 잔액 정상 조회
+        BalanceRepository -->> BalanceService: 사용자 ID 별 잔액 정보
+    end
+    deactivate BalanceRepository
     BalanceService ->> BalanceRepository: 사용자 ID 의 잔액 업데이트
+    activate BalanceRepository
     BalanceRepository -->> BalanceService: 사용자 ID 의 잔액 업데이트 성공
+    deactivate BalanceRepository
     BalanceService -->> Client: 충전 완료 응답
+    deactivate BalanceService
 ```
 
 ###### 잔액 조회
@@ -81,7 +91,8 @@ sequenceDiagram
 1. 클라이언트가 상품을 주문하고 결제 요청 보냄
 2. 상품의 재고 확인
 3. 주문 정보 저장
-4. 재고 차감
+4. 장바구니 상품 삭제
+5. 재고 차감 이벤트 발행
 
 ```mermaid
 sequenceDiagram
@@ -89,15 +100,32 @@ sequenceDiagram
     participant OrderFacade
     participant ProductDetailService
     participant OrderService
+    participant CartService
+    participant KafkaProducer
 
     Client ->> OrderFacade: 주문 요청 (사용자 ID, 상품 ID, 수량)
+    activate OrderFacade
     OrderFacade ->> ProductDetailService: 상품 재고 조회
-    ProductDetailService -->> OrderFacade: 상품 재고 정보
+    activate ProductDetailService
+    alt 상품 정보를 찾지 못하는 경우
+        ProductDetailService -->> OrderFacade: throw NotFoundException
+    else 재고가 부족할 경우
+        ProductDetailService -->> OrderFacade: throw BadRequestException
+    else 상품 정보가 정상적인 경우
+        ProductDetailService -->> OrderFacade: 상품 재고 정보
+    end
+    deactivate ProductDetailService
     OrderFacade ->> OrderService: 주문 정보 저장 요청
+    activate OrderService
     OrderService -->> OrderFacade: 주문 정보 저장 완료
-    OrderFacade ->> ProductDetailService: 상품 재고 차감 요청
-    ProductDetailService -->> OrderFacade: 상품 재고 차감 완료
+    deactivate OrderService
+    OrderFacade ->> CartService: 장바구니 상품 삭제 요청
+    activate CartService
+    CartService -->> OrderFacade: 장바구니 상품 삭제 완료
+    deactivate CartService
+    OrderFacade ->> KafkaProducer: 상품 재고 차감 이벤트 발행
     OrderFacade -->> Client: 주문 완료 응답
+    deactivate OrderFacade
 ```
 
 ##### 결제
@@ -117,8 +145,17 @@ sequenceDiagram
     participant ExternalDataPlatform
 
     Client ->> PaymentFacade: 결제 요청 (사용자 ID, 주문 ID)
+    activate PaymentFacade
     PaymentFacade ->> BalanceService: 사용자 잔액 조회
-    BalanceService -->> PaymentFacade: 사용자 잔액 정보
+    activate BalanceService
+    alt 잔액 정보를 찾지 못하는 경우
+        BalanceService -->> PaymentFacade: throw NotFoundException
+    else 잔액이 부족한 경우
+        BalanceService -->> PaymentFacade: throw BadRequestException
+    else 잔액 정보를 정상적으로 조회한 경우
+        BalanceService -->> PaymentFacade: 사용자 잔액 정보
+    end
+    deactivate BalanceService
     PaymentFacade ->> BalanceService: 사용자 잔액 차감 요청
     BalanceService -->> PaymentFacade: 사용자 잔액 차감 완료
     PaymentFacade ->> PaymentService: 결제 정보 저장 요청
@@ -127,6 +164,7 @@ sequenceDiagram
     OrderService -->> PaymentFacade: 주문 상태 업데이트 완료
     PaymentFacade ->> ExternalDataPlatform: 외부 데이터 플랫폼 전송 이벤트 (AFTER_COMMIT Event)
     PaymentFacade -->> Client: 결제 완료 응답
+    deactivate PaymentFacade
 ```
 
 #### 상위 상품 통계
