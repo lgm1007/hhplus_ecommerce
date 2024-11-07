@@ -15,7 +15,7 @@ sequenceDiagram
     activate BalanceService
     BalanceService ->> BalanceRepository: 사용자 ID 로 잔액 조회
     activate BalanceRepository
-    alt 잔액 정보 찾지 못함
+    alt 잔액 정보를 찾지 못한 경우
         BalanceRepository -->> BalanceService: throw NotFoundException
     else 잔액 정상 조회
         BalanceRepository -->> BalanceService: 사용자 ID 별 잔액 정보
@@ -40,9 +40,17 @@ sequenceDiagram
     participant BalanceRepository
 
     Client ->> BalanceService: 잔액 조회 요청 (사용자 ID)
+    activate BalanceService
     BalanceService ->> BalanceRepository: 사용자 ID 로 잔액 조회
-    BalanceRepository -->> BalanceService: 사용자 ID 별 잔액 정보
+    activate BalanceRepository
+    alt 잔액 정보를 찾지 못한 경우
+        BalanceRepository -->> BalanceService: throw NotFoundException
+    else 잔액 정보 정상 조회
+        BalanceRepository -->> BalanceService: 사용자 ID 별 잔액 정보
+    end
+    deactivate BalanceRepository
     BalanceService -->> Client: 잔액 정보 응답
+    deactivate BalanceService
 ```
 
 #### 상품 조회
@@ -58,12 +66,26 @@ sequenceDiagram
     participant ProductDetailRepository
 
     Client ->> ProductService: 상품 목록 조회 요청
+    activate ProductService
     ProductService ->> ProductRepository: 상품 목록 조회
-    ProductRepository -->> ProductService: 상품 목록 정보
+    activate ProductRepository
+    alt 상품 목록이 없는 경우
+        ProductRepository -->> ProductService: throw NotFoundException
+    else 상품 목록 정상 조회
+        ProductRepository -->> ProductService: 상품 목록 정보
+    end
+    deactivate ProductRepository
     ProductService ->> ProductDetailRepository: 조회한 상품들의 세부 정보 조회
-    ProductDetailRepository -->> ProductService: 조회한 상품들의 세부 정보
+    activate ProductDetailRepository
+    alt 상품 세부 정보를 찾지 못하는 경우
+        ProductDetailRepository -->> ProductService: throw NotFoundException
+    else 상품 세부 정보 정상 조회
+        ProductDetailRepository -->> ProductService: 조회한 상품들의 세부 정보
+    end
+    deactivate ProductDetailRepository
     ProductService ->> ProductService: 응답해 줄 상품 목록 정보 가공
     ProductService -->> Client: 상품 목록 정보 (id, 이름, 가격, 잔여수량) 응답
+    deactivate ProductService
 ```
 
 ##### 특정 상품 조회
@@ -78,12 +100,26 @@ sequenceDiagram
     participant ProductDetailRepository
 
     Client ->> ProductService: 특정 상품 조회 요청
+    activate ProductService
     ProductService ->> ProductRepository: 특정 상품 조회
-    ProductRepository -->> ProductService: 특정 상품 정보
+    activate ProductRepository
+    alt 상품 정보가 존재하지 않을 경우
+        ProductRepository -->> ProductService: throw NotFoundException
+    else 상품 정보 정상 조회
+        ProductRepository -->> ProductService: 특정 상품 정보
+    end
+    deactivate ProductRepository
     ProductService ->> ProductDetailRepository: 조회한 상품의 세부 정보 조회
-    ProductDetailRepository -->> ProductService: 조회한 상품의 세부 정보
+    activate ProductDetailRepository
+    alt 상품 세부 정보가 존재하지 않을 경우
+        ProductDetailRepository -->> ProductService: throw NotFoundException
+    else 상품 세부 정보 정상 조회
+        ProductDetailRepository -->> ProductService: 조회한 상품의 세부 정보
+    end
+    deactivate ProductDetailRepository
     ProductService ->> ProductService: 응답해 줄 상품 정보 가공
     ProductService -->> Client: 상품 정보 (id, 이름, 가격, 잔여수량) 응답
+    deactivate ProductService
 ```
 
 #### 주문 / 결제
@@ -111,7 +147,7 @@ sequenceDiagram
         ProductDetailService -->> OrderFacade: throw NotFoundException
     else 재고가 부족할 경우
         ProductDetailService -->> OrderFacade: throw BadRequestException
-    else 상품 정보가 정상적인 경우
+    else 상품 정보 정상 조회
         ProductDetailService -->> OrderFacade: 상품 재고 정보
     end
     deactivate ProductDetailService
@@ -152,16 +188,22 @@ sequenceDiagram
         BalanceService -->> PaymentFacade: throw NotFoundException
     else 잔액이 부족한 경우
         BalanceService -->> PaymentFacade: throw BadRequestException
-    else 잔액 정보를 정상적으로 조회한 경우
+    else 잔액 정보 정상 조회
         BalanceService -->> PaymentFacade: 사용자 잔액 정보
     end
     deactivate BalanceService
     PaymentFacade ->> BalanceService: 사용자 잔액 차감 요청
+    activate BalanceService
     BalanceService -->> PaymentFacade: 사용자 잔액 차감 완료
+    deactivate BalanceService
     PaymentFacade ->> PaymentService: 결제 정보 저장 요청
+    activate PaymentService
     PaymentService -->> PaymentFacade: 결제 정보 저장 완료
+    deactivate PaymentService
     PaymentFacade ->> OrderService: 주문 상태를 결제 완료로 업데이트 요청
+    activate OrderService
     OrderService -->> PaymentFacade: 주문 상태 업데이트 완료
+    deactivate OrderService
     PaymentFacade ->> ExternalDataPlatform: 외부 데이터 플랫폼 전송 이벤트 (AFTER_COMMIT Event)
     PaymentFacade -->> Client: 결제 완료 응답
     deactivate PaymentFacade
@@ -182,13 +224,25 @@ sequenceDiagram
     participant ProductService
 
     Client ->> StatisticFacade: 최근 3일간 판매량 상위 5개 상품 조회 요청
+    activate StatisticFacade
     StatisticFacade ->> OrderService: 최근 3일간 판매량 상위 5개의 productDetailId 목록 조회 (OrderItem 내 데이터)
+    activate OrderService
     OrderService -->> StatisticFacade: productDetailId 목록 정보
+    deactivate OrderService
     StatisticFacade ->> ProductService: productDetailId 목록으로 ProductDetail 목록 조회
-    ProductService -->> StatisticFacade: ProductDetail 목록 정보
+    activate ProductService
+    alt ProductDetail 목록이 없는 경우
+        ProductService -->> StatisticFacade: throw NotFoundException
+    else ProductDetail 목록 정상 조회
+        ProductService -->> StatisticFacade: ProductDetail 목록 정보
+    end
+    deactivate ProductService
     StatisticFacade ->> ProductService: ProductId 목록으로 Product 목록 조회
+    activate ProductService
     ProductService -->> StatisticFacade: Product 목록 정보
+    deactivate ProductService
     StatisticFacade -->> Client: 상위 5개 상품 정보 응답
+    deactivate StatisticFacade
 ```
 
 #### 장바구니 기능
@@ -204,11 +258,23 @@ sequenceDiagram
     participant CartService
 
     Client ->> CartFacade: 장바구니 상품 추가 요청 (사용자 ID, 상품 디테일 ID)
+    activate CartFacade
     CartFacade ->> ProductDetailService: 상품 재고 조회
-    ProductDetailService -->> CartFacade: 상품 재고 정보
+    activate ProductDetailService
+    alt 상품 정보가 존재하지 않을 경우
+        ProductDetailService -->> CartFacade: throw NotFoundException
+    else 상품 재고가 존재하지 않을 경우
+        ProductDetailService -->> CartFacade: throw BadRequestException
+    else 상품 정보 정상 조회
+        ProductDetailService -->> CartFacade: 상품 재고 정보
+    end
+    deactivate ProductDetailService
     CartFacade ->> CartService: 장바구니에 상품 저장 요청
+    activate CartService
     CartService -->> CartFacade: 장바구니에 상품 저장 완료
+    deactivate CartService
     CartFacade -->> Client: 장바구니 상품 추가 완료 응답
+    deactivate CartFacade
 ```
 
 ##### 장바구니 상품 삭제
@@ -220,7 +286,13 @@ sequenceDiagram
     participant CartService
 
     Client ->> CartService: 장바구니 상품 삭제 요청 (사용자 ID, 장바구니 ID)
-    CartService -->> Client: 장바구니 상품 삭제 완료 응답
+    activate CartService
+    alt 장바구니 정보가 존재하지 않을 경우
+        CartService -->> Client: throw NotFoundException
+    else
+        CartService -->> Client: 장바구니 상품 삭제 완료 응답
+    end
+    deactivate CartService
 ```
 
 ##### 장바구니 조회
@@ -232,5 +304,11 @@ sequenceDiagram
     participant CartService
 
     Client ->> CartService: 장바구니 목록 조회 요청 (사용자 ID)
-    CartService -->> Client: 장바구니 목록 조회 응답
+    activate CartService
+    alt 장바구니 목록이 존재하지 않을 경우
+        CartService -->> Client: throw NotFoundException
+    else 장바구니 목록 정상 조회
+        CartService -->> Client: 장바구니 목록 조회 응답
+    end
+    deactivate CartService
 ```
