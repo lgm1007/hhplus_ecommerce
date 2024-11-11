@@ -5,6 +5,7 @@ import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepos
 import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
+import mu.KotlinLogging
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -21,6 +22,7 @@ class ProductServiceIntegrationTest {
 	@Autowired private lateinit var productService: ProductService
 	@Autowired private lateinit var productRepository: ProductJpaRepository
 	@Autowired private lateinit var productDetailRepository: ProductDetailJpaRepository
+	private val logger = KotlinLogging.logger {}
 
 	@BeforeEach
 	fun clearDB() {
@@ -51,7 +53,12 @@ class ProductServiceIntegrationTest {
 		val productId = productRepository.save(Product("상품 A", "A 상품")).id
 		productDetailRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES))
 
+		val startTime = System.currentTimeMillis()
+
 		val actual = productService.getProductInfoById(productId)
+
+		val endTime = System.currentTimeMillis()
+		logger.info("실행 시간: ${endTime - startTime} milliseconds")
 
 		assertThat(actual.price).isEqualTo(1000)
 		assertThat(actual.stockQuantity).isEqualTo(100)

@@ -5,6 +5,7 @@ import com.example.hhplus_ecommerce.domain.product.ProductRepository
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDto
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
@@ -21,6 +22,7 @@ class ProductRepositoryImpl(
 		return productJpaRepository.findAllWithPaging(pageable)
 	}
 
+	@Cacheable(value = ["productInfo"], key = "#id.toString()", cacheManager = "redisCacheManager")
 	override fun getById(id: Long): Product {
 		return productJpaRepository.findByIdOrNull(id)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT)

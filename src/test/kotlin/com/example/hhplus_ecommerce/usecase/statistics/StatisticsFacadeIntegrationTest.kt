@@ -12,6 +12,7 @@ import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepos
 import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
+import mu.KotlinLogging
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
@@ -30,6 +31,7 @@ class StatisticsFacadeIntegrationTest {
 	@Autowired private lateinit var orderItemRepository: OrderItemJpaRepository
 	@Autowired private lateinit var productRepository: ProductJpaRepository
 	@Autowired private lateinit var productDetailRepository: ProductDetailJpaRepository
+	private val logger = KotlinLogging.logger {}
 
 	@BeforeEach
 	fun clearDB() {
@@ -44,7 +46,12 @@ class StatisticsFacadeIntegrationTest {
 	fun getTopProductsStatistics() {
 		givenOrderItems()
 
+		val startTime = System.currentTimeMillis()
+
 		val actual = statisticsFacade.getTopOrderProductStatistics(3, 5)
+
+		val endTime = System.currentTimeMillis()
+		logger.info("실행 시간: ${endTime - startTime} milliseconds")
 
 		assertThat(actual.size).isEqualTo(5)
 		assertThat(actual[0].name).isEqualTo("상품A")
