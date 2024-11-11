@@ -80,3 +80,6 @@ hhplusecommerce
 
 ### 🔒 동시성 제어 시나리오 분석
 - [동시성 제어 시나리오 분석 보고서](docs/CONCURRENCY_CONTROL.md)
+
+### 💾 캐시
+- [캐시 및 캐시 적용 분석 보고서](docs/CACHING.md)

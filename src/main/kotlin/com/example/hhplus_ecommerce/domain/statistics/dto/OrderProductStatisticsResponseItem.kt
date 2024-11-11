@@ -2,12 +2,13 @@ package com.example.hhplus_ecommerce.domain.statistics.dto
 
 import com.example.hhplus_ecommerce.domain.order.dto.OrderQuantityStatisticsInfo
 import com.example.hhplus_ecommerce.domain.product.dto.ProductStatisticsInfo
+import java.io.Serializable
 
 class OrderProductStatisticsResponseItem(
 	val productId: Long,
 	val name: String,
 	val totalSold: Int
-) {
+) : Serializable {
 	companion object {
 		fun of(
 			productStatisticsInfo: ProductStatisticsInfo,
