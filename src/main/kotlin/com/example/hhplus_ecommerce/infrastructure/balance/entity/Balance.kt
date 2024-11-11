@@ -11,6 +11,7 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
+@Table(name = "BALANCE", indexes = [Index(name = "idx_balance_user_id", columnList = "userId")])
 class Balance(
 	val userId: Long,
 	var amount: Int,
