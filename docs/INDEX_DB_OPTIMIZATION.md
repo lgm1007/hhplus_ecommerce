@@ -75,9 +75,11 @@ SELECT * FROM Cart WHERE userId = :userId
 
 EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
-![](https://github.com/user-attachments/assets/6edf0289-ba61-46e3-9645-4cbd04229900)
+![](https://github.com/user-attachments/assets/2413a852-7a03-4f06-a00b-205c276dc9f1)
 
-조회 실행 시간: **89 ms**
+테스트를 위해 1만 건의 데이터에서 9990번 째 있는 데이터에 해당하는 값을 조회하도록 함
+
+조회 실행 시간: **115 ms**
 
 ##### 인덱스 적용 O
 
@@ -85,11 +87,11 @@ EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
 EXPLAIN 실행 결과: 인덱스 적용된 것 확인
 
-![](https://github.com/user-attachments/assets/e2a378a1-55af-495f-bf44-a260e58edd28)
+![](https://github.com/user-attachments/assets/7915d5a5-0980-43c7-985d-9219ab54a4ad)
 
-조회 실행 시간: **71 ms**
+조회 실행 시간: **60 ms**
 
-인덱스 적용 후 실행 시간 약 **20%** 개선
+인덱스 적용 후 실행 시간 약 **48%** 개선
 
 #### 상품 ID 목록으로 상품 세부 정보 목록 조회
 ##### 인덱스 적용 X
@@ -98,9 +100,11 @@ EXPLAIN 실행 결과: 인덱스 적용된 것 확인
 
 EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
-![](https://github.com/user-attachments/assets/a54a27ba-84ef-447c-a74c-82d7d4d4ac67)
+![](https://github.com/user-attachments/assets/9f278632-da56-4c06-8311-18f9b8836386)
 
-조회 실행 시간: **115 ms**
+테스트를 위해 1만 건의 데이터에서 9900,9910,9920,9930,9940,9950,9960,9970,9980,9990번 째 있는 데이터에 해당하는 값을 조회하도록 함
+
+조회 실행 시간: **108 ms**
 
 ##### 인덱스 적용 O
 
@@ -108,11 +112,11 @@ EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
 EXPLAIN 실행 결과: 인덱스 적용된 것 확인
 
-![](https://github.com/user-attachments/assets/5a2df57e-6a86-4f31-906e-5ecb3acd7462)
+![](https://github.com/user-attachments/assets/bf5e860d-37f2-446a-9847-eb2a80322270)
 
-조회 실행 시간: **77 ms**
+조회 실행 시간: **65 ms**
 
-인덱스 적용 후 실행 시간 약 **33%** 개선
+인덱스 적용 후 실행 시간 약 **40%** 개선
 
 #### 사용자 ID로 장바구니 조회
 ##### 인덱스 적용 X
@@ -121,9 +125,11 @@ EXPLAIN 실행 결과: 인덱스 적용된 것 확인
 
 EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
-![](https://github.com/user-attachments/assets/799dce91-7a51-453b-b373-ac08825e84e9)
+![](https://github.com/user-attachments/assets/b1e38ccd-cecd-4f10-91b0-7c691f4d054d)
 
-조회 실행 시간: **90 ms**
+테스트를 위해 잔액 조회 테스트와 마찬가지로 1만 건의 데이터에서 9990번 째 있는 데이터에 해당하는 값을 조회하도록 함
+
+조회 실행 시간: **135 ms**
 
 ##### 인덱스 적용 O
 
@@ -131,8 +137,8 @@ EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
 EXPLAIN 실행 결과: 인덱스 적용된 것 확인
 
-![](https://github.com/user-attachments/assets/59f81d82-7280-4d8d-8858-86f1bf85cf05)
+![](https://github.com/user-attachments/assets/cd047a46-3d5c-4e89-ae76-6d0330d47000)
 
-조회 실행 시간: **75 ms**
+조회 실행 시간: **71 ms**
 
-인덱스 적용 후 실행 시간 약 **16%** 개선
+인덱스 적용 후 실행 시간 약 **47%** 개선
