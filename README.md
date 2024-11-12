@@ -86,3 +86,6 @@ hhplusecommerce
 
 ### 🪄 DB 조회 성능 최적화
 - [DB 조회 쿼리 최적화를 위한 쿼리 분석 및 인덱스 적용 보고서](docs/INDEX_DB_OPTIMIZATION.md)
+
+### ⛓️ 트랜잭션 범위 및 서비스 확장 대응 보고서
+- [시나리오 트랜잭션 범위 분석 및 서비스 확장 대비 보고서](docs/DISTRIBUTED_TRANSACTION.md)
