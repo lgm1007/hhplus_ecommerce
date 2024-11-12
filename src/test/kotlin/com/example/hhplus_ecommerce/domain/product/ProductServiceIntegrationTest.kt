@@ -31,20 +31,26 @@ class ProductServiceIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("10000개의 데이터에서 상품 ID가 9900,9910,9920,9930,9940,9950,9960,9970,9980,9990에 해당하는 상품 세부 정보 조회")
+	@DisplayName("300000개의 데이터에서 상품 ID가 50000,100000,150000,200000,250000에 해당하는 상품 세부 정보 조회")
 	fun getAllProductDetailByProductIds() {
-		givenProducts(10000)
+		givenProductDetails(300000)
 
 		val startTime = System.currentTimeMillis()
 
 		val actual = productDetailRepository.findAllByProductIdIn(
-			listOf(9900L, 9910L, 9920L, 9930L, 9940L, 9950L, 9960L, 9970L, 9980L, 9990L)
+			listOf(50000L, 100000L, 150000L, 200000L, 250000L)
 		)
 
 		val endTime = System.currentTimeMillis()
 		logger.info("실행 시간: ${endTime - startTime} milliseconds")
 
-		assertThat(actual.size).isEqualTo(10)
+		assertThat(actual.size).isEqualTo(5)
+	}
+
+	private fun givenProductDetails(size: Int) {
+		for (i in 1..size) {
+			productDetailRepository.save(ProductDetail(i.toLong(), 1234, 500, ProductCategory.CLOTHES))
+		}
 	}
 
 	@Test
