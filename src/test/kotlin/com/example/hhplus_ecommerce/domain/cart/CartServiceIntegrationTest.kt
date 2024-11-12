@@ -27,13 +27,13 @@ class CartServiceIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("10000개의 데이터에서 사용자 ID가 9999인 데이터 조회")
+	@DisplayName("10000개의 데이터에서 사용자 ID가 9990인 데이터 조회")
 	fun getCartByUserId() {
 		givenCartDumpData(10000)
 
 		val startTime = System.currentTimeMillis()
 
-		val actual = cartService.getAllCartsByUser(9999L)
+		val actual = cartService.getAllCartsByUser(9990L)
 
 		val endTime = System.currentTimeMillis()
 		logger.info("실행 시간: ${endTime - startTime} milliseconds")

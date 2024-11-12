@@ -32,13 +32,13 @@ class BalanceServiceIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("10000개의 데이터에서 사용자 ID가 9999에 해당하는 잔액 정보 조회")
+	@DisplayName("10000개의 데이터에서 사용자 ID가 9990에 해당하는 잔액 정보 조회")
 	fun getBalanceByUserId() {
 		givenBalanceDumpData(10000)
 
 		val startTime = System.currentTimeMillis()
 
-		val actual = balanceService.getByUserId(9999L)
+		val actual = balanceService.getByUserId(9990L)
 
 		val endTime = System.currentTimeMillis()
 		logger.info("실행 시간: ${endTime - startTime} milliseconds")
