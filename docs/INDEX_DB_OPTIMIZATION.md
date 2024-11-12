@@ -75,11 +75,11 @@ SELECT * FROM Cart WHERE userId = :userId
 
 EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
-![](https://github.com/user-attachments/assets/2413a852-7a03-4f06-a00b-205c276dc9f1)
+![](https://github.com/user-attachments/assets/46e055c4-2daa-49fe-8276-27c9d37984cf)
 
-테스트를 위해 1만 건의 데이터에서 9990번 째 있는 데이터에 해당하는 값을 조회하도록 함
+테스트를 위해 사용자 ID가 1부터 30만까지의 데이터에서 사용자 ID가 298,765인 데이터에 해당하는 값을 조회하도록 함
 
-조회 실행 시간: **115 ms**
+조회 실행 시간: **229 ms**
 
 ##### 인덱스 적용 O
 
@@ -87,11 +87,11 @@ EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
 EXPLAIN 실행 결과: 인덱스 적용된 것 확인
 
-![](https://github.com/user-attachments/assets/7915d5a5-0980-43c7-985d-9219ab54a4ad)
+![](https://github.com/user-attachments/assets/9d7d51aa-fa9f-4e45-b4fb-e7d06e8112e0)
 
-조회 실행 시간: **60 ms**
+조회 실행 시간: **30 ms**
 
-인덱스 적용 후 실행 시간 약 **48%** 개선
+인덱스 적용 후 실행 시간 약 **87%** 개선
 
 #### 상품 ID 목록으로 상품 세부 정보 목록 조회
 ##### 인덱스 적용 X
@@ -100,11 +100,11 @@ EXPLAIN 실행 결과: 인덱스 적용된 것 확인
 
 EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
-![](https://github.com/user-attachments/assets/9f278632-da56-4c06-8311-18f9b8836386)
+![](https://github.com/user-attachments/assets/de281a90-dd87-46f7-a05a-e9a328a390c0)
 
-테스트를 위해 1만 건의 데이터에서 9900,9910,9920,9930,9940,9950,9960,9970,9980,9990번 째 있는 데이터에 해당하는 값을 조회하도록 함
+테스트를 위해 상품 ID가 1부터 30만까지의 데이터에서 상품 ID가 50000,100000,150000,200000,250000인 데이터에 해당하는 값을 조회하도록 함
 
-조회 실행 시간: **108 ms**
+조회 실행 시간: **220 ms**
 
 ##### 인덱스 적용 O
 
@@ -112,11 +112,11 @@ EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
 EXPLAIN 실행 결과: 인덱스 적용된 것 확인
 
-![](https://github.com/user-attachments/assets/bf5e860d-37f2-446a-9847-eb2a80322270)
+![](https://github.com/user-attachments/assets/03bb1590-3da8-42e5-81dc-ee28e8c015f8)
 
-조회 실행 시간: **65 ms**
+조회 실행 시간: **42 ms**
 
-인덱스 적용 후 실행 시간 약 **40%** 개선
+인덱스 적용 후 실행 시간 약 **81%** 개선
 
 #### 사용자 ID로 장바구니 조회
 ##### 인덱스 적용 X
@@ -125,11 +125,11 @@ EXPLAIN 실행 결과: 인덱스 적용된 것 확인
 
 EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
-![](https://github.com/user-attachments/assets/b1e38ccd-cecd-4f10-91b0-7c691f4d054d)
+![](https://github.com/user-attachments/assets/624127d5-fbca-47fe-b783-5d126722a4c5)
 
-테스트를 위해 잔액 조회 테스트와 마찬가지로 1만 건의 데이터에서 9990번 째 있는 데이터에 해당하는 값을 조회하도록 함
+테스트를 위해 사용자 ID가 1부터 30만까지의 데이터에서 사용자 ID가 298,765인 데이터에 해당하는 값을 조회하도록 함
 
-조회 실행 시간: **135 ms**
+조회 실행 시간: **213 ms**
 
 ##### 인덱스 적용 O
 
@@ -137,8 +137,8 @@ EXPLAIN 실행 결과: tableScan 으로 인덱스 적용되지 않은 것 확인
 
 EXPLAIN 실행 결과: 인덱스 적용된 것 확인
 
-![](https://github.com/user-attachments/assets/cd047a46-3d5c-4e89-ae76-6d0330d47000)
+![](https://github.com/user-attachments/assets/20b1bb15-de25-44f4-bc28-267f178f5311)
 
-조회 실행 시간: **71 ms**
+조회 실행 시간: **46 ms**
 
-인덱스 적용 후 실행 시간 약 **47%** 개선
+인덱스 적용 후 실행 시간 약 **78%** 개선
