@@ -10,9 +10,6 @@
 * Spring Boot: 2.7.18
 * JPA: 1.9.24
 * DBMS: H2
-* API Docs
-  * [API 명세서](docs/API_SPEC.md)
-  * Swagger-ui
 
 ### 🗃️ 프로젝트 구조
 ```
