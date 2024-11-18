@@ -34,7 +34,7 @@ class PaymentFacade(
 
 		val paymentResultInfo = PaymentResultInfo.of(registerPayment, balanceDto, orderId)
 
-		// 외부 데이터 플랫폼에 비동기 전송
+		// 외부 데이터 플랫폼 전송 이벤트 발행
 		eventPublisher.publishEvent(DataPlatformEvent(paymentResultInfo))
 
 		return paymentResultInfo
