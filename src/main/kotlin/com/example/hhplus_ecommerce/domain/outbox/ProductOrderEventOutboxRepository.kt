@@ -6,4 +6,6 @@ interface ProductOrderEventOutboxRepository {
 	fun getAllByUserIdAndEventStatus(userId: Long, eventStatus: OutboxEventStatus): List<ProductOrderEventOutboxDto>
 
 	fun insert(productOrderEventOutboxDto: ProductOrderEventOutboxDto)
+
+	fun insertAll(productOrderEventOutboxDtos: List<ProductOrderEventOutboxDto>)
 }

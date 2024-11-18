@@ -3,6 +3,7 @@ package com.example.hhplus_ecommerce.infrastructure.outbox
 import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
 import com.example.hhplus_ecommerce.domain.outbox.PaymentEventOutboxRepository
 import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxDto
+import com.example.hhplus_ecommerce.infrastructure.outbox.entity.PaymentEventOutbox
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -17,6 +18,6 @@ class PaymentEventOutboxRepositoryImpl(
 	}
 
 	override fun insert(paymentEventOutboxDto: PaymentEventOutboxDto) {
-		TODO("Not yet implemented")
+		jpaRepository.save(PaymentEventOutbox.from(paymentEventOutboxDto))
 	}
 }
