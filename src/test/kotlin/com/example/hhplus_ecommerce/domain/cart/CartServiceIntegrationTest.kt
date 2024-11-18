@@ -4,6 +4,8 @@ import com.example.hhplus_ecommerce.api.error.ErrorStatus
 import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
 import com.example.hhplus_ecommerce.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.cart.CartJpaRepository
+import com.example.hhplus_ecommerce.infrastructure.cart.entity.Cart
+import mu.KotlinLogging
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
@@ -17,10 +19,32 @@ import java.time.LocalDateTime
 class CartServiceIntegrationTest {
 	@Autowired private lateinit var cartService: CartService
 	@Autowired private lateinit var cartRepository: CartJpaRepository
+	private val logger = KotlinLogging.logger {}
 
 	@BeforeEach
 	fun clearDB() {
 		cartRepository.deleteAll()
+	}
+
+	@Test
+	@DisplayName("300000개의 데이터에서 사용자 ID가 298765인 데이터 조회")
+	fun getCartByUserId() {
+		givenCartDumpData(300000)
+
+		val startTime = System.currentTimeMillis()
+
+		val actual = cartService.getAllCartsByUser(298765L)
+
+		val endTime = System.currentTimeMillis()
+		logger.info("실행 시간: ${endTime - startTime} milliseconds")
+
+		assertThat(actual).isNotNull
+	}
+
+	private fun givenCartDumpData(size: Int) {
+		for (i in 1..size) {
+			cartRepository.save(Cart(i.toLong(), i.toLong(), 1))
+		}
 	}
 
 	@Test

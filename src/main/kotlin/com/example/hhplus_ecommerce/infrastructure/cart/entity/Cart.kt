@@ -8,6 +8,7 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
+@Table(name = "CART", indexes = [Index(name = "idx_cart_user_id", columnList = "userId")])
 class Cart(
 	val userId: Long,
 	val productDetailId: Long,

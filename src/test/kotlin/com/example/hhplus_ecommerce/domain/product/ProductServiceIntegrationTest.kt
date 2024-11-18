@@ -31,6 +31,29 @@ class ProductServiceIntegrationTest {
 	}
 
 	@Test
+	@DisplayName("300000개의 데이터에서 상품 ID가 50000,100000,150000,200000,250000에 해당하는 상품 세부 정보 조회")
+	fun getAllProductDetailByProductIds() {
+		givenProductDetails(300000)
+
+		val startTime = System.currentTimeMillis()
+
+		val actual = productDetailRepository.findAllByProductIdIn(
+			listOf(50000L, 100000L, 150000L, 200000L, 250000L)
+		)
+
+		val endTime = System.currentTimeMillis()
+		logger.info("실행 시간: ${endTime - startTime} milliseconds")
+
+		assertThat(actual.size).isEqualTo(5)
+	}
+
+	private fun givenProductDetails(size: Int) {
+		for (i in 1..size) {
+			productDetailRepository.save(ProductDetail(i.toLong(), 1234, 500, ProductCategory.CLOTHES))
+		}
+	}
+
+	@Test
 	@DisplayName("상품 목록 조회 - 페이징하여 상품 목록 조회")
 	fun getAllProductsWithPaging() {
 		givenProducts(5)

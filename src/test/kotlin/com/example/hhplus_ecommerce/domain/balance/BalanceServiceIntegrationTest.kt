@@ -5,6 +5,7 @@ import com.example.hhplus_ecommerce.exception.BadRequestException
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceHistoryJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance
+import mu.KotlinLogging
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
@@ -22,11 +23,33 @@ class BalanceServiceIntegrationTest {
 	@Autowired private lateinit var balanceService: BalanceService
 	@Autowired private lateinit var balanceRepository: BalanceJpaRepository
 	@Autowired private lateinit var balanceHistoryRepository: BalanceHistoryJpaRepository
+	private val logger = KotlinLogging.logger {}
 
 	@BeforeEach
 	fun clearDB() {
 		balanceRepository.deleteAll()
 		balanceHistoryRepository.deleteAll()
+	}
+
+	@Test
+	@DisplayName("300000개의 데이터에서 사용자 ID가 298765에 해당하는 잔액 정보 조회")
+	fun getBalanceByUserId() {
+		givenBalanceDumpData(300000)
+
+		val startTime = System.currentTimeMillis()
+
+		val actual = balanceService.getByUserId(298765L)
+
+		val endTime = System.currentTimeMillis()
+		logger.info("실행 시간: ${endTime - startTime} milliseconds")
+
+		assertThat(actual).isNotNull
+	}
+
+	private fun givenBalanceDumpData(size: Int) {
+		for (i in 1..size) {
+			balanceRepository.save(Balance(i.toLong(), 100))
+		}
 	}
 
 	@Test
