@@ -10,11 +10,10 @@ import org.springframework.stereotype.Repository
 class PaymentEventOutboxRepositoryImpl(
 	private val jpaRepository: PaymentEventOutboxJpaRepository
 ) : PaymentEventOutboxRepository {
-	override fun getAllByUserIdAndEventStatus(
-		userId: Long,
+	override fun getAllByEventStatus(
 		eventStatus: OutboxEventStatus
 	): List<PaymentEventOutboxDto> {
-		return PaymentEventOutboxDto.fromList(jpaRepository.findAllByUserIdAndEventStatus(userId, eventStatus))
+		return PaymentEventOutboxDto.fromList(jpaRepository.findAllByEventStatus(eventStatus))
 	}
 
 	override fun insert(paymentEventOutboxDto: PaymentEventOutboxDto) {

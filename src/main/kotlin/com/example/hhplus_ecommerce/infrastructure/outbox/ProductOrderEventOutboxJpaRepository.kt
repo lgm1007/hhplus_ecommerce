@@ -5,5 +5,5 @@ import com.example.hhplus_ecommerce.infrastructure.outbox.entity.ProductOrderEve
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface ProductOrderEventOutboxJpaRepository : JpaRepository<ProductOrderEventOutbox, Long> {
-	fun findAllByUserIdAndEventStatus(userId: Long, eventStatus: OutboxEventStatus): List<ProductOrderEventOutbox>
+	fun findAllByEventStatus(eventStatus: OutboxEventStatus): List<ProductOrderEventOutbox>
 }

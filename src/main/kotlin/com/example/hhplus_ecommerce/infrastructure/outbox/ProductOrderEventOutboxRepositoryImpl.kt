@@ -10,11 +10,10 @@ import org.springframework.stereotype.Repository
 class ProductOrderEventOutboxRepositoryImpl(
 	private val jpaRepository: ProductOrderEventOutboxJpaRepository
 ) : ProductOrderEventOutboxRepository {
-	override fun getAllByUserIdAndEventStatus(
-		userId: Long,
+	override fun getAllByEventStatus(
 		eventStatus: OutboxEventStatus
 	): List<ProductOrderEventOutboxDto> {
-		return ProductOrderEventOutboxDto.fromList(jpaRepository.findAllByUserIdAndEventStatus(userId, eventStatus))
+		return ProductOrderEventOutboxDto.fromList(jpaRepository.findAllByEventStatus(eventStatus))
 	}
 
 	override fun insert(productOrderEventOutboxDto: ProductOrderEventOutboxDto) {

@@ -5,5 +5,5 @@ import com.example.hhplus_ecommerce.infrastructure.outbox.entity.PaymentEventOut
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface PaymentEventOutboxJpaRepository : JpaRepository<PaymentEventOutbox, Long> {
-	fun findAllByUserIdAndEventStatus(userId: Long, eventStatus: OutboxEventStatus): List<PaymentEventOutbox>
+	fun findAllByEventStatus(eventStatus: OutboxEventStatus): List<PaymentEventOutbox>
 }
