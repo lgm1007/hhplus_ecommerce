@@ -1,11 +1,11 @@
 package com.example.hhplus_ecommerce.usecase.order
 
+import com.example.hhplus_ecommerce.consumer.kafka.EcommerceKafkaConsumer
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemInfo
 import com.example.hhplus_ecommerce.domain.product.ProductCategory
 import com.example.hhplus_ecommerce.domain.product.ProductService
 import com.example.hhplus_ecommerce.exception.BadRequestException
-import com.example.hhplus_ecommerce.infrastructure.message.consumer.KafkaConsumer
-import com.example.hhplus_ecommerce.infrastructure.message.producer.MessageProducer
+import com.example.hhplus_ecommerce.infrastructure.kafka.producer.MessageProducer
 import com.example.hhplus_ecommerce.infrastructure.order.OrderItemJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.order.OrderJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepository
@@ -35,7 +35,7 @@ class OrderFacadeIntegrationTest {
 	@Autowired private lateinit var orderRepository: OrderJpaRepository
 	@Autowired private lateinit var orderItemRepository: OrderItemJpaRepository
 	@Autowired private lateinit var messageProducer: MessageProducer
-	@Autowired private lateinit var kafkaConsumer: KafkaConsumer
+	@Autowired private lateinit var ecommerceKafkaConsumer: EcommerceKafkaConsumer
 	@Autowired private lateinit var objectMapper: ObjectMapper
 	private val logger = KotlinLogging.logger {}
 
