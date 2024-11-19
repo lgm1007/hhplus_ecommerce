@@ -23,7 +23,7 @@ class EcommerceKafkaConsumer(
 	}
 
 	@KafkaListener(groupId = "\${spring.kafka.consumer.group-id}", topics = [AFTER_PAYMENT_TOPIC])
-	fun listenPaymentDataPlatformEvent(@Payload message: PaymentDataMessage) {
+	fun listenAfterPaymentEvent(@Payload message: PaymentDataMessage) {
 		val dataPlatform = ExternalDataPlatform()
 		dataPlatform.sendPaymentData(message.orderId, message.currentBalance, message.paymentDate)
 	}
