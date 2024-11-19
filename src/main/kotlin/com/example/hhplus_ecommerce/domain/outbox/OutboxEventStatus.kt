@@ -1,6 +1,7 @@
 package com.example.hhplus_ecommerce.domain.outbox
 
 enum class OutboxEventStatus(val message: String) {
-	BEFORE_PROCESS("처리 전"),
+	INIT("등록"),
+	PUBLISH("발행"),
 	COMPLETE("성공");
 }
