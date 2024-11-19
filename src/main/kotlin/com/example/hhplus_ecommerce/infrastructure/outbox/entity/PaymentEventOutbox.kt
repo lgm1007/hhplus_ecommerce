@@ -13,7 +13,7 @@ class PaymentEventOutbox(
 	val userId: Long,
 	val orderId: Long,
 	@Enumerated(EnumType.STRING)
-	val eventStatus: OutboxEventStatus
+	var eventStatus: OutboxEventStatus
 ) {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +22,10 @@ class PaymentEventOutbox(
 	@CreatedDate
 	var createdDate: LocalDateTime = LocalDateTime.now()
 		private set
+
+	fun modifyEventStatus(eventStatus: OutboxEventStatus) {
+		this.eventStatus = eventStatus
+	}
 
 	companion object {
 		fun from(paymentEventOutboxDto: PaymentEventOutboxDto): PaymentEventOutbox {

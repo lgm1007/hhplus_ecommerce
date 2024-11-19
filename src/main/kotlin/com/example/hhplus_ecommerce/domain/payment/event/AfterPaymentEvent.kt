@@ -1,8 +1,8 @@
 package com.example.hhplus_ecommerce.domain.payment.event
 
-import com.example.hhplus_ecommerce.domain.payment.dto.PaymentResultInfo
+import com.example.hhplus_ecommerce.domain.payment.dto.AfterPaymentEventInfo
 import org.springframework.context.ApplicationEvent
 
 class AfterPaymentEvent(
-    val paymentResultInfo: PaymentResultInfo
-) : ApplicationEvent(paymentResultInfo)
+    val paymentEventInfo: AfterPaymentEventInfo
+) : ApplicationEvent(paymentEventInfo)
