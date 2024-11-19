@@ -1,8 +1,7 @@
-package com.example.hhplus_ecommerce.domain.order
+package com.example.hhplus_ecommerce.domain.order.event
 
-import com.example.hhplus_ecommerce.event.ProductOrderMessageEvent
-import com.example.hhplus_ecommerce.infrastructure.message.producer.MessageProducer
-import com.example.hhplus_ecommerce.infrastructure.message.producer.dto.ProductMessage
+import com.example.hhplus_ecommerce.infrastructure.kafka.producer.MessageProducer
+import com.example.hhplus_ecommerce.infrastructure.kafka.producer.dto.ProductMessage
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener

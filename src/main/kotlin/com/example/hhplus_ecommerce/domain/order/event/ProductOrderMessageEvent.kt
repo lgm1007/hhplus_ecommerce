@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.event
+package com.example.hhplus_ecommerce.domain.order.event
 
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemInfo
 import org.springframework.context.ApplicationEvent

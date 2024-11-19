@@ -5,8 +5,8 @@ import com.example.hhplus_ecommerce.domain.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.dto.OrderInfo
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetailInfo
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemInfo
+import com.example.hhplus_ecommerce.domain.order.event.ProductOrderMessageEvent
 import com.example.hhplus_ecommerce.domain.product.ProductService
-import com.example.hhplus_ecommerce.event.ProductOrderMessageEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional

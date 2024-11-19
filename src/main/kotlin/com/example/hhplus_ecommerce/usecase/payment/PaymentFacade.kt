@@ -6,7 +6,7 @@ import com.example.hhplus_ecommerce.domain.order.OrderStatus
 import com.example.hhplus_ecommerce.domain.payment.PaymentService
 import com.example.hhplus_ecommerce.domain.payment.dto.PaymentDto
 import com.example.hhplus_ecommerce.domain.payment.dto.PaymentResultInfo
-import com.example.hhplus_ecommerce.event.DataPlatformEvent
+import com.example.hhplus_ecommerce.domain.payment.event.AfterPaymentEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -35,7 +35,7 @@ class PaymentFacade(
 		val paymentResultInfo = PaymentResultInfo.of(registerPayment, balanceDto, orderId)
 
 		// 외부 데이터 플랫폼 전송 이벤트 발행
-		eventPublisher.publishEvent(DataPlatformEvent(paymentResultInfo))
+		eventPublisher.publishEvent(AfterPaymentEvent(paymentResultInfo))
 
 		return paymentResultInfo
 	}
