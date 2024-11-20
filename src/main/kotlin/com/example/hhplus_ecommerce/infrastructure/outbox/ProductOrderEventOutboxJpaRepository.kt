@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ProductOrderEventOutboxJpaRepository : JpaRepository<ProductOrderEventOutbox, Long> {
 	fun findAllByEventStatus(eventStatus: OutboxEventStatus): List<ProductOrderEventOutbox>
+
+	fun findAllByUserIdAndProductDetailId(userId: Long, productDetailId: Long): List<ProductOrderEventOutbox>
 }

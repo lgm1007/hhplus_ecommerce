@@ -14,7 +14,7 @@ class ProductOrderEventOutbox(
 	val productDetailId: Long,
 	val orderQuantity: Int,
 	@Enumerated(EnumType.STRING)
-	val eventStatus: OutboxEventStatus
+	var eventStatus: OutboxEventStatus
 ) {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +23,10 @@ class ProductOrderEventOutbox(
 	@CreatedDate
 	var createdDate: LocalDateTime = LocalDateTime.now()
 		private set
+
+	fun modifyEventStatus(eventStatus: OutboxEventStatus) {
+		this.eventStatus = eventStatus
+	}
 
 	companion object {
 		fun from(productOrderEventOutboxDto: ProductOrderEventOutboxDto): ProductOrderEventOutbox {
