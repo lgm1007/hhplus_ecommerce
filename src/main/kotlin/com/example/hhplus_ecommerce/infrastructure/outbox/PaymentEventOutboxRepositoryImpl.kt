@@ -19,6 +19,12 @@ class PaymentEventOutboxRepositoryImpl(
 		return PaymentEventOutboxDto.fromList(jpaRepository.findAllByEventStatus(eventStatus))
 	}
 
+	override fun getByUserIdAndOrderId(userId: Long, orderId: Long): PaymentEventOutboxDto {
+		return PaymentEventOutboxDto.from(
+			jpaRepository.findByUserIdAndOrderId(userId, orderId) ?: throw NotFoundException(ErrorStatus.NOT_FOUND_PAYMENT_OUTBOX)
+		)
+	}
+
 	override fun insert(paymentEventOutboxDto: PaymentEventOutboxDto) {
 		jpaRepository.save(PaymentEventOutbox.from(paymentEventOutboxDto))
 	}

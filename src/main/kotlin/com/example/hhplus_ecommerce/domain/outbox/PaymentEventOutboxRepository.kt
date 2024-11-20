@@ -6,6 +6,8 @@ import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxRequestD
 interface PaymentEventOutboxRepository {
 	fun getAllByEventStatus(eventStatus: OutboxEventStatus): List<PaymentEventOutboxDto>
 
+	fun getByUserIdAndOrderId(userId: Long, orderId: Long): PaymentEventOutboxDto
+
 	fun insert(paymentEventOutboxDto: PaymentEventOutboxDto)
 
 	fun updateStatus(paymentEventOutboxRequest: PaymentEventOutboxRequestDto, eventStatus: OutboxEventStatus): PaymentEventOutboxDto
