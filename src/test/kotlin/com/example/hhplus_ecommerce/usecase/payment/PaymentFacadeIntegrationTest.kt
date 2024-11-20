@@ -3,6 +3,8 @@ package com.example.hhplus_ecommerce.usecase.payment
 import com.example.hhplus_ecommerce.domain.balance.BalanceService
 import com.example.hhplus_ecommerce.domain.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
+import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
+import com.example.hhplus_ecommerce.domain.outbox.PaymentEventOutboxRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceHistoryJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.kafka.test.context.EmbeddedKafka
 import org.springframework.orm.ObjectOptimisticLockingFailureException
 import java.time.LocalDateTime
 import java.util.concurrent.CountDownLatch
@@ -22,6 +25,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 
 @SpringBootTest
+@EmbeddedKafka(partitions = 3, brokerProperties = ["listeners=PLAINTEXT://localhost:9092"], ports = [9092])
 class PaymentFacadeIntegrationTest {
 	@Autowired private lateinit var paymentFacade: PaymentFacade
 	@Autowired private lateinit var orderService: OrderService
@@ -30,6 +34,7 @@ class PaymentFacadeIntegrationTest {
 	@Autowired private lateinit var balanceHistoryRepository: BalanceHistoryJpaRepository
 	@Autowired private lateinit var paymentRepository: PaymentJpaRepository
 	@Autowired private lateinit var orderRepository: OrderJpaRepository
+	@Autowired private lateinit var paymentEventOutboxRepository: PaymentEventOutboxRepository
 
 	@BeforeEach
 	fun clearDB() {
@@ -94,5 +99,22 @@ class PaymentFacadeIntegrationTest {
 		} finally {
 			executor.shutdown()
 		}
+	}
+
+	@Test
+	@DisplayName("결제 요청 정상 처리 후 outbox 메시지 상태가 COMPLETE 인지 확인한다")
+	fun outboxStatusUpdateCompleteAfterPayment() {
+		val userId = 1L
+		val orderId = orderRepository.save(OrderTable(userId, LocalDateTime.now(), 10000, OrderStatus.ORDER_COMPLETE)).id
+		balanceRepository.save(Balance(userId, 10000))
+
+		paymentFacade.orderPayment(userId, orderId)
+
+		// 메시지 컨슈밍까지 완료 보장시간 2초
+		Thread.sleep(2000)
+
+		val actual = paymentEventOutboxRepository.getByUserIdAndOrderId(userId, orderId)
+
+		assertThat(actual.eventStatus).isEqualTo(OutboxEventStatus.COMPLETE)
 	}
 }
