@@ -1,18 +1,17 @@
 package com.example.hhplus_ecommerce.usecase.order
 
-import com.example.hhplus_ecommerce.consumer.kafka.EcommerceKafkaConsumer
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemInfo
+import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
+import com.example.hhplus_ecommerce.domain.outbox.ProductOrderEventOutboxRepository
 import com.example.hhplus_ecommerce.domain.product.ProductCategory
 import com.example.hhplus_ecommerce.domain.product.ProductService
 import com.example.hhplus_ecommerce.exception.BadRequestException
-import com.example.hhplus_ecommerce.infrastructure.kafka.producer.MessageProducer
 import com.example.hhplus_ecommerce.infrastructure.order.OrderItemJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.order.OrderJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
-import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -34,9 +33,7 @@ class OrderFacadeIntegrationTest {
 	@Autowired private lateinit var productDetailRepository: ProductDetailJpaRepository
 	@Autowired private lateinit var orderRepository: OrderJpaRepository
 	@Autowired private lateinit var orderItemRepository: OrderItemJpaRepository
-	@Autowired private lateinit var messageProducer: MessageProducer
-	@Autowired private lateinit var ecommerceKafkaConsumer: EcommerceKafkaConsumer
-	@Autowired private lateinit var objectMapper: ObjectMapper
+	@Autowired private lateinit var productOrderEventOutboxRepository: ProductOrderEventOutboxRepository
 	private val logger = KotlinLogging.logger {}
 
 	@BeforeEach
@@ -243,6 +240,23 @@ class OrderFacadeIntegrationTest {
 			assertThat(actual.stockQuantity).isEqualTo(0)
 		} finally {
 			executor.shutdown()
+		}
+	}
+
+	@Test
+	@DisplayName("주문 요청 정상 처리 후 outbox 메시지 상태가 COMPLETE 인지 확인한다")
+	fun outboxStatusUpdateCompleteAfterOrder() {
+		val userId = 1L
+		val productId = productRepository.save(Product("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES)).id
+
+		orderFacade.productOrderWithKafka(userId, listOf(OrderItemInfo(detailId, 50)))
+
+		Thread.sleep(2000)
+
+		val actual = productOrderEventOutboxRepository.getAllByUserIdAndProductDetailId(userId, detailId)
+		actual.forEach {
+			assertThat(it.eventStatus).isEqualTo(OutboxEventStatus.COMPLETE)
 		}
 	}
 }
