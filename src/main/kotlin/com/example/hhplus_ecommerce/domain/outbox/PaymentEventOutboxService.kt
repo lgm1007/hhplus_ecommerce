@@ -9,6 +9,10 @@ import org.springframework.transaction.annotation.Transactional
 class PaymentEventOutboxService(
 	private val paymentEventOutboxRepository: PaymentEventOutboxRepository
 ) {
+	fun getAllByEventStatus(eventStatus: OutboxEventStatus): List<PaymentEventOutboxDto> {
+		return paymentEventOutboxRepository.getAllByEventStatus(eventStatus)
+	}
+
 	fun save(outbox: PaymentEventOutboxDto) {
 		paymentEventOutboxRepository.insert(outbox)
 	}
