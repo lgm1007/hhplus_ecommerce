@@ -41,4 +41,8 @@ class PaymentEventOutboxRepositoryImpl(
 
 		return PaymentEventOutboxDto.from(paymentEventOutbox)
 	}
+
+	override fun deleteAll() {
+		jpaRepository.deleteAll()
+	}
 }

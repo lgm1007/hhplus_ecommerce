@@ -13,4 +13,6 @@ interface ProductOrderEventOutboxRepository {
 	fun insertAll(productOrderEventOutboxDtos: List<ProductOrderEventOutboxDto>)
 
 	fun updateStatus(outboxRequestDto: ProductOrderEventOutboxRequestDto, eventStatus: OutboxEventStatus): ProductOrderEventOutboxDto
+
+	fun deleteAll()
 }

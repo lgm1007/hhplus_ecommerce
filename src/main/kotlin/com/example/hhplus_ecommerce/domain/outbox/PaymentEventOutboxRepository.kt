@@ -11,4 +11,6 @@ interface PaymentEventOutboxRepository {
 	fun insert(paymentEventOutboxDto: PaymentEventOutboxDto)
 
 	fun updateStatus(paymentEventOutboxRequest: PaymentEventOutboxRequestDto, eventStatus: OutboxEventStatus): PaymentEventOutboxDto
+
+	fun deleteAll()
 }
