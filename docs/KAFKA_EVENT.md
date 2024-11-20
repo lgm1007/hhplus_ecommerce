@@ -249,7 +249,7 @@ spring:
 
       ![](https://github.com/user-attachments/assets/49e22629-db32-48f5-95be-76bbb94c96ea)
 
-        - 리더 레플리카가 메시지를 기록하고, 팔로워가 기록한 메시지를 잘 복제했는지 확인하지 않고 ack를 응답한다. `acks = 0` 설정에 비해 메시지 손실 가능성은 낮으나 처리량은 떨어진다.
+        - 리더 레플리카가 메시지를 기록하고, ISR 팔로워가 기록한 메시지를 잘 복제했는지 확인하지 않고 ack를 응답한다. `acks = 0` 설정에 비해 메시지 손실 가능성은 낮으나 처리량은 떨어진다.
     - `acks = all or -1`
 
       ![](https://github.com/user-attachments/assets/fbe65aa1-fc89-4f56-9381-f7f65818bc9f)
@@ -257,8 +257,8 @@ spring:
         - 리더 레플리카가 팔로워로부터 메시지 동기화에 대한 ack를 기다린 후 ack를 응답한다.
         - 하나 이상의 팔로워가 있는 이상 메시지 손실 가능성이 없으며 가장 강력한 일관성을 얻을 수 있다.
         - 토픽의 설정에는 `min.insync.replicas` 설정이 존재하는데 이 설정은 ack 응답을 보내기 위해 리더가 동기화를 확인해야 할 최소 레플리케이션 수이다.
-            - 주의할 점은 `min.insync.replicas` 수는 리더도 포함하기 때문에 `min.insync.replicas = 1`인 경우에는 `acks = 1` 과 동일하게 동작한다.
-            - 손실 없는 메시지 전송을 위해 `acks = all`로 설정했다면 `min.insync.replicas=2`에 레플리케이션 팩터는 3으로 지정할 것을 권장한다.
+            - 주의할 점은 `min.insync.replicas` 수는 리더도 포함하기 때문에 `min.insync.replicas` 가 1인 경우에는 `acks = 1` 과 동일하게 동작한다.
+            - 손실 없는 메시지 전송을 위해 `acks = all`로 설정했다면 `min.insync.replicas`는 2에 레플리케이션 팩터는 3으로 지정할 것을 권장한다.
                 - 만약 브로커 1이 다운되어도 브로커 2가 있어서 `min.insync.replicas`를 만족할 수 있기 때문에 브로커 한 대가 다운되어도 손실 없는 메시지 전송이 가능하다.
 - `key-serializer`: 메시지 키 직렬화 전략 설정 (프로듀서 설정)
     - `StringSerializer`: 문자열 타입으로 직렬화
