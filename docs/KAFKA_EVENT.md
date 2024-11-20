@@ -474,3 +474,280 @@ kafka-ui 로 접속하여 (localhost:8989) 토픽을 생성한다. 본 예제에
 토픽의 메시지가 잘 발행되었는지 확인하기 위해 kafka-ui에 접속해 해당 토픽의 메시지를 확인한다.
 
 ![](https://github.com/user-attachments/assets/19304d1c-92a4-481e-a948-ddb5d5d0111d)
+
+## 카프카 이벤트 결과적 일관성 보장
+
+카프카의 메시지 발행 결과의 일관성 및 신뢰성을 보장하기 위한 전략을 설계 및 구현해본다.
+
+### Transactional Outbox Pattern 설계 및 구현
+
+Transactional Outbox Pattern은 우리가 개발하는 서비스에서 DB를 업데이트하는 트랜잭션과 메시지를 함께 발행할 때, DB 업데이트 작업과 메시지 발행 작업이 원자적으로 수행되지 않는 문제를 해결하기 위한 전략이다.
+
+방법은 DB를 업데이트하는 트랜잭션에서 메시지를 DB에 저장한다. 그런 다음 별도의 프로세스가 저장된 이벤트를 읽어 메시지 브로커에 전송한다. 만약 이벤트 처리 실패 시 다시 시도할 수 있어서 Transactional Outbox Pattern은 적어도 한 번 이상 (at-least once) 메시지가 성공적으로 전송되었는지 확인할 수 있는 방법이다.
+
+다음은 이커머스 시나리오의 결제 로직에 대해 Transactional Outbox Pattern을 적용한 설계 및 구현한 내용이다. 참고로 결제 로직에서는 결제 동작이 완료된 후 외부 데이터 플랫폼으로 데이터를 전송하는 이벤트를 발행한다.
+
+#### 설계
+
+![](https://github.com/user-attachments/assets/6976215b-1962-4639-b1c1-10389511d359)
+
+```
+┌───────────────────────────────────────────────────────────┐
+│ 1. 결제 요청                                               │
+│ Tx 1 생성                                                 │
+│ 2. BEFORE_COMMIT 이벤트                                   │
+│    - Outbox 테이블에 INIT 상태인 메시지 저장                │
+│ 3. 결제 비즈니스 로직 수행                                 │
+│ Tx 1 커밋                                                 │
+│ 4. AFTER_COMMIT 이벤트                                    │
+│    - Outbox 테이블에서 해당 메시지 상태 PUBLISH로 업데이트  │
+│    - 메시지 브로커에게 메시지 발행 요청                     │
+└───────────────────────────────────────────────────────────┘
+ - 결제 완료 메시지 Producing
+┌───────────────────────────────────────────────────────────┐
+│ Consumer (ecommerce group)                                │
+│ - 외부 데이터 플랫폼 전송                                   │
+└───────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────┐
+│ Consumer (outbox group)                                   │
+│ - Outbox 테이블에서 해당 메시지 상태 COMPLETE로 업데이트     │
+└───────────────────────────────────────────────────────────┘
+```
+
+#### 구현
+
+1️⃣ 결제 로직 BEFORE_COMMIT 이벤트
+
+```kotlin
+@Component
+class PaymentEventListener(
+    private val paymentEventOutboxService: PaymentEventOutboxService
+) {
+    /**
+     * 결제 트랜잭션 커밋 전 이벤트 발행
+     * outbox 테이블에 INIT 상태인 데이터 저장
+     */
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    fun listenBeforePaymentEvent(event: BeforePaymentEvent) {
+        paymentEventOutboxService.save(
+            PaymentEventOutboxDto(
+                0L,
+                event.paymentEventRequest.userId,
+                event.paymentEventRequest.orderId,
+                OutboxEventStatus.INIT,
+                LocalDateTime.now()
+            )
+        )
+    }
+}
+```
+
+2️⃣ 결제 로직 AFTER_COMMIT 이벤트
+
+```kotlin
+@Component
+class PaymentEventListener(
+    private val paymentEventOutboxService: PaymentEventOutboxService,
+    private val messageProducer: MessageProducer
+) {
+    /**
+     * 결제 트랜잭션 커밋 후 이벤트 발행
+     * outbox 테이블 PUBLISH 상태 업데이트 및 Kafka 메시지 발행
+     */
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    fun listenAfterPaymentEvent(event: AfterPaymentEvent) {
+        paymentEventOutboxService.updateEventStatusPublish(
+            PaymentEventOutboxRequestDto(
+                event.paymentEventInfo.userId,
+                event.paymentEventInfo.orderId
+            )
+        )
+        // 결제 완료 메시지 발행
+                messageProducer.sendAfterPaymentMessage(PaymentDataMessage.from(event.paymentEventInfo))
+    }
+}
+```
+
+3️⃣ Kafka Producer
+
+```kotlin
+interface MessageProducer {
+    fun sendAfterPaymentMessage(message: PaymentDataMessage)
+}
+```
+
+```kotlin
+@Component
+class KafkaProducer(
+    private val kafkaTemplate: KafkaTemplate<String, Any>
+) : MessageProducer {
+        override fun sendAfterPaymentMessage(message: PaymentDataMessage) {
+                kafkaTemplate.send(AFTER_PAYMENT_TOPIC, message.userId.toString(), message)
+        }
+}
+```
+
+참고로 토픽은 코틀린 파일에서 상수로 관리하고 있다.
+
+```kotlin
+const val AFTER_PAYMENT_TOPIC = "queue.after.payment"
+```
+
+4️⃣ Kafka Consumer (ecommerce group)
+
+```kotlin
+@Component
+class EcommerceKafkaConsumer(
+    private val productService: ProductService
+) {
+        @KafkaListener(groupId = "\${spring.kafka.consumer.group-id}", topics = [AFTER_PAYMENT_TOPIC])
+        fun listenAfterPaymentEvent(@Payload message: PaymentDataMessage) {
+            val dataPlatform = ExternalDataPlatform()
+            dataPlatform.sendPaymentData(message.orderId, message.currentBalance, message.paymentDate)
+        }
+}
+```
+
+5️⃣ Kafka Consumer (outbox group)
+
+```kotlin
+@Component
+class OutboxKafkaConsumer(
+    private val paymentEventOutboxService: PaymentEventOutboxService
+) {
+        private val logger = KotlinLogging.logger {}
+    
+        /**
+         * OUTBOX COMPLETE 상태 업데이트용 컨슈머
+         */
+        @KafkaListener(groupId = "outbox_group", topics = [AFTER_PAYMENT_TOPIC])
+        fun listenPaymentDataPlatformEvent(@Payload message: PaymentDataMessage) {
+            logger.info("OUTBOX CONSUMER GROUP: After Payment Topic - userId: {}, orderId: {}", message.userId, message.orderId)
+            paymentEventOutboxService.updateEventStatusComplete(
+                    PaymentEventOutboxRequestDto(
+                          message.userId, 
+                          message.orderId
+                    )
+              )
+        }
+}
+```
+
+### 실패 케이스 재시도 스케줄러 설계 및 구현
+
+만약 메시지 발행이 실패하거나 발행한 메시지를 소비 동작이 정상적으로 수행되지 않을 경우엔 Outbox 테이블에 저장된 메시지 상태가 아무리 시간이 지나도 COMPLETE 로 업데이트되지 않을 것이다. 즉 **Outbox 테이블에 저장된 지 일정 시간이 지난 후에도 상태가 업데이트되지 않는** 메시지를 대상으로 메시지 발행을 재시도하는 스케줄러를 통해 실패 케이스에 대해 재시도를 수행하며 데이터의 일관성을 보장한다.
+
+#### 설계
+##### 실패 케이스 1. INIT (최초 등록) 인 상태에서 지연
+
+![](https://github.com/user-attachments/assets/61b82323-06e1-4716-83e1-869c6376d2e2)
+
+Outbox 메시지 상태가 INIT (최초 등록) 인 상태에서 테이블에 저장된 지 5분이 경과된 경우에, 해당 메시지 상태를 PUBLISH로 업데이트함과 동시에 해당 메시지를 메시지 브로커에 발행 요청한다.
+
+여기서 5분이라는 시간은 컨슈머가 정상적으로 동작 중이지만, 앞의 메시지들을 처리하느라 해당 메시지를 아직 소비하지 못하는 경우에 바로 처리가 어려울 수 있다. 이 경우를 대비하여 정상적인 메시지 소비에 대한 보장 시간이다.
+
+##### 실패 케이스 2. PUBLISH (메시지 발행) 인 상태에서 지연
+
+![](https://github.com/user-attachments/assets/350a47b0-875c-4754-8aae-82eefbf07808)
+
+Outbox 메시지 상태가 PUBLISH (발행) 인 상태에서 테이블에 저장된 지 5분이 경과된 경우에, 해당 메시지를 메시지 브로커에 발행 요청한다.
+
+#### 구현
+
+결제 이벤트에 대한 스케줄러는 다음과 같이 구현했다.
+
+```kotlin
+@Component
+class PaymentEventScheduler(
+    private val paymentEventOutboxService: PaymentEventOutboxService,
+    private val balanceService: BalanceService,
+    private val messageProducer: MessageProducer
+) {
+    /**
+     * 매 5분마다 INIT 상태인 이벤트 재시도
+     */
+    @Scheduled(cron = "0 */5 * * * *")
+    fun retryPaymentEventInitStatus() {
+        val initEventOutboxes = paymentEventOutboxService.getAllByEventStatus(OutboxEventStatus.INIT)
+            .filter { it.createdDate < LocalDateTime.now().minusMinutes(5) }   // 메시지가 정상적으로 발행되고 소비될 때까지 보장 시간 5분
+
+        initEventOutboxes.forEach {
+            val currentBalance = balanceService.getByUserId(it.userId).amount
+
+            paymentEventOutboxService.updateEventStatusPublish(
+                PaymentEventOutboxRequestDto(it.userId, it.orderId)
+            )
+
+            messageProducer.sendAfterPaymentMessage(
+                PaymentDataMessage(it.userId, it.orderId, currentBalance, it.createdDate)
+            )
+        }
+    }
+
+    /**
+     * 매 5분마다 PUBLISH 상태인 이벤트 재시도
+     */
+    @Scheduled(cron = "0 */5 * * * *")
+    fun retryPaymentEventPublishStatus() {
+        val publishEventOutboxes = paymentEventOutboxService.getAllByEventStatus(OutboxEventStatus.PUBLISH)
+            .filter { it.createdDate < LocalDateTime.now().minusMinutes(5) }
+
+        publishEventOutboxes.forEach {
+            val currentBalance = balanceService.getByUserId(it.userId).amount
+
+            messageProducer.sendAfterPaymentMessage(
+                PaymentDataMessage(it.userId, it.orderId, currentBalance, it.createdDate)
+            )
+        }
+    }
+}
+```
+
+## 카프카 이벤트 통합테스트
+
+카프카의 프로듀서가 메시지를 발행하고, 컨슈머가 메시지를 소비하는 이러한 작업들을 테스트하기 위해 여러 방법이 있지만, 여기서는 `spring-kafka-test`의 `@EmbeddedKafka` 를 사용하는 방법을 소개한다.
+
+`@EmbeddedKafka` 는 Spring Boot 애플리케이션이 외부 카프카 서버에 의존하지 않는 안정적이고 독립적으로 카프카 통합 테스트를 진행하도록 도와주는 기능이다.
+
+사용하기 위해서는 먼저 `spring-kafka-test` 의존을 추가한다.
+
+```yaml
+dependencies {
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+}
+```
+
+`spring-kafka-test` 의존을 추가하면 `org.springframework.kafka.test.context.EmbeddedKafka` 를 사용할 수 있게 된다. 카프카 통합 테스트를 진행할 테스트 클래스에 `@EmbeddedKafka`  어노테이션을 추가하고, 속성으로 파티션, 리스너 브로커 설정, 포트와 같은 값들을 설정해준다.
+
+```kotlin
+@SpringBootTest
+@EmbeddedKafka(partitions = 3, brokerProperties = ["listeners=PLAINTEXT://localhost:9092"], ports = [9092])
+class PaymentFacadeIntegrationTest {
+    @Autowired private lateinit var paymentFacade: PaymentFacade
+    @Autowired private lateinit var paymentEventOutboxService: PaymentEventOutboxService
+    @Autowired private lateinit var orderRepository: OrderRepository
+    @Autowired private lateinit var balanceRepository: BalanceRepository
+    @Autowired private lateinit var paymentEventOutboxRepository: PaymentEventOutboxRepository
+    
+    @Test    
+    @DisplayName("결제 요청 정상 처리 후 outbox 메시지 상태가 COMPLETE 인지 확인한다")
+    fun outboxStatusUpdateCompleteAfterPayment() {
+        val userId = 1L
+        val orderId = orderRepository.save(OrderTable(userId, LocalDateTime.now(), 10000, OrderStatus.ORDER_COMPLETE)).id)
+        balanceRepository.save(Balance(userId, 10000))
+        
+        paymentFacade.orderPayment(userId, orderId)
+        
+        // 메시지 컨슈밍까지 완료 보장시간 2초
+        Thread.sleep(2000)
+        
+        val actual = paymentEventOutboxRepository.getByUserIdAndOrderId(userId, orderId)
+        
+        assertThat(actual.eventStatus).isEqualTo(OutboxEventStatus.COMPLETE)
+    }
+}
+```
+
+테스트 코드를 수행해보면 다음과 같이 `OutboxKafkaConsumer` 에서 메시지를 소비할 때 남긴 로그와 PaymentEventOutbox 테이블에 저장된 메시지 데이터를 업데이트하는 쿼리가 수행되는 것을 볼 수 있다.
+
+![](https://github.com/user-attachments/assets/9de7123a-de26-4c16-abc1-aec4695b0593)
