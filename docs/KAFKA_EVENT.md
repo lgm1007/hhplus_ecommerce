@@ -249,7 +249,7 @@ spring:
 
       ![](https://github.com/user-attachments/assets/49e22629-db32-48f5-95be-76bbb94c96ea)
 
-        - 리더 레플리카가 메시지를 기록하고, 팔로워가 기록한 메시지를 잘 복제했는지 확인하지 않고 ack를 응답한다. `acks = 0` 설정에 비해 메시지 손실 가능성은 낮으나 처리량은 떨어진다.
+        - 리더 레플리카가 메시지를 기록하고, ISR 팔로워가 기록한 메시지를 잘 복제했는지 확인하지 않고 ack를 응답한다. `acks = 0` 설정에 비해 메시지 손실 가능성은 낮으나 처리량은 떨어진다.
     - `acks = all or -1`
 
       ![](https://github.com/user-attachments/assets/fbe65aa1-fc89-4f56-9381-f7f65818bc9f)
