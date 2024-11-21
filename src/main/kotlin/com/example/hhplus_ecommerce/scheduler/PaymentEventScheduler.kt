@@ -1,11 +1,11 @@
 package com.example.hhplus_ecommerce.scheduler
 
 import com.example.hhplus_ecommerce.domain.balance.BalanceService
+import com.example.hhplus_ecommerce.domain.messaging.producer.MessageProducer
+import com.example.hhplus_ecommerce.domain.messaging.producer.dto.PaymentDataMessage
 import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
 import com.example.hhplus_ecommerce.domain.outbox.PaymentEventOutboxService
 import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxRequestDto
-import com.example.hhplus_ecommerce.infrastructure.kafka.producer.MessageProducer
-import com.example.hhplus_ecommerce.infrastructure.kafka.producer.dto.PaymentDataMessage
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime

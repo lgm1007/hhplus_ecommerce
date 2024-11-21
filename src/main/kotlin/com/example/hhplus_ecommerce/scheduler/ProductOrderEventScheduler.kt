@@ -1,10 +1,10 @@
 package com.example.hhplus_ecommerce.scheduler
 
+import com.example.hhplus_ecommerce.domain.messaging.producer.MessageProducer
+import com.example.hhplus_ecommerce.domain.messaging.producer.dto.ProductMessage
 import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
 import com.example.hhplus_ecommerce.domain.outbox.ProductOrderEventOutboxService
 import com.example.hhplus_ecommerce.domain.outbox.dto.ProductOrderEventOutboxRequestDto
-import com.example.hhplus_ecommerce.infrastructure.kafka.producer.MessageProducer
-import com.example.hhplus_ecommerce.infrastructure.kafka.producer.dto.ProductMessage
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime

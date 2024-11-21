@@ -1,11 +1,11 @@
 package com.example.hhplus_ecommerce.consumer.kafka
 
+import com.example.hhplus_ecommerce.domain.messaging.producer.dto.PaymentDataMessage
+import com.example.hhplus_ecommerce.domain.messaging.producer.dto.ProductMessage
 import com.example.hhplus_ecommerce.domain.outbox.PaymentEventOutboxService
 import com.example.hhplus_ecommerce.domain.outbox.ProductOrderEventOutboxService
 import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxRequestDto
 import com.example.hhplus_ecommerce.domain.outbox.dto.ProductOrderEventOutboxRequestDto
-import com.example.hhplus_ecommerce.infrastructure.kafka.producer.dto.PaymentDataMessage
-import com.example.hhplus_ecommerce.infrastructure.kafka.producer.dto.ProductMessage
 import com.example.hhplus_ecommerce.infrastructure.kafka.topic.AFTER_PAYMENT_TOPIC
 import com.example.hhplus_ecommerce.infrastructure.kafka.topic.PRODUCT_ORDER_TOPIC
 import mu.KotlinLogging

@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.infrastructure.kafka.producer.dto
+package com.example.hhplus_ecommerce.domain.messaging.producer.dto
 
 data class ProductMessage(
 	val userId: Long,

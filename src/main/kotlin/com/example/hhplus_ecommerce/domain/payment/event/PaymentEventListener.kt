@@ -1,11 +1,11 @@
 package com.example.hhplus_ecommerce.domain.payment.event
 
+import com.example.hhplus_ecommerce.domain.messaging.producer.MessageProducer
+import com.example.hhplus_ecommerce.domain.messaging.producer.dto.PaymentDataMessage
 import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
 import com.example.hhplus_ecommerce.domain.outbox.PaymentEventOutboxService
 import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxDto
 import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxRequestDto
-import com.example.hhplus_ecommerce.infrastructure.kafka.producer.MessageProducer
-import com.example.hhplus_ecommerce.infrastructure.kafka.producer.dto.PaymentDataMessage
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener

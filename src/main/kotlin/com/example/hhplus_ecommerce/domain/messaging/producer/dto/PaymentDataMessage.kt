@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.infrastructure.kafka.producer.dto
+package com.example.hhplus_ecommerce.domain.messaging.producer.dto
 
 import com.example.hhplus_ecommerce.domain.payment.dto.AfterPaymentEventInfo
 import java.time.LocalDateTime
