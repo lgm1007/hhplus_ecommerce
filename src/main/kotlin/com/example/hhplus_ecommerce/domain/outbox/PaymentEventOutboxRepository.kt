@@ -12,5 +12,7 @@ interface PaymentEventOutboxRepository {
 
 	fun updateStatus(paymentEventOutboxRequest: PaymentEventOutboxRequestDto, eventStatus: OutboxEventStatus): PaymentEventOutboxDto
 
+	fun deleteById(outboxId: Long)
+
 	fun deleteAll()
 }

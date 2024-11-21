@@ -26,4 +26,9 @@ class PaymentEventOutboxService(
 	fun updateEventStatusComplete(paymentEventOutboxRequest: PaymentEventOutboxRequestDto): PaymentEventOutboxDto {
 		return paymentEventOutboxRepository.updateStatus(paymentEventOutboxRequest, OutboxEventStatus.COMPLETE)
 	}
+
+	@Transactional
+	fun deleteById(outboxId: Long) {
+		return paymentEventOutboxRepository.deleteById(outboxId)
+	}
 }

@@ -30,4 +30,9 @@ class ProductOrderEventOutboxService(
 	fun updateEventStatusComplete(outboxRequestDto: ProductOrderEventOutboxRequestDto): ProductOrderEventOutboxDto {
 		return productOrderEventOutboxRepository.updateStatus(outboxRequestDto, OutboxEventStatus.COMPLETE)
 	}
+
+	@Transactional
+	fun deleteById(outboxId: Long) {
+		productOrderEventOutboxRepository.deleteById(outboxId)
+	}
 }

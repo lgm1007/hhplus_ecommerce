@@ -14,5 +14,7 @@ interface ProductOrderEventOutboxRepository {
 
 	fun updateStatus(outboxRequestDto: ProductOrderEventOutboxRequestDto, eventStatus: OutboxEventStatus): ProductOrderEventOutboxDto
 
+	fun deleteById(outboxId: Long)
+
 	fun deleteAll()
 }

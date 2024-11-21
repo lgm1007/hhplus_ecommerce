@@ -47,4 +47,17 @@ class ProductOrderEventScheduler(
 			)
 		}
 	}
+
+	/**
+	 * 하루에 한 번 COMPLETE 상태이며 저장된 지 한 달 된 메시지 삭제
+	 */
+	@Scheduled(cron = "0 0 0 * * *")
+	fun deleteOrderEventCompleteBeforeMonth() {
+		val completeEventOutboxes = productOrderEventOutboxService.getAllByEventStatus(OutboxEventStatus.COMPLETE)
+			.filter { it.createdDate < LocalDateTime.now().minusMonths(1) }
+
+		completeEventOutboxes.forEach {
+			productOrderEventOutboxService.deleteById(it.id)
+		}
+	}
 }

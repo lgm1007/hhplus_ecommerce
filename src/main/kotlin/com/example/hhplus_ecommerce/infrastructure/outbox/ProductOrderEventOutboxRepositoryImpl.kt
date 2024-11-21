@@ -48,6 +48,10 @@ class ProductOrderEventOutboxRepositoryImpl(
 		return ProductOrderEventOutboxDto.from(orderEventOutbox)
 	}
 
+	override fun deleteById(outboxId: Long) {
+		jpaRepository.deleteById(outboxId)
+	}
+
 	override fun deleteAll() {
 		jpaRepository.deleteAll()
 	}
