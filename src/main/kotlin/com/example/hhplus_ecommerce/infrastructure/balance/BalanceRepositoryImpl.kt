@@ -39,4 +39,9 @@ class BalanceRepositoryImpl(private val balanceJpaRepository: BalanceJpaReposito
 
 		return balanceJpaRepository.save(balance)
 	}
+
+	@Transactional
+	override fun deleteAll() {
+		balanceJpaRepository.deleteAll()
+	}
 }

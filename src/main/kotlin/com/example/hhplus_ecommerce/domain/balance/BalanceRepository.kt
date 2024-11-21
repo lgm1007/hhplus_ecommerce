@@ -11,4 +11,6 @@ interface BalanceRepository {
 	fun updateDecreaseAmount(userId: Long, amount: Int): Balance
 
 	fun updateChargeAmount(userId: Long, amount: Int): Balance
+
+	fun deleteAll()
 }
