@@ -47,7 +47,7 @@ class KafkaConfig {
 
 	@Bean
 	fun producerProps(): Map<String, Any> {
-		val props = HashMap<String, Any>()
+		val props = hashMapOf<String, Any>()
 		props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = producerBootstrapServers
 		props[ProducerConfig.ACKS_CONFIG] = acks
 		props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = keySerializer
@@ -67,7 +67,7 @@ class KafkaConfig {
 
 	@Bean
 	fun consumerProps(): Map<String, Any> {
-		val props = HashMap<String, Any>()
+		val props = hashMapOf<String, Any>()
 		props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = consumerBootstrapServers
 		props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = keyDeserializer
 		props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = valueDeserializer
