@@ -505,9 +505,9 @@ Transactional Outbox Pattern은 우리가 개발하는 서비스에서 DB를 업
 ┌───────────────────────────────────────────────────────────┐
 │ 1. 결제 요청                                               │
 │ Tx 1 생성                                                 │
-│ 2. BEFORE_COMMIT 이벤트                                   │
+│ 2. 결제 비즈니스 로직 수행                                 │
+│ 3. BEFORE_COMMIT 이벤트                                   │
 │    - Outbox 테이블에 INIT 상태인 메시지 저장                │
-│ 3. 결제 비즈니스 로직 수행                                 │
 │ Tx 1 커밋                                                 │
 │ 4. AFTER_COMMIT 이벤트                                    │
 │    - Outbox 테이블에서 해당 메시지 상태 PUBLISH로 업데이트  │
