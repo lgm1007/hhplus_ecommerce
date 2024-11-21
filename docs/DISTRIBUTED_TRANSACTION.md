@@ -1,4 +1,4 @@
-# 시나리오 트랜잭션 범위 분석 및 서비스 확장 대비 보고서
+# 시나리오 트랜잭션 범위 분석 및 서비스 확장 대응 보고서
 ## 개요
 만약 현재 시나리오를 MSA 로 확장한다고 가정할 때, 확장에도 안정적인 기능이 동작하도록 현재 트랜잭션 범위를 분석해보고, 적절한 처리 방법을 고려해본다.
 
@@ -15,13 +15,13 @@ MSA 구조로 서비스를 확장한다면 다음과 같이 기능 별로 분리
 
 ### 주문 트랜잭션
 
-![transaction_range_order](https://github.com/user-attachments/assets/169f74b5-c11c-4928-81dd-90fbf5c0b8de)
+![transaction_range_order](https://github.com/user-attachments/assets/2db024e6-b24c-4c95-bd80-1961e7bd4fe7)
 
 주문 기능에서는 이전 Step 12 동시성 제어 과제에서 상품 재고 차감 기능을 이벤트로 분리했다. 즉 주문 기능 중 주문 정보 저장과 장바구니 상품 삭제 기능이 하나의 트랜잭션 범위이며 해당 트랜잭션이 커밋되면 상품 재고 차감 이벤트가 발생, 상품 재고 차감은 별도의 트랜잭션을 가지게 되는 구조이다.
 
 ### 결제 트랜잭션
 
-![transaction_range_payment](https://github.com/user-attachments/assets/74aa7e9a-fd23-4ead-90af-5a943e04f0d3)
+![transaction_range_payment](https://github.com/user-attachments/assets/16fc0a4b-be77-4f81-99af-6ae1e942fa15)
 
 결제 기능에서는 주문 정보 조회부터 결제 및 주문 상태 업데이트부터 모든 동작을 하나의 트랜잭션 범위에서 처리하고 있다. 이는 기능 내 하나의 동작에서 실패가 발생하면 모든 동작을 롤백 처리하기 위해 설정한 의도이기도 했다.
 
@@ -75,7 +75,7 @@ MSA 구조로 서비스를 확장한다면 다음과 같이 기능 별로 분리
 
 다음은 현재 시나리오의 주문 기능을 코레오그래피 기반의 사가 패턴을 구현한 예시이다.
 
-![choreography-based-saga](https://github.com/user-attachments/assets/040862f5-ace6-4d67-9148-82b5f02be3e4)
+![choreography-saga](https://github.com/user-attachments/assets/7d1d8bc0-be04-429e-b8d7-7cadeee37cd6)
 
 1. 주문 요청하면 Order 서비스는 주문 저장 트랜잭션을 처리하고 결과를 Product 서비스에게 이벤트로 전달한다.
 2. 트랜잭션 성공, 실패 응답이 큐 (channel)에 들어간다.
@@ -92,7 +92,7 @@ MSA 구조로 서비스를 확장한다면 다음과 같이 기능 별로 분리
 
 다음은 현재 시나리오의 주문 기능을 오케스트레이션 기반의 사가 패턴을 구현한 예시이다.
 
-![orchestration-saga](https://github.com/user-attachments/assets/b5c94e07-b66c-4d95-824f-221faf540c58)
+![orchestration-saga](https://github.com/user-attachments/assets/8695766d-0f93-45bb-9fb5-358675130136)
 
 1. 주문 요청하면 Order 서비스에서 요청을 수신하고, 중계자가 주문 로직인 주문 저장 동작을 수행한다.
 2. 재고 차감 명령 이벤트를 발생시킨다.
