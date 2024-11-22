@@ -12,7 +12,7 @@
 * DBMS: H2
 * Testing: JUnit
 * Caching: Redis
-* Message Broker: Kafka
+* Event Broker: Kafka
 
 ### 🗃️ 프로젝트 구조
 ```
