@@ -89,3 +89,6 @@ hhplusecommerce
 
 ### ⛓️ 트랜잭션 범위 및 서비스 확장 대응 보고서
 - [시나리오 트랜잭션 범위 분석 및 서비스 확장 대비 보고서](docs/DISTRIBUTED_TRANSACTION.md)
+
+### ✉️ 카프카 메시지 발행 적용 보고서
+- [카프카 구축 및 메시지 발행 적용 보고서](docs/KAFKA_EVENT.md)
