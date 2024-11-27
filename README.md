@@ -92,3 +92,6 @@ hhplusecommerce
 
 ### ✉️ 카프카 메시지 발행 적용 보고서
 - [카프카 구축 및 메시지 발행 적용 보고서](docs/KAFKA_EVENT.md)
+
+### ⚠️ 부하 테스트 및 가상 장애 대응 보고서
+- [부하 테스트 및 가상 장애 대응 보고서](docs/LOAD_TEST_FAILOVER.md)
