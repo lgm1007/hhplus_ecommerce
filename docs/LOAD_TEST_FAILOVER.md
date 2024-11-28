@@ -93,26 +93,30 @@ export default function() {
 #### k6 부하테스트 지표
 K6 테스트에서 발생하는 지표는 다음과 같은 의미이다.
 
-- **http_reqs (HTTP Requests)**:
-    - 요청 수를 측정. 부하 테스트를 통해 얼마나 많은 HTTP 요청이 발생했는지 확인할 수 있다.
-- **http_req_duration (HTTP Request Duration)**:
-    - 요청이 발생하고 응답을 받기까지 걸린 시간의 분포. 주로 **평균 응답 시간**, **최고/최저 응답 시간**, **백분위수**를 확인할 수 있다.
-- **http_req_failed (HTTP Request Failed)**:
-    - 실패한 요청의 수. 실패한 요청이 많을수록 시스템이 트래픽을 제대로 처리하지 못하고 있다는 신호일 수 있다.
-- **http_req_waiting (Waiting Time)**:
-    - 요청을 보낸 후 서버가 응답을 준비하는 데 걸린 시간. 서버의 처리 지연을 확인할 수 있다.
-- **http_req_connecting (Connecting Time)**:
-    - 서버와 연결을 설정하는 데 걸린 시간. 네트워크 지연이나 DNS 문제 등으로 인해 병목이 발생할 수 있는 부분.
-- **vus (Virtual Users)**:
-    - 테스트에서 사용된 가상 사용자의 수. 이 수치를 통해 얼마나 많은 사용자가 동시에 시스템을 테스트했는지 알 수 있다.
-- **duration (Test Duration)**:
-    - 테스트가 지속된 시간. 테스트가 얼마나 길게 진행되었는지 확인할 수 있다.
-- **throughput (Throughput)**:
-    - 초당 처리된 요청 수를 나타낸다. 시스템이 얼마나 많은 요청을 처리했는지 평가하는 데 유용하다.
-- **error_rate (Error Rate)**:
-    - 테스트 중 발생한 오류 비율. 오류가 많이 발생하면 시스템이 트래픽을 처리하는 데 문제가 있다는 신호이다.
-- **response_time (Response Time)**:
-    - 요청과 응답 사이의 시간이 평균, 95백분위수 등으로 계산된다. 시스템의 **응답 속도**를 확인하는 데 중요.
+- **data_received**:
+  - 서버로부터 수신된 데이터의 총량
+- **data_sent**:
+  - 클라이언트에서 서버로 보낸 데이터의 총량
+- **http_req_blocked**:
+  - 요청이 네트워크에서 차단된 시간. 예를 들어, DNS 조회나 연결 대기와 같은 초기 네트워크 지연 시간 포함
+- **http_req_connecting**:
+  - 서버와 연결을 설정하는 데 걸린 시간. 네트워크 지연이나 DNS 문제 등으로 인해 병목이 발생할 수 있는 부분.
+- **http_req_duration**:
+  - 한 HTTP 요청의 전체 지속 시간. `(http_req_connecting + waiting + receiving)`
+- **http_req_failed**:
+  - 실패한 HTTP 요청의 비율.
+- **http_req_receiving**:
+  - 응답 데이터를 클라이언트가 수신하는 데 걸린 시간.
+- **http_req_sending**:
+  - 요청 본문을 서버에 전송하는 데 걸린 시간.
+- **http_req_waiting**:
+  - 서버로 요청을 보낸 후 응답을 기다리는 시간. 백엔드 처리 시간과 유사하며, API 성능의 핵심 지표
+- **http_reqs**:
+  - 요청 수를 측정. 부하 테스트를 통해 얼마나 많은 HTTP 요청이 발생했는지 확인할 수 있다.
+- **iteration_duration**:
+  - 각 반복(iteration)이 완료되는데 걸리는 시간.
+- **vus**:
+  - 실행 중인 가상 사용자의 수
 
 **성능 지표로 병목 탐색하기:**
 
@@ -140,18 +144,143 @@ K6 테스트에서 발생하는 지표는 다음과 같은 의미이다.
 
 ##### 1. 정상 트래픽 시나리오
 
-![normal_traffic_k6](https://github.com/user-attachments/assets/8a62fceb-c9e6-408a-852b-11bed75f307c)
+![normal_traffic_k6_log](https://github.com/user-attachments/assets/db9a3abb-8df9-490b-893e-bf82f661fa2e)
+![normal_traffic_k6](https://github.com/user-attachments/assets/ab4251b7-cb02-4450-af65-245d080d662d)
 
+- **data_received**: 55 KB
+- **data_sent**: 22 KB
+- **http_req_blocked**:
+  - avg: 190.32 us
+  - p(90): 554.13 us
+  - p(95): 2 ms
+  - max: 2 ms
+- **http_req_connecting**: 
+  - avg: 99.99 us
+  - p(90): 99.99 us
+  - p(95): 999.9 us
+  - max: 999.9 us
+- **http_req_duration**:
+  - avg: 5.13 ms
+  - p(90): 8.08 ms
+  - p(95): 9.13 ms
+  - max: 11.47 ms
+- **http_req_failed**: 0.0 %
+- **http_req_receiving**:
+  - avg: 141.4 us
+  - p(90): 513.62 us
+  - p(95): 524.42 us
+  - max: 1.02 ms
+- **http_req_sending**:
+  - avg: 2.81 us
+  - p(90): 0 s
+  - p(95): 0 s
+  - max: 281.7 us
+- **http_req_waiting**:
+  - avg: 4.98 ms
+  - p(90): 8.08 ms
+  - p(95): 9.13 ms
+  - max: 11.47 ms
+- **http_reqs**: 100,  9.895/s
+- **iteration_duration**:
+  - avg: 1 s
+  - p(90): 1.01 s
+  - p(95): 1.01 s
+  - max: 1.02 s
+- **vus**: 10
 
 ##### 2. 피크 트래픽 시나리오
 
-![peak_traffic_k6](https://github.com/user-attachments/assets/770b3282-8deb-44ed-862f-e9d8e0405528)
+![peak_traffic_k6_log](https://github.com/user-attachments/assets/3d96d9b2-96ad-4361-bb82-0c00aadd780d)
+![peak_traffic_k6](https://github.com/user-attachments/assets/81b92ea8-5bc8-4a49-9d0e-eeff1efa800b)
 
+- **data_received**: 1.6 MB
+- **data_sent**: 638 KB
+- **http_req_blocked**:
+  - avg: 15.23 us (정상 트래픽 대비 -175.09 us)
+  - p(90): 0 s
+  - p(95): 0 s
+  - max: 2.83 ms (+0.83 ms)
+- **http_req_connecting**:
+  - avg: 10.95 us (-89.04 us)
+  - p(90): 0 s (-99.99 us)
+  - p(95): 0 s (-999.9 us)
+  - max: 2.08 ms (+1.07 ms)
+- **http_req_duration**:
+  - avg: 4.59 ms (-0.54 ms)
+  - p(90): 9.56 ms (+1.48 ms)
+  - p(95): 13.21 ms (+4.08 ms)
+  - max: 55.4 ms (+43.93 ms)
+- **http_req_failed**: 0.0 %
+- **http_req_receiving**:
+  - avg: 181.51 us (+40.11 us)
+  - p(90): 604.97 us (+91.35 us)
+  - p(95): 965.79 us (+441.37 us)
+  - max: 6.28 ms (+5.26 ms)
+- **http_req_sending**:
+  - avg: 16.06 us (+13.25 us)
+  - p(90): 0 s
+  - p(95): 0 s
+  - max: 1.02 us (-280.68 us)
+- **http_req_waiting**:
+  - avg: 4.39 ms (-0.59 ms)
+  - p(90): 9.08 ms (+1 ms)
+  - p(95): 12.98 ms (+3.85 ms)
+  - max: 54.81 ms (+43.34 ms)
+- **http_reqs**: 2952,  48.386/s
+- **iteration_duration**:
+  - avg: 1 s
+  - p(90): 1.01 s
+  - p(95): 1.02 s (+0.01 s)
+  - max: 1.06 s (+0.04 s)
+- **vus**: 50
 
 ##### 3. 부하 및 스트레스 테스트 시나리오
 
-![stress_test_k6](https://github.com/user-attachments/assets/9fcbf1e7-148e-460a-842d-55a606c6d474)
+![load_test_k6_log](https://github.com/user-attachments/assets/70820339-942f-431f-bc16-7c032159986a)
+![load_test_k6](https://github.com/user-attachments/assets/383dc483-393a-4d1a-b605-e701982f00a6)
 
+- **data_received**: 40 MB
+- **data_sent**: 16 MB
+- **http_req_blocked**:
+  - avg: 60.59 us (정상 트래픽 대비 -129.73 us)
+  - p(90): 0 s
+  - p(95): 518.59 us (-1.48 ms)
+  - max: 5.53 ms (+3.53 ms)
+- **http_req_connecting**:
+  - avg: 53.76 us (-46.23 us)
+  - p(90): 0 s
+  - p(95): 513.2 us (-486.7 us)
+  - max: 5.53 ms (+4.53 ms)
+- **http_req_duration**:
+  - avg: 663.94 ms (+658.81 ms)
+  - p(90): 1.65 s (+1.64 s)
+  - p(95): 1.71 s (+1.7 s)
+  - max: 3.08 s (+3.07 s)
+- **http_req_failed**: 0.0 %
+- **http_req_receiving**:
+  - avg: 111.32 us (-30.08 us)
+  - p(90): 517.1 us (+3.48 us)
+  - p(95): 525.2 us (+0.78 us)
+  - max: 7.33 ms (+6.31 ms)
+- **http_req_sending**:
+  - avg: 12.69 us (+9.88 us)
+  - p(90): 0 s
+  - p(95): 0 s
+  - max: 41.01 ms (+40.7 ms)
+- **http_req_waiting**:
+  - avg: 663.81 ms (+658.83 ms)
+  - p(90): 1.65 s (+1.64 s)
+  - p(95): 1.71 s (+1.7 s)
+  - max: 3.07 s (+3.06 s)
+- **http_reqs**: 71553,  1177.624/s
+- **iteration_duration**:
+  - avg: 1.66 s (+0.66 s)
+  - p(90): 2.65 s (+1.64 s)
+  - p(95): 2.71 s (+1.7 s)
+  - max: 4.08 s (+3.06 s)
+- **vus**:
+  - min: 189
+  - max: 3999
 
 #### JVM Monitor 지표
 ##### 1. 정상 트래픽 시나리오
