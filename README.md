@@ -10,9 +10,10 @@
 * Spring Boot: 2.7.18
 * JPA: 1.9.24
 * DBMS: H2
-* Testing: JUnit
+* Testing: JUnit, Mockito, K6
 * Caching: Redis
 * Event Broker: Kafka
+* Monitoring: Grafana
 
 ### 🗃️ 프로젝트 구조
 ```
