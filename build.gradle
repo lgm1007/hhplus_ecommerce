@@ -23,6 +23,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation('org.redisson:redisson-spring-boot-starter:3.34.1') {
         exclude group: 'org.redisson', module: 'redisson-spring-data-33'
     }
@@ -33,6 +34,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
     runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
