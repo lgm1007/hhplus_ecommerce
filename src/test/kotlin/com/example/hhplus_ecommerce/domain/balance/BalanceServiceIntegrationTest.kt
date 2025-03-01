@@ -5,6 +5,9 @@ import com.example.hhplus_ecommerce.exception.BadRequestException
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceHistoryJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy
@@ -114,6 +117,39 @@ class BalanceServiceIntegrationTest {
 		} finally {
 			executor.shutdown()
 		}
+	}
+
+	@Test
+	@DisplayName("잔액 차감 - Coroutine 도입 동시에 잔액 차감 요청이 들어오면 한 번만 성공시키고 나머지 요청 실패 동시성 제어 테스트")
+	fun balanceDecreaseConcurrencyWithCoroutine() {
+		// 10,000 잔액 보유한 사용자에 대해 3,000 씩 5번 동시 차감 수행
+		// 동시에 들어온 잔액 차감 요청은 한 번만 성공시키고 나머지 요청은 실패 처리한다.
+		// 예상 성공 카운트 1, 실패 카운트 4, 남은 잔액 7,000
+		val balance = Balance(1L, 10000)
+		balanceRepository.save(balance)
+
+		val successCount = AtomicInteger(0) // 성공 카운트
+		val failCount = AtomicInteger(0)    // 실패 카운트
+
+		runBlocking {
+			repeat(5) {
+				// launch 로 잔액 차감 요청을 개별 Coroutine 에서 실행
+				launch(Dispatchers.Default) {   // Dispatchers.Default = 멀티 스레드에서 실행되도록
+					try {
+						balanceService.updateAmountDecrease(1L, 3000)
+						successCount.incrementAndGet()
+					} catch (e: ObjectOptimisticLockingFailureException) {
+						failCount.incrementAndGet()
+					}
+				}
+			}
+		}
+
+		val actual = balanceService.getByUserId(1L)
+
+		assertThat(actual.amount).isEqualTo(7000)
+		assertThat(successCount.get()).isEqualTo(1)
+		assertThat(failCount.get()).isEqualTo(4)
 	}
 
 	@Test

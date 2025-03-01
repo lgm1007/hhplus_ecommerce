@@ -11,6 +11,9 @@ import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance
 import com.example.hhplus_ecommerce.infrastructure.order.OrderJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.order.entity.OrderTable
 import com.example.hhplus_ecommerce.infrastructure.payment.PaymentJpaRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -99,6 +102,40 @@ class PaymentFacadeIntegrationTest {
 		} finally {
 			executor.shutdown()
 		}
+	}
+
+	@Test
+	@DisplayName("결제 요청 - Coroutine 동시에 결제 요청 시 한 번만 성공시키고 나머지는 실패 처리 동시성 제어 테스트")
+	fun orderPaymentConcurrencyWithCoroutine() {
+		// 잔액 50,000이 있고, 주문할 금액이 12,000씩 10번 동시에 요청할 때
+		// 같은 주문에 대해 동시에 결제 요청이 들어오는 경우 한 번만 성공시키며 나머지는 실패 처리한다.
+		// 예상 성공 카운트 1, 실패 카운트 9, 남은 잔액 38,000
+		val userId = 1L
+		val orderId = orderRepository.save(OrderTable(userId, LocalDateTime.now(), 12000, OrderStatus.ORDER_COMPLETE)).id
+		balanceRepository.save(Balance(userId, 50000))
+
+		val successCount = AtomicInteger(0) // 성공 카운트
+		val failCount = AtomicInteger(0)    // 실패 카운트
+
+		runBlocking {
+			repeat(10) {
+				// launch 로 결제 요청을 개별 Coroutine 에서 실행
+				launch(Dispatchers.Default) {
+					try {
+						paymentFacade.orderPayment(userId, orderId)
+						successCount.incrementAndGet()
+					} catch (e: ObjectOptimisticLockingFailureException) {
+						failCount.incrementAndGet()
+					}
+				}
+			}
+		}
+
+		val balanceDto = balanceService.getByUserId(userId)
+
+		assertThat(balanceDto.amount).isEqualTo(38000)
+		assertThat(successCount.get()).isEqualTo(1)
+		assertThat(failCount.get()).isEqualTo(9)
 	}
 
 	@Test

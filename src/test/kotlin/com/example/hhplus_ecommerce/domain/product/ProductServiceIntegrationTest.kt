@@ -5,6 +5,9 @@ import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepos
 import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -125,5 +128,38 @@ class ProductServiceIntegrationTest {
 		} finally {
 			executor.shutdown()
 		}
+	}
+
+	@Test
+	@DisplayName("상품 재고 차감 - Coroutine 동시에 재고 차감 동시성 제어 테스트")
+	fun quantityDecreaseConcurrencyWithCoroutine() {
+		// 상품 재고 3개에 대해 5번 동시 차감 요청 시
+		// 예상 성공 카운트 3, 실패 카운트 2, 남은 재고양 0
+		val productId = productRepository.save(Product("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 3, ProductCategory.CLOTHES)).id
+
+		val successCount = AtomicInteger(0) // 성공 카운트
+		val failCount = AtomicInteger(0)    // 실패 카운트
+
+		runBlocking {
+			repeat(5) {
+				// launch: 새로운 Coroutine 생성하여 병렬적 실행
+				// launch 로 각각의 반복 재고 차감 요청을 개별 Coroutine 에서 실행
+				launch(Dispatchers.Default) {   // Dispatchers.Default = 멀티 스레드에서 실행되도록
+					try {
+						productService.updateProductQuantityDecreaseWithDBLock(detailId, 1)
+						successCount.incrementAndGet()
+					} catch (e: BadRequestException) {
+						failCount.incrementAndGet()
+					}
+				}
+			}
+		}
+
+		val actual = productService.getProductInfoById(productId)
+
+		assertThat(actual.stockQuantity).isEqualTo(0)
+		assertThat(successCount.get()).isEqualTo(3)
+		assertThat(failCount.get()).isEqualTo(2)
 	}
 }
