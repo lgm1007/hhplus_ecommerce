@@ -5,6 +5,7 @@ import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepos
 import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
@@ -144,7 +145,7 @@ class ProductServiceIntegrationTest {
 			repeat(5) {
 				// launch: 새로운 Coroutine 생성하여 병렬적 실행
 				// launch 로 각각의 반복 재고 차감 요청을 개별 Coroutine 에서 실행
-				launch {
+				launch(Dispatchers.Default) {   // Dispatchers.Default = 멀티 스레드에서 실행되도록
 					try {
 						productService.updateProductQuantityDecreaseWithDBLock(detailId, 1)
 						successCount.incrementAndGet()
