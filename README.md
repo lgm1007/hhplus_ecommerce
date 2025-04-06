@@ -44,6 +44,19 @@ hhplusecommerce
     └─statistic
 ```
 
+### 🚀 애플리케이션 실행
+#### Gradle 기반 로컬 실행 방법
+```
+./gradlew bootRun
+./gradlew clean build && java -jar build/libs/hhplus_ecommerce-1.0.0.jar
+```
+
+#### 도커 기반 실행 방법
+```
+docker build -t ecommerce-api .
+docker run -p 8080:8080 ecommerce-api
+```
+
 ### 📜 API 스펙
 1️⃣ **잔액 충전 / 조회 API**
 * 결제에 사용될 금액을 충전하는 API 를 작성한다.
