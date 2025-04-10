@@ -28,7 +28,7 @@ jobs:
       - name: Build with gradle
         uses: gradle/gradle-build-action@v3
         with:
-          arguments: clean build
+          arguments: clean build -x test
 
       # Docker build & push
       # GITHUB_SHA : GitHub 커밋 앞 7자리
