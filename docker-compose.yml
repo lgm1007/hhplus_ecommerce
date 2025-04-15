@@ -2,9 +2,16 @@ networks:
   grafana:
 
 services:
+  # Redis 설정
+  redis1:
+    image: redis
+    container_name: redis1
+    ports:
+      - '6379:6379'
+
   # Zookeeper 1 서비스 설정입니다.
   zookeeper1:
-    image: 'bitnami/zookeeper'
+    image: 'bitnami/zookeeper:3.8.1'
     hostname: 'zookeeper1'
     ports:
       - '2181:2181'  # 호스트와 컨테이너 간의 포트 포워딩: 호스트의 2181 포트와 컨테이너의 2181 포트 간에 통신이 이루어집니다.
@@ -16,7 +23,7 @@ services:
     user: root  # 컨테이너 실행 시 사용할 사용자
   # Kafka 브로커 1
   kafka1:
-    image: 'bitnami/kafka'
+    image: 'bitnami/kafka:3.5.1'
     hostname: 'kafka1'
     ports:
       - '9092:9092'    # 호스트 포트와 컨테이너 포트 간의 포트 포워딩 설정: 호스트의 9092 포트와 컨테이너의 9092 포트 간에 통신이 이루어짐
@@ -25,9 +32,11 @@ services:
       - KAFKA_BROKER_ID=1    # Kafka 브로커 ID
       - ALLOW_PLAINTEXT_LISTENER=yes    # PLAINTEXT 리스너 허용 설정 (yes : 보안 없이 접속 가능)
       - KAFKA_ENABLE_KRAFT=no    # Kafka KRaft 활성화 여부 설정 (no : Zookeeper 사용/ yes : Zookeeper 사용x)
+#      - KAFKA_CFG_NODE_ID=1   # KRaft mode 에서 unique한 node id 필요    👉 KRaft 관련 설정으로 Zookeeper 사용 X일 때 사용
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,INTERNAL:PLAINTEXT
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,INTERNAL://:9094    # Kafka 브로커 리스너 설정 (Kafka 내부/외부에서 접속할 정보)
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092,INTERNAL://kafka1:9094
+#      - KAFKA_CFG_PROCESS_ROLES=broker    # Kafka requires at least one process role    👉 KRaft 관련 설정으로 Zookeeper 사용 X일 때 사용
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper1:2181  #ZooKeeper의 주소를 KAFKA_CFG_ZOOKEEPER_CONNECT 환경 변수에 설정
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
     depends_on:
