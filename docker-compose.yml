@@ -37,6 +37,7 @@ services:
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,INTERNAL://:9094    # Kafka 브로커 리스너 설정 (Kafka 내부/외부에서 접속할 정보)
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092,INTERNAL://kafka1:9094
       - KAFKA_CFG_PROCESS_ROLES=controller,broker    # Kafka requires at least one process role
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER # CFG_PROCESS_ROLES에 controller가 존재하면 controller 리스너 네임 필요
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper1:2181  #ZooKeeper의 주소를 KAFKA_CFG_ZOOKEEPER_CONNECT 환경 변수에 설정
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
     depends_on:
