@@ -1,10 +1,10 @@
 package com.example.hhplus_ecommerce.infrastructure.order
 
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
+import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.order.OrderRepository
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
 import com.example.hhplus_ecommerce.domain.order.dto.OrderDto
-import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.order.entity.OrderTable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository

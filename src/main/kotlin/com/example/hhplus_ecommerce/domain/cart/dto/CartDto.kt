@@ -1,6 +1,6 @@
 package com.example.hhplus_ecommerce.domain.cart.dto
 
-import com.example.hhplus_ecommerce.api.cart.request.CartAddRequest
+import com.example.hhplus_ecommerce.web.cart.request.CartAddRequest
 import com.example.hhplus_ecommerce.infrastructure.cart.entity.Cart
 import java.time.LocalDateTime
 

@@ -1,9 +1,9 @@
 package com.example.hhplus_ecommerce.infrastructure.balance
 
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
+import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.balance.BalanceRepository
 import com.example.hhplus_ecommerce.domain.balance.dto.BalanceDto
-import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional

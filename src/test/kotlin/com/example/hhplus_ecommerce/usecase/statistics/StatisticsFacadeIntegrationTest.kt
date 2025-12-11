@@ -1,11 +1,11 @@
 package com.example.hhplus_ecommerce.usecase.statistics
 
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
+import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDto
 import com.example.hhplus_ecommerce.domain.product.ProductCategory
 import com.example.hhplus_ecommerce.domain.product.ProductService
-import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.order.OrderItemJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.order.OrderJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepository

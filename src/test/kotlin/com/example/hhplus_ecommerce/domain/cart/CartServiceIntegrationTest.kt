@@ -1,8 +1,8 @@
 package com.example.hhplus_ecommerce.domain.cart
 
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
+import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
-import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.cart.CartJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.cart.entity.Cart
 import mu.KotlinLogging

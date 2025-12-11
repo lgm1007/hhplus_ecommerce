@@ -1,7 +1,7 @@
 package com.example.hhplus_ecommerce.domain.balance
 
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
-import com.example.hhplus_ecommerce.exception.BadRequestException
+import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
+import com.example.hhplus_ecommerce.domain.share.exception.BadRequestException
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceHistoryJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance

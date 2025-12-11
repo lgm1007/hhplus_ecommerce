@@ -1,8 +1,8 @@
 package com.example.hhplus_ecommerce.infrastructure.balance.entity
 
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
+import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.balance.dto.BalanceDto
-import com.example.hhplus_ecommerce.exception.BadRequestException
+import com.example.hhplus_ecommerce.domain.share.exception.BadRequestException
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener

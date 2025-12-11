@@ -1,6 +1,6 @@
 package com.example.hhplus_ecommerce.config
 
-import com.example.hhplus_ecommerce.api.interceptor.ApiLoggingInterceptor
+import com.example.hhplus_ecommerce.web.interceptor.ApiLoggingInterceptor
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer

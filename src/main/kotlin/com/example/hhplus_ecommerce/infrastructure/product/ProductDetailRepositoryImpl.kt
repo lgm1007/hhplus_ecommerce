@@ -1,9 +1,9 @@
 package com.example.hhplus_ecommerce.infrastructure.product
 
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
+import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.product.ProductDetailRepository
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
-import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository

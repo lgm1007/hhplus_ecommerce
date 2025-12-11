@@ -1,9 +1,9 @@
 package com.example.hhplus_ecommerce.infrastructure.cart
 
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
+import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.cart.CartRepository
 import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
-import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.cart.entity.Cart
 import org.springframework.stereotype.Repository
 

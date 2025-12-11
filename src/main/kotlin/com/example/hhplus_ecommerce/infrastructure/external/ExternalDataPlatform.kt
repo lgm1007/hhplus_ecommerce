@@ -1,6 +1,6 @@
 package com.example.hhplus_ecommerce.infrastructure.external
 
-import com.example.hhplus_ecommerce.exception.ExternalRequestException
+import com.example.hhplus_ecommerce.domain.share.exception.ExternalRequestException
 import java.time.LocalDateTime
 
 class ExternalDataPlatform {

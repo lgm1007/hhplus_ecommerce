@@ -5,7 +5,7 @@ import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
 import com.example.hhplus_ecommerce.domain.outbox.ProductOrderEventOutboxRepository
 import com.example.hhplus_ecommerce.domain.product.ProductCategory
 import com.example.hhplus_ecommerce.domain.product.ProductService
-import com.example.hhplus_ecommerce.exception.BadRequestException
+import com.example.hhplus_ecommerce.domain.share.exception.BadRequestException
 import com.example.hhplus_ecommerce.infrastructure.order.OrderItemJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.order.OrderJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepository

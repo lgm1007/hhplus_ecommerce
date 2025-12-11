@@ -1,11 +1,11 @@
 package com.example.hhplus_ecommerce.infrastructure.outbox
 
-import com.example.hhplus_ecommerce.api.error.ErrorStatus
+import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
 import com.example.hhplus_ecommerce.domain.outbox.PaymentEventOutboxRepository
 import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxDto
 import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxRequestDto
-import com.example.hhplus_ecommerce.exception.NotFoundException
+import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.outbox.entity.PaymentEventOutbox
 import org.springframework.stereotype.Repository
 
