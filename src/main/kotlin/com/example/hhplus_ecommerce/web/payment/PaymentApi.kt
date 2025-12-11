@@ -3,7 +3,7 @@ package com.example.hhplus_ecommerce.web.payment
 import com.example.hhplus_ecommerce.domain.share.exception.ExceptionBody
 import com.example.hhplus_ecommerce.web.payment.request.PaymentRequest
 import com.example.hhplus_ecommerce.web.payment.response.PaymentResponse
-import com.example.hhplus_ecommerce.usecase.payment.PaymentFacade
+import com.example.hhplus_ecommerce.application.payment.PaymentFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

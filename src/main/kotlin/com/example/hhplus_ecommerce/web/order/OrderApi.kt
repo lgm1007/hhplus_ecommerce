@@ -3,7 +3,7 @@ package com.example.hhplus_ecommerce.web.order
 import com.example.hhplus_ecommerce.domain.share.exception.ExceptionBody
 import com.example.hhplus_ecommerce.web.order.request.OrderRequest
 import com.example.hhplus_ecommerce.web.order.response.OrderResponse
-import com.example.hhplus_ecommerce.usecase.order.OrderFacade
+import com.example.hhplus_ecommerce.application.order.OrderFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

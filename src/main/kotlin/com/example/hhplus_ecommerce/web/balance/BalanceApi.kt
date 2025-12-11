@@ -4,7 +4,7 @@ import com.example.hhplus_ecommerce.web.balance.request.BalanceChargeRequest
 import com.example.hhplus_ecommerce.web.balance.response.BalanceChargeResponse
 import com.example.hhplus_ecommerce.web.balance.response.UserBalanceResponse
 import com.example.hhplus_ecommerce.domain.share.exception.ExceptionBody
-import com.example.hhplus_ecommerce.domain.balance.BalanceService
+import com.example.hhplus_ecommerce.application.balance.BalanceService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

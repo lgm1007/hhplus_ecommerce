@@ -1,10 +1,12 @@
-package com.example.hhplus_ecommerce.domain.product
+package com.example.hhplus_ecommerce.application.product
 
-import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
+import com.example.hhplus_ecommerce.domain.product.ProductDetailRepository
+import com.example.hhplus_ecommerce.domain.product.ProductRepository
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDto
 import com.example.hhplus_ecommerce.domain.product.dto.ProductInfo
 import com.example.hhplus_ecommerce.domain.product.dto.ProductStatisticsInfo
+import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.lock.RedisLockSupporter
 import org.redisson.api.RedissonClient
@@ -27,7 +29,7 @@ class ProductService(
 		val productIds = products.map { product -> product.id }
 		val productDetails = productDetailRepository.getAllByProductIdsIn(productIds).map(ProductDetailDto.Companion::from)
 
-		val productInfos = ProductInfo.listOf(products, productDetails)
+		val productInfos = ProductInfo.Companion.listOf(products, productDetails)
 
 		if (productInfos.isEmpty()) {
 			throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT)
@@ -38,25 +40,25 @@ class ProductService(
 
 	@Transactional(readOnly = true)
 	fun getProductInfoById(productId: Long): ProductInfo {
-		val product = ProductDto.from(productRepository.getById(productId))
-		val productDetail = ProductDetailDto.from(productDetailRepository.getByProductId(productId))
+		val product = ProductDto.Companion.from(productRepository.getById(productId))
+		val productDetail = ProductDetailDto.Companion.from(productDetailRepository.getByProductId(productId))
 
-		return ProductInfo.of(product, productDetail)
+		return ProductInfo.Companion.of(product, productDetail)
 	}
 
 	@Transactional(readOnly = true)
 	fun getAllProductDetailsByDetailIdsInWithLock(productDetailIds: List<Long>): List<ProductDetailDto> {
-		return ProductDetailDto.fromList(productDetailRepository.getAllByIdsInWithLock(productDetailIds))
+		return ProductDetailDto.Companion.fromList(productDetailRepository.getAllByIdsInWithLock(productDetailIds))
 	}
 
 	@Transactional(readOnly = true)
 	fun getAllProductDetailsByIdsIn(productDetailIds: List<Long>): List<ProductDetailDto> {
-		return ProductDetailDto.fromList(productDetailRepository.getAllByIdsIn(productDetailIds))
+		return ProductDetailDto.Companion.fromList(productDetailRepository.getAllByIdsIn(productDetailIds))
 	}
 
 	@Transactional(readOnly = true)
 	fun getAllProductStatisticsInfos(productDetailIds: List<Long>): List<ProductStatisticsInfo> {
-		val productDetailDtos = ProductDetailDto.fromList(productDetailRepository.getAllByIdsIn(productDetailIds))
+		val productDetailDtos = ProductDetailDto.Companion.fromList(productDetailRepository.getAllByIdsIn(productDetailIds))
 
 		if (productDetailDtos.isEmpty()) {
 			throw NotFoundException(ErrorStatus.NOT_FOUND_PRODUCT)
@@ -64,14 +66,14 @@ class ProductService(
 
 		val productIds = productDetailDtos.map { it.productId }
 
-		val productDtos = ProductDto.fromList(productRepository.getAllByIds(productIds))
+		val productDtos = ProductDto.Companion.fromList(productRepository.getAllByIds(productIds))
 
-		return ProductStatisticsInfo.listOf(productDtos, productDetailDtos)
+		return ProductStatisticsInfo.Companion.listOf(productDtos, productDetailDtos)
 	}
 
 	@Transactional
 	fun updateProductQuantityDecreaseWithDBLock(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
-		return ProductDetailDto.from(productDetailRepository.updateProductQuantityDecreaseWithLock(productDetailId, orderQuantity))
+		return ProductDetailDto.Companion.from(productDetailRepository.updateProductQuantityDecreaseWithLock(productDetailId, orderQuantity))
 	}
 
 	fun updateProductQuantityDecreaseWithLettuce(productDetailId: Long, orderQuantity: Int): ProductDetailDto {
@@ -81,7 +83,7 @@ class ProductService(
 		}
 
 		try {
-			return ProductDetailDto.from(
+			return ProductDetailDto.Companion.from(
 				productDetailRepository.updateProductQuantityDecrease(
 					productDetailId, orderQuantity
 				)
@@ -99,7 +101,7 @@ class ProductService(
 			if (!acquireLock) {
 				throw InterruptedException("Lock 획득 실패")
 			}
-			return ProductDetailDto.from(
+			return ProductDetailDto.Companion.from(
 				productDetailRepository.updateProductQuantityDecrease(productDetailId, orderQuantity)
 			)
 		} finally {

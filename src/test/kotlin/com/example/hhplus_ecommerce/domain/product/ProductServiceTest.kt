@@ -1,5 +1,6 @@
 package com.example.hhplus_ecommerce.domain.product
 
+import com.example.hhplus_ecommerce.application.product.ProductService
 import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
 import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
 import org.assertj.core.api.AssertionsForClassTypes.assertThat

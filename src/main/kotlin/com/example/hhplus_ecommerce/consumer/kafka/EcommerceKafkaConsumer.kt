@@ -2,7 +2,7 @@ package com.example.hhplus_ecommerce.consumer.kafka
 
 import com.example.hhplus_ecommerce.domain.messaging.producer.dto.PaymentDataMessage
 import com.example.hhplus_ecommerce.domain.messaging.producer.dto.ProductMessage
-import com.example.hhplus_ecommerce.domain.product.ProductService
+import com.example.hhplus_ecommerce.application.product.ProductService
 import com.example.hhplus_ecommerce.infrastructure.external.ExternalDataPlatform
 import com.example.hhplus_ecommerce.infrastructure.kafka.topic.AFTER_PAYMENT_TOPIC
 import com.example.hhplus_ecommerce.infrastructure.kafka.topic.PRODUCT_ORDER_TOPIC

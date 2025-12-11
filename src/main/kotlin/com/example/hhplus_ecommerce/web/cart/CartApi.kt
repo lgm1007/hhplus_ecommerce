@@ -4,7 +4,7 @@ import com.example.hhplus_ecommerce.web.cart.request.CartAddRequest
 import com.example.hhplus_ecommerce.web.cart.response.CartCommandResponse
 import com.example.hhplus_ecommerce.web.cart.response.CartQueryResponse
 import com.example.hhplus_ecommerce.domain.share.exception.ExceptionBody
-import com.example.hhplus_ecommerce.domain.cart.CartService
+import com.example.hhplus_ecommerce.application.cart.CartService
 import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content

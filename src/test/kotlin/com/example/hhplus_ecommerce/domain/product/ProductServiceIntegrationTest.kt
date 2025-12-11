@@ -1,5 +1,6 @@
 package com.example.hhplus_ecommerce.domain.product
 
+import com.example.hhplus_ecommerce.application.product.ProductService
 import com.example.hhplus_ecommerce.domain.share.exception.BadRequestException
 import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository

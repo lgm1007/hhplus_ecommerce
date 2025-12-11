@@ -1,13 +1,14 @@
 package com.example.hhplus_ecommerce.usecase.order
 
-import com.example.hhplus_ecommerce.domain.cart.CartService
-import com.example.hhplus_ecommerce.domain.order.OrderService
+import com.example.hhplus_ecommerce.application.cart.CartService
+import com.example.hhplus_ecommerce.application.order.OrderFacade
+import com.example.hhplus_ecommerce.application.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
 import com.example.hhplus_ecommerce.domain.order.dto.OrderDto
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDto
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemInfo
 import com.example.hhplus_ecommerce.domain.product.ProductCategory
-import com.example.hhplus_ecommerce.domain.product.ProductService
+import com.example.hhplus_ecommerce.application.product.ProductService
 import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.DisplayName

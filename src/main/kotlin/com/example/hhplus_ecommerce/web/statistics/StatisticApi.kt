@@ -2,7 +2,7 @@ package com.example.hhplus_ecommerce.web.statistics
 
 import com.example.hhplus_ecommerce.domain.share.exception.ExceptionBody
 import com.example.hhplus_ecommerce.web.statistics.response.OrderProductStatisticsResponse
-import com.example.hhplus_ecommerce.usecase.statistics.StatisticsFacade
+import com.example.hhplus_ecommerce.application.statistics.StatisticsFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

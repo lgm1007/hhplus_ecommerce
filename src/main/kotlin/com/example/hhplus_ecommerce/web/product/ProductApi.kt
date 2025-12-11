@@ -3,7 +3,7 @@ package com.example.hhplus_ecommerce.web.product
 import com.example.hhplus_ecommerce.domain.share.exception.ExceptionBody
 import com.example.hhplus_ecommerce.web.product.response.ProductResponse
 import com.example.hhplus_ecommerce.web.product.response.ProductResponseItem
-import com.example.hhplus_ecommerce.domain.product.ProductService
+import com.example.hhplus_ecommerce.application.product.ProductService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

@@ -1,11 +1,12 @@
 package com.example.hhplus_ecommerce.usecase.payment
 
-import com.example.hhplus_ecommerce.domain.balance.BalanceService
+import com.example.hhplus_ecommerce.application.balance.BalanceService
 import com.example.hhplus_ecommerce.domain.balance.dto.BalanceDto
-import com.example.hhplus_ecommerce.domain.order.OrderService
+import com.example.hhplus_ecommerce.application.order.OrderService
+import com.example.hhplus_ecommerce.application.payment.PaymentFacade
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
 import com.example.hhplus_ecommerce.domain.order.dto.OrderDto
-import com.example.hhplus_ecommerce.domain.payment.PaymentService
+import com.example.hhplus_ecommerce.application.payment.PaymentService
 import com.example.hhplus_ecommerce.domain.payment.PaymentStatus
 import com.example.hhplus_ecommerce.domain.payment.dto.PaymentDto
 import org.assertj.core.api.AssertionsForClassTypes.assertThat

@@ -1,5 +1,6 @@
 package com.example.hhplus_ecommerce.domain.order
 
+import com.example.hhplus_ecommerce.application.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.dto.OrderDto
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDto
 import com.example.hhplus_ecommerce.infrastructure.order.OrderItemJpaRepository

@@ -1,10 +1,11 @@
 package com.example.hhplus_ecommerce.usecase.order
 
+import com.example.hhplus_ecommerce.application.order.OrderFacade
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemInfo
 import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
 import com.example.hhplus_ecommerce.domain.outbox.ProductOrderEventOutboxRepository
 import com.example.hhplus_ecommerce.domain.product.ProductCategory
-import com.example.hhplus_ecommerce.domain.product.ProductService
+import com.example.hhplus_ecommerce.application.product.ProductService
 import com.example.hhplus_ecommerce.domain.share.exception.BadRequestException
 import com.example.hhplus_ecommerce.infrastructure.order.OrderItemJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.order.OrderJpaRepository

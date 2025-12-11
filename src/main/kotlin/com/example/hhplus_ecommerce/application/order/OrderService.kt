@@ -1,5 +1,8 @@
-package com.example.hhplus_ecommerce.domain.order
+package com.example.hhplus_ecommerce.application.order
 
+import com.example.hhplus_ecommerce.domain.order.OrderItemRepository
+import com.example.hhplus_ecommerce.domain.order.OrderRepository
+import com.example.hhplus_ecommerce.domain.order.OrderStatus
 import com.example.hhplus_ecommerce.domain.order.dto.OrderDto
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetailInfo
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDto
@@ -21,33 +24,33 @@ class OrderService(
 		orderItemDetailInfos: List<OrderItemDetailInfo>
 	): Pair<OrderDto, List<OrderItemDto>> {
 		val totalPrices = orderItemDetailInfos.map { orderItemDetailInfo -> orderItemDetailInfo.calculateOrderPrice() }
-		val orderDto = OrderDto.from(userId)
+		val orderDto = OrderDto.Companion.from(userId)
 
 		orderDto.addTotalPrice(totalPrices)
 		orderDto.updateOrderStatus(OrderStatus.ORDER_COMPLETE)
 		val savedOrder = insertOrder(orderDto)
 
-		val orderItemDtos = OrderItemDto.listOf(savedOrder.id, orderItemDetailInfos)
+		val orderItemDtos = OrderItemDto.Companion.listOf(savedOrder.id, orderItemDetailInfos)
 		val savedOrderItems = insertAllOrderItems(orderItemDtos)
 		return Pair(savedOrder, savedOrderItems)
 	}
 
 	fun insertOrder(orderDto: OrderDto): OrderDto {
-		return OrderDto.from(orderRepository.insert(orderDto))
+		return OrderDto.Companion.from(orderRepository.insert(orderDto))
 	}
 
 	fun insertAllOrderItems(orderItemDtos: List<OrderItemDto>): List<OrderItemDto> {
 		return orderItemRepository.insertAll(orderItemDtos).map { orderItem ->
-			OrderItemDto.from(orderItem)
+			OrderItemDto.Companion.from(orderItem)
 		}
 	}
 
 	fun getOrderById(orderId: Long): OrderDto {
-		return OrderDto.from(orderRepository.getById(orderId))
+		return OrderDto.Companion.from(orderRepository.getById(orderId))
 	}
 
 	fun updateOrderStatus(orderId: Long, orderStatus: OrderStatus): OrderDto {
-		return OrderDto.from(orderRepository.updateOrderStatus(orderId, orderStatus))
+		return OrderDto.Companion.from(orderRepository.updateOrderStatus(orderId, orderStatus))
 	}
 
 	fun getAllOrderItemsTopMoreThanDay(day: Int, limit: Int): List<OrderQuantityStatisticsInfo> {

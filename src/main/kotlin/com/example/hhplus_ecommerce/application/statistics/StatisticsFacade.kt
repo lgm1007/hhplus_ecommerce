@@ -1,7 +1,7 @@
-package com.example.hhplus_ecommerce.usecase.statistics
+package com.example.hhplus_ecommerce.application.statistics
 
-import com.example.hhplus_ecommerce.domain.order.OrderService
-import com.example.hhplus_ecommerce.domain.product.ProductService
+import com.example.hhplus_ecommerce.application.order.OrderService
+import com.example.hhplus_ecommerce.application.product.ProductService
 import com.example.hhplus_ecommerce.domain.statistics.dto.OrderProductStatisticsResponseItem
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
@@ -20,6 +20,6 @@ class StatisticsFacade(
 		// 주문 정보에서 상품 목록 조회
 		val productStatisticsInfos = productService.getAllProductStatisticsInfos(productDetailIds)
 
-		return OrderProductStatisticsResponseItem.listOf(productStatisticsInfos, orderItemStatisticsInfos)
+		return OrderProductStatisticsResponseItem.Companion.listOf(productStatisticsInfos, orderItemStatisticsInfos)
 	}
 }

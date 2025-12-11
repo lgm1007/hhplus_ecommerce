@@ -1,9 +1,8 @@
-package com.example.hhplus_ecommerce.usecase.payment
+package com.example.hhplus_ecommerce.application.payment
 
-import com.example.hhplus_ecommerce.domain.balance.BalanceService
-import com.example.hhplus_ecommerce.domain.order.OrderService
+import com.example.hhplus_ecommerce.application.balance.BalanceService
+import com.example.hhplus_ecommerce.application.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
-import com.example.hhplus_ecommerce.domain.payment.PaymentService
 import com.example.hhplus_ecommerce.domain.payment.dto.AfterPaymentEventInfo
 import com.example.hhplus_ecommerce.domain.payment.dto.PaymentDto
 import com.example.hhplus_ecommerce.domain.payment.dto.PaymentEventRequestInfo
@@ -24,9 +23,11 @@ class PaymentFacade(
 	@Transactional
 	fun orderPayment(userId: Long, orderId: Long): PaymentResultInfo {
 		// 결제 진행 전 이벤트 발행
-		eventPublisher.publishEvent(BeforePaymentEvent(
-			PaymentEventRequestInfo(userId, orderId)
-		))
+		eventPublisher.publishEvent(
+			BeforePaymentEvent(
+				PaymentEventRequestInfo(userId, orderId)
+			)
+		)
 
 		// 주문 정보 조회
 		val orderDto = orderService.getOrderById(orderId)
@@ -35,21 +36,23 @@ class PaymentFacade(
 		val balanceDto = balanceService.updateAmountDecrease(userId, orderDto.totalPrice)
 
 		// 결제 정보 저장
-		val registerPayment = paymentService.registerPayment(PaymentDto.of(userId, orderDto))
+		val registerPayment = paymentService.registerPayment(PaymentDto.Companion.of(userId, orderDto))
 
 		// 주문 정보에서 결제 완료로 상태 업데이트
 		orderService.updateOrderStatus(orderId, OrderStatus.PAYMENT_COMPLETE)
 
 		// 결제 완료 이벤트 발행
-		eventPublisher.publishEvent(AfterPaymentEvent(
-			AfterPaymentEventInfo(
-				userId,
-				orderId,
-				balanceDto.amount,
-				registerPayment.createdDate
+		eventPublisher.publishEvent(
+			AfterPaymentEvent(
+				AfterPaymentEventInfo(
+					userId,
+					orderId,
+					balanceDto.amount,
+					registerPayment.createdDate
+				)
 			)
-		))
+		)
 
-		return PaymentResultInfo.of(registerPayment, balanceDto, orderId)
+		return PaymentResultInfo.Companion.of(registerPayment, balanceDto, orderId)
 	}
 }

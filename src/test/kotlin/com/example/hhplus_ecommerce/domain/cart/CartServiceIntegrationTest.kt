@@ -1,5 +1,6 @@
 package com.example.hhplus_ecommerce.domain.cart
 
+import com.example.hhplus_ecommerce.application.cart.CartService
 import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
 import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException

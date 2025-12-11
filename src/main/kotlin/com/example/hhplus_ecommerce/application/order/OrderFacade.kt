@@ -1,14 +1,13 @@
-package com.example.hhplus_ecommerce.usecase.order
+package com.example.hhplus_ecommerce.application.order
 
-import com.example.hhplus_ecommerce.domain.cart.CartService
-import com.example.hhplus_ecommerce.domain.order.OrderService
+import com.example.hhplus_ecommerce.application.cart.CartService
 import com.example.hhplus_ecommerce.domain.order.dto.OrderEventInfo
 import com.example.hhplus_ecommerce.domain.order.dto.OrderInfo
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDetailInfo
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemInfo
 import com.example.hhplus_ecommerce.domain.order.event.BeforeProductOrderEvent
 import com.example.hhplus_ecommerce.domain.order.event.ProductOrderMessageEvent
-import com.example.hhplus_ecommerce.domain.product.ProductService
+import com.example.hhplus_ecommerce.application.product.ProductService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -24,7 +23,7 @@ class OrderFacade(
 	fun productOrder(userId: Long, orderItemInfos: List<OrderItemInfo>): OrderInfo {
 		val productDetailIds = orderItemInfos.map { orderItemInfo -> orderItemInfo.productDetailId }
 		val productDetails = productService.getAllProductDetailsByDetailIdsInWithLock(productDetailIds)
-		val orderItemDetailInfos = OrderItemDetailInfo.ofList(productDetails, orderItemInfos)
+		val orderItemDetailInfos = OrderItemDetailInfo.Companion.ofList(productDetails, orderItemInfos)
 		// 주문 정보 등록
 		val (savedOrder, savedOrderItems) = orderService.doOrder(userId, orderItemDetailInfos)
 
@@ -38,13 +37,13 @@ class OrderFacade(
 		// 장바구니 삭제
 		cartService.deleteCartByUser(userId)
 
-		return OrderInfo.of(savedOrder, savedOrderItems)
+		return OrderInfo.Companion.of(savedOrder, savedOrderItems)
 	}
 
 	fun productOrderWithLettuce(userId: Long, orderItemInfos: List<OrderItemInfo>): OrderInfo {
 		val productDetailIds = orderItemInfos.map { orderItemInfo -> orderItemInfo.productDetailId }
 		val productDetails = productService.getAllProductDetailsByIdsIn(productDetailIds)
-		val orderItemDetailInfos = OrderItemDetailInfo.ofList(productDetails, orderItemInfos)
+		val orderItemDetailInfos = OrderItemDetailInfo.Companion.ofList(productDetails, orderItemInfos)
 		// 주문 정보 등록
 		val (savedOrder, savedOrderItems) = orderService.doOrder(userId, orderItemDetailInfos)
 
@@ -58,13 +57,13 @@ class OrderFacade(
 		// 장바구니 삭제
 		cartService.deleteCartByUser(userId)
 
-		return OrderInfo.of(savedOrder, savedOrderItems)
+		return OrderInfo.Companion.of(savedOrder, savedOrderItems)
 	}
 
 	fun productOrderWithRedisson(userId: Long, orderItemInfos: List<OrderItemInfo>): OrderInfo {
 		val productDetailIds = orderItemInfos.map { orderItemInfo -> orderItemInfo.productDetailId }
 		val productDetails = productService.getAllProductDetailsByIdsIn(productDetailIds)
-		val orderItemDetailInfos = OrderItemDetailInfo.ofList(productDetails, orderItemInfos)
+		val orderItemDetailInfos = OrderItemDetailInfo.Companion.ofList(productDetails, orderItemInfos)
 		// 주문 정보 등록
 		val (savedOrder, savedOrderItems) = orderService.doOrder(userId, orderItemDetailInfos)
 
@@ -78,19 +77,21 @@ class OrderFacade(
 		// 장바구니 삭제
 		cartService.deleteCartByUser(userId)
 
-		return OrderInfo.of(savedOrder, savedOrderItems)
+		return OrderInfo.Companion.of(savedOrder, savedOrderItems)
 	}
 
 	@Transactional
 	fun productOrderWithKafka(userId: Long, orderItemInfos: List<OrderItemInfo>): OrderInfo {
 		// 주문 진행 전 이벤트 발행
-		eventPublisher.publishEvent(BeforeProductOrderEvent(
-			OrderEventInfo(userId, orderItemInfos)
-		))
+		eventPublisher.publishEvent(
+			BeforeProductOrderEvent(
+				OrderEventInfo(userId, orderItemInfos)
+			)
+		)
 
 		val productDetailIds = orderItemInfos.map { orderItemInfo -> orderItemInfo.productDetailId }
 		val productDetails = productService.getAllProductDetailsByDetailIdsInWithLock(productDetailIds)
-		val orderItemDetailInfos = OrderItemDetailInfo.ofList(productDetails, orderItemInfos)
+		val orderItemDetailInfos = OrderItemDetailInfo.Companion.ofList(productDetails, orderItemInfos)
 		// 주문 정보 등록
 		val (savedOrder, savedOrderItems) = orderService.doOrder(userId, orderItemDetailInfos)
 
@@ -98,10 +99,12 @@ class OrderFacade(
 		cartService.deleteCartByUser(userId)
 
 		// 재고 차감 이벤트 발생
-		eventPublisher.publishEvent(ProductOrderMessageEvent(
-			OrderEventInfo(userId, orderItemInfos)
-		))
+		eventPublisher.publishEvent(
+			ProductOrderMessageEvent(
+				OrderEventInfo(userId, orderItemInfos)
+			)
+		)
 
-		return OrderInfo.of(savedOrder, savedOrderItems)
+		return OrderInfo.Companion.of(savedOrder, savedOrderItems)
 	}
 }

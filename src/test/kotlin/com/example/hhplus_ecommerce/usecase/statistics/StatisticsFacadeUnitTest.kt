@@ -1,8 +1,9 @@
 package com.example.hhplus_ecommerce.usecase.statistics
 
-import com.example.hhplus_ecommerce.domain.order.OrderService
+import com.example.hhplus_ecommerce.application.order.OrderService
 import com.example.hhplus_ecommerce.domain.order.dto.OrderQuantityStatisticsInfo
-import com.example.hhplus_ecommerce.domain.product.ProductService
+import com.example.hhplus_ecommerce.application.product.ProductService
+import com.example.hhplus_ecommerce.application.statistics.StatisticsFacade
 import com.example.hhplus_ecommerce.domain.product.dto.ProductStatisticsInfo
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Assertions.*
