@@ -10,7 +10,8 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class Payment(
+@Table(name = "PAYMENT")
+class PaymentEntity(
 	val userId: Long,
 	val orderId: Long,
 	val price: Int,
@@ -29,8 +30,8 @@ class Payment(
 		private set
 
 	companion object {
-		fun from(paymentDto: PaymentDto): Payment {
-			return Payment(
+		fun from(paymentDto: PaymentDto): PaymentEntity {
+			return PaymentEntity(
 				paymentDto.userId,
 				paymentDto.orderId,
 				paymentDto.price,

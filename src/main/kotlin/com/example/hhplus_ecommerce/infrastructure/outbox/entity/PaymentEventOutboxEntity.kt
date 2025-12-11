@@ -9,7 +9,8 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class PaymentEventOutbox(
+@Table(name = "PAYMENTEVENTOUTBOX")
+class PaymentEventOutboxEntity(
 	val userId: Long,
 	val orderId: Long,
 	@Enumerated(EnumType.STRING)
@@ -28,8 +29,8 @@ class PaymentEventOutbox(
 	}
 
 	companion object {
-		fun from(paymentEventOutboxDto: PaymentEventOutboxDto): PaymentEventOutbox {
-			return PaymentEventOutbox(
+		fun from(paymentEventOutboxDto: PaymentEventOutboxDto): PaymentEventOutboxEntity {
+			return PaymentEventOutboxEntity(
 				userId = paymentEventOutboxDto.userId,
 				orderId = paymentEventOutboxDto.orderId,
 				eventStatus = paymentEventOutboxDto.eventStatus

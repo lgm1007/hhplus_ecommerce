@@ -1,7 +1,7 @@
 package com.example.hhplus_ecommerce.domain.cart.dto
 
 import com.example.hhplus_ecommerce.web.cart.request.CartAddRequest
-import com.example.hhplus_ecommerce.infrastructure.cart.entity.Cart
+import com.example.hhplus_ecommerce.infrastructure.cart.entity.CartEntity
 import java.time.LocalDateTime
 
 class CartDto(
@@ -12,7 +12,7 @@ class CartDto(
 	val createdDate: LocalDateTime
 ) {
 	companion object {
-		fun from(cart: Cart): CartDto {
+		fun from(cart: CartEntity): CartDto {
 			return CartDto(
 				cart.id,
 				cart.userId,
@@ -22,7 +22,7 @@ class CartDto(
 			)
 		}
 
-		fun fromList(carts: List<Cart>): List<CartDto> {
+		fun fromList(carts: List<CartEntity>): List<CartDto> {
 			return carts.map(::from)
 		}
 

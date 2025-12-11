@@ -11,8 +11,8 @@ import com.example.hhplus_ecommerce.infrastructure.order.OrderItemJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.order.OrderJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository
-import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
-import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductEntity
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetailEntity
 import mu.KotlinLogging
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -48,8 +48,8 @@ class OrderFacadeIntegrationTest {
 	@Test
 	@DisplayName("상품에 대한 주문 단건 요청")
 	fun productOrderRequestOnce() {
-		val productId = productRepository.save(Product("상품 A", "A 상품")).id
-		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetailEntity(productId, 1000, 100, ProductCategory.CLOTHES)).id
 
 		val orderInfo = orderFacade.productOrder(1L, listOf(OrderItemInfo(detailId, 50)))
 		val productInfo = productService.getProductInfoById(productId)
@@ -63,8 +63,8 @@ class OrderFacadeIntegrationTest {
 	@Test
 	@DisplayName("상품에 대한 주문 단건 요청 Lettuce 사용하여 락 획득")
 	fun productOrderRequestOnceWithLettuce() {
-		val productId = productRepository.save(Product("상품 A", "A 상품")).id
-		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetailEntity(productId, 1000, 100, ProductCategory.CLOTHES)).id
 
 		val orderInfo = orderFacade.productOrderWithLettuce(1L, listOf(OrderItemInfo(detailId, 50)))
 		val productInfo = productService.getProductInfoById(productId)
@@ -80,8 +80,8 @@ class OrderFacadeIntegrationTest {
 	fun productOrderConcurrency() {
 		// 재고 20개 존재하는 상품에 대해 30번 주문 요청
 		// 예상 성공 카운트 20, 실패 카운트 10, 남은 재고량 0
-		val productId = productRepository.save(Product("상품 A", "A 상품")).id
-		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 20, ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetailEntity(productId, 1000, 20, ProductCategory.CLOTHES)).id
 
 		val executor = Executors.newFixedThreadPool(30)
 		val countDownLatch = CountDownLatch(30)
@@ -123,8 +123,8 @@ class OrderFacadeIntegrationTest {
 	fun productOrderConcurrencyWithLettuce() {
 		// 재고 20개 존재하는 상품에 대해 30번 주문 요청
 		// 예상 성공 카운트 20, 실패 카운트 10, 남은 재고량 0
-		val productId = productRepository.save(Product("상품 A", "A 상품")).id
-		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 20, ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetailEntity(productId, 1000, 20, ProductCategory.CLOTHES)).id
 
 		val executor = Executors.newFixedThreadPool(30)
 		val countDownLatch = CountDownLatch(30)
@@ -166,8 +166,8 @@ class OrderFacadeIntegrationTest {
 	fun productOrderConcurrencyWithRedisson() {
 		// 재고 20개 존재하는 상품에 대해 30번 주문 요청
 		// 예상 성공 카운트 20, 실패 카운트 10, 남은 재고량 0
-		val productId = productRepository.save(Product("상품 A", "A 상품")).id
-		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 20, ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetailEntity(productId, 1000, 20, ProductCategory.CLOTHES)).id
 
 		val executor = Executors.newFixedThreadPool(30)
 		val countDownLatch = CountDownLatch(30)
@@ -209,8 +209,8 @@ class OrderFacadeIntegrationTest {
 	fun productOrderConcurrencyWithKafka() {
 		// 재고 20개 존재하는 상품에 대해 30번 주문 요청
 		// 예상 남은 재고량 0
-		val productId = productRepository.save(Product("상품 A", "A 상품")).id
-		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 20, ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetailEntity(productId, 1000, 20, ProductCategory.CLOTHES)).id
 
 		val executor = Executors.newFixedThreadPool(30)
 		val countDownLatch = CountDownLatch(30)
@@ -248,8 +248,8 @@ class OrderFacadeIntegrationTest {
 	@DisplayName("주문 요청 정상 처리 후 outbox 메시지 상태가 COMPLETE 인지 확인한다")
 	fun outboxStatusUpdateCompleteAfterOrder() {
 		val userId = 1L
-		val productId = productRepository.save(Product("상품 A", "A 상품")).id
-		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetailEntity(productId, 1000, 100, ProductCategory.CLOTHES)).id
 
 		orderFacade.productOrderWithKafka(userId, listOf(OrderItemInfo(detailId, 50)))
 

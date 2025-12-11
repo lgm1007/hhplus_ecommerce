@@ -1,7 +1,7 @@
 package com.example.hhplus_ecommerce.domain.order.dto
 
 import com.example.hhplus_ecommerce.domain.order.OrderStatus
-import com.example.hhplus_ecommerce.infrastructure.order.entity.OrderTable
+import com.example.hhplus_ecommerce.infrastructure.order.entity.OrderTableEntity
 import java.time.LocalDateTime
 
 class OrderDto(
@@ -24,7 +24,7 @@ class OrderDto(
 	}
 
 	companion object {
-		fun from(order: OrderTable): OrderDto {
+		fun from(order: OrderTableEntity): OrderDto {
 			return OrderDto(
 				order.id,
 				order.userId,

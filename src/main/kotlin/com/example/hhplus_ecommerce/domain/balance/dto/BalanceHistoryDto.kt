@@ -1,6 +1,6 @@
 package com.example.hhplus_ecommerce.domain.balance.dto
 
-import com.example.hhplus_ecommerce.infrastructure.balance.entity.BalanceHistory
+import com.example.hhplus_ecommerce.infrastructure.balance.entity.BalanceHistoryEntity
 import java.time.LocalDateTime
 
 class BalanceHistoryDto(
@@ -11,7 +11,7 @@ class BalanceHistoryDto(
 	val createdDate: LocalDateTime
 ) {
 	companion object {
-		fun from(balanceHistory: BalanceHistory): BalanceHistoryDto {
+		fun from(balanceHistory: BalanceHistoryEntity): BalanceHistoryDto {
 			return BalanceHistoryDto(
 				balanceHistory.id,
 				balanceHistory.balanceId,

@@ -9,7 +9,8 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class Product(
+@Table(name = "PRODUCT")
+class ProductEntity(
 	val name: String,
 	val description: String,
 ) : Serializable {
@@ -27,8 +28,8 @@ class Product(
 	}
 
 	companion object {
-		fun from(productDto: ProductDto): Product {
-			return Product(
+		fun from(productDto: ProductDto): ProductEntity {
+			return ProductEntity(
 				productDto.name,
 				productDto.description
 			)

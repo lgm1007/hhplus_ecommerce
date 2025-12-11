@@ -5,7 +5,7 @@ import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.share.exception.BadRequestException
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceHistoryJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.balance.BalanceJpaRepository
-import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance
+import com.example.hhplus_ecommerce.infrastructure.balance.entity.BalanceEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -52,14 +52,14 @@ class BalanceServiceIntegrationTest {
 
 	private fun givenBalanceDumpData(size: Int) {
 		for (i in 1..size) {
-			balanceRepository.save(Balance(i.toLong(), 100))
+			balanceRepository.save(BalanceEntity(i.toLong(), 100))
 		}
 	}
 
 	@Test
 	@DisplayName("잔액 차감 - 한 번 차감 수행")
 	fun balanceDecreaseOnce() {
-		val balance = Balance(1L, 10000)
+		val balance = BalanceEntity(1L, 10000)
 		balanceRepository.save(balance)
 
 		balanceService.updateAmountDecrease(1L, 8000)
@@ -71,7 +71,7 @@ class BalanceServiceIntegrationTest {
 	@Test
 	@DisplayName("잔액 차감 - 잔액이 부족할 경우 예외 케이스")
 	fun shouldFailAmountNotEnough() {
-		val balance = Balance(1L, 5000)
+		val balance = BalanceEntity(1L, 5000)
 		balanceRepository.save(balance)
 
 		assertThatThrownBy { balanceService.updateAmountDecrease(1L, 10000) }
@@ -86,7 +86,7 @@ class BalanceServiceIntegrationTest {
 		// 10,000 잔액 보유한 사용자에 대해 3,000 씩 5번 동시 차감 수행
 		// 동시에 들어온 잔액 차감 요청은 한 번만 성공시키고 나머지 요청은 실패 처리한다.
 		// 예상 성공 카운트 1, 실패 카운트 4, 남은 잔액 7,000
-		val balance = Balance(1L, 10000)
+		val balance = BalanceEntity(1L, 10000)
 		balanceRepository.save(balance)
 
 		val executor = Executors.newFixedThreadPool(5)
@@ -126,7 +126,7 @@ class BalanceServiceIntegrationTest {
 		// 10,000 잔액 보유한 사용자에 대해 3,000 씩 5번 동시 차감 수행
 		// 동시에 들어온 잔액 차감 요청은 한 번만 성공시키고 나머지 요청은 실패 처리한다.
 		// 예상 성공 카운트 1, 실패 카운트 4, 남은 잔액 7,000
-		val balance = Balance(1L, 10000)
+		val balance = BalanceEntity(1L, 10000)
 		balanceRepository.save(balance)
 
 		val successCount = AtomicInteger(0) // 성공 카운트
@@ -156,7 +156,7 @@ class BalanceServiceIntegrationTest {
 	@Test
 	@DisplayName("잔액 충전 - 한 번 충전 수행")
 	fun balanceChargeOnce() {
-		val balance = Balance(1L, 5000)
+		val balance = BalanceEntity(1L, 5000)
 		balanceRepository.save(balance)
 
 		balanceService.updateAmountCharge(1L, 10000)
@@ -168,7 +168,7 @@ class BalanceServiceIntegrationTest {
 	@Test
 	@DisplayName("잔액 충전 - 충전 금액이 마이너스일 경우 예외 케이스")
 	fun shouldFailChargeAmountNegative() {
-		val balance = Balance(1L, 5000)
+		val balance = BalanceEntity(1L, 5000)
 		balanceRepository.save(balance)
 
 		assertThatThrownBy { balanceService.updateAmountCharge(1L, -10000) }
@@ -183,7 +183,7 @@ class BalanceServiceIntegrationTest {
 		// 동시에 10,000 잔액 충전 요청이 5번 들어오는 경우
 		// 동시에 들어온 충전 요청은 한 번만 성공시키고 나머지 요청은 실패 처리한다.
 		// 예상 충전 잔액: 10,000
-		val balance = Balance(1L, 0)
+		val balance = BalanceEntity(1L, 0)
 		balanceRepository.save(balance)
 
 		val executor = Executors.newFixedThreadPool(5)

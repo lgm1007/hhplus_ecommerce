@@ -1,12 +1,12 @@
 package com.example.hhplus_ecommerce.domain.order
 
 import com.example.hhplus_ecommerce.domain.order.dto.OrderDto
-import com.example.hhplus_ecommerce.infrastructure.order.entity.OrderTable
+import com.example.hhplus_ecommerce.infrastructure.order.entity.OrderTableEntity
 
 interface OrderRepository {
-	fun insert(orderDto: OrderDto): OrderTable
+	fun insert(orderDto: OrderDto): OrderTableEntity
 
-	fun getById(orderId: Long): OrderTable
+	fun getById(orderId: Long): OrderTableEntity
 
-	fun updateOrderStatus(orderId: Long, orderStatus: OrderStatus): OrderTable
+	fun updateOrderStatus(orderId: Long, orderStatus: OrderStatus): OrderTableEntity
 }

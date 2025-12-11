@@ -1,7 +1,7 @@
 package com.example.hhplus_ecommerce.domain.product.dto
 
 import com.example.hhplus_ecommerce.domain.product.ProductCategory
-import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetailEntity
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDateTime
@@ -18,20 +18,20 @@ class ProductDetailDto(
 	val lastModifiedDate: LocalDateTime,
 ) {
 	companion object {
-		fun from(productDetail: ProductDetail): ProductDetailDto {
+		fun from(productDetailEntity: ProductDetailEntity): ProductDetailDto {
 			return ProductDetailDto(
-				productDetail.id,
-				productDetail.productId,
-				productDetail.price,
-				productDetail.stockQuantity,
-				productDetail.productCategory,
-				productDetail.createdDate,
-				productDetail.lastModifiedDate
+				productDetailEntity.id,
+				productDetailEntity.productId,
+				productDetailEntity.price,
+				productDetailEntity.stockQuantity,
+				productDetailEntity.productCategory,
+				productDetailEntity.createdDate,
+				productDetailEntity.lastModifiedDate
 			)
 		}
 
-		fun fromList(productDetails: List<ProductDetail>): List<ProductDetailDto> {
-			return productDetails.map(::from)
+		fun fromList(productDetailEntities: List<ProductDetailEntity>): List<ProductDetailDto> {
+			return productDetailEntities.map(::from)
 		}
 	}
 }

@@ -13,7 +13,7 @@ import javax.persistence.*
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 @Table(name = "PRODUCTDETAIL", indexes = [Index(name = "idx_product_detail_product_id", columnList = "productId")])
-class ProductDetail(
+class ProductDetailEntity(
 	val productId: Long,
 	val price: Int,
 	var stockQuantity: Int,
@@ -39,8 +39,8 @@ class ProductDetail(
 	}
 
 	companion object {
-		fun from(productDetailDto: ProductDetailDto): ProductDetail {
-			return ProductDetail(
+		fun from(productDetailDto: ProductDetailDto): ProductDetailEntity {
+			return ProductDetailEntity(
 				productDetailDto.productId,
 				productDetailDto.price,
 				productDetailDto.stockQuantity,
@@ -48,7 +48,7 @@ class ProductDetail(
 			)
 		}
 
-		fun fromList(productDetailDtos: List<ProductDetailDto>): List<ProductDetail> {
+		fun fromList(productDetailDtos: List<ProductDetailDto>): List<ProductDetailEntity> {
 			return productDetailDtos.map(::from)
 		}
 	}

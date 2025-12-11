@@ -12,7 +12,7 @@ class ProductDetailTest {
     @Test
     @DisplayName("재고 차감 기능 테스트")
     fun decreaseQuantity() {
-        val productDetail = ProductDetail(
+        val productDetail = ProductDetailEntity(
             1L,
             10000,
             10,
@@ -27,7 +27,7 @@ class ProductDetailTest {
     @Test
     @DisplayName("재고가 없는 경우에 대한 예외케이스 기능 테스트")
     fun shouldFailWhenNotEnoughQuantity() {
-        val productDetail = ProductDetail(
+        val productDetail = ProductDetailEntity(
             1L,
             10000,
             10,

@@ -8,7 +8,8 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class BalanceHistory(
+@Table(name = "BALANCEHISTORY")
+class BalanceHistoryEntity(
 	val balanceId: Long,
 	val userId: Long,
 	val updateAmount: Int
@@ -22,8 +23,8 @@ class BalanceHistory(
 		private set
 
 	companion object {
-		fun from(balanceHistoryDto: BalanceHistoryDto): BalanceHistory {
-			return BalanceHistory(
+		fun from(balanceHistoryDto: BalanceHistoryDto): BalanceHistoryEntity {
+			return BalanceHistoryEntity(
 				balanceHistoryDto.balanceId,
 				balanceHistoryDto.userId,
 				balanceHistoryDto.updateAmount

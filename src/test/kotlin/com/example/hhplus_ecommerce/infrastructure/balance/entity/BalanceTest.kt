@@ -11,7 +11,7 @@ class BalanceTest {
     @Test
     @DisplayName("재고 사용 (차감) 기능 테스트")
     fun decreaseAmount() {
-        val balance = Balance(1L, 10000)
+        val balance = BalanceEntity(1L, 10000)
 
         balance.decreaseAmount(5000)
 
@@ -21,7 +21,7 @@ class BalanceTest {
     @Test
     @DisplayName("재고 차감 시 잔액 부족 예외케이스 테스트")
     fun shouldFailWhenNotEnoughAmount() {
-        val balance = Balance(1L, 10000)
+        val balance = BalanceEntity(1L, 10000)
 
         assertThatThrownBy { balance.decreaseAmount(20000) }
             .isInstanceOf(BadRequestException::class.java)
@@ -32,7 +32,7 @@ class BalanceTest {
     @Test
     @DisplayName("잔액 충전 기능 테스트")
     fun chargeAmount() {
-        val balance = Balance(1L, 10000)
+        val balance = BalanceEntity(1L, 10000)
 
         balance.chargeAmount(5000)
 
@@ -42,7 +42,7 @@ class BalanceTest {
     @Test
     @DisplayName("잔액 충전 시 충전 금액이 음수인 경우 예외케이스 테스트")
     fun shouldFailWhenAmountNegative() {
-        val balance = Balance(1L, 10000)
+        val balance = BalanceEntity(1L, 10000)
 
         assertThatThrownBy { balance.chargeAmount(-1000) }
             .isInstanceOf(BadRequestException::class.java)

@@ -3,20 +3,20 @@ package com.example.hhplus_ecommerce.infrastructure.order
 import com.example.hhplus_ecommerce.domain.order.OrderItemRepository
 import com.example.hhplus_ecommerce.domain.order.dto.OrderItemDto
 import com.example.hhplus_ecommerce.domain.order.dto.OrderQuantityStatisticsInfo
-import com.example.hhplus_ecommerce.infrastructure.order.entity.OrderItem
+import com.example.hhplus_ecommerce.infrastructure.order.entity.OrderItemEntity
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
 @Repository
 class OrderItemRepositoryImpl(private val orderItemJpaRepository: OrderItemJpaRepository) : OrderItemRepository {
-	override fun insert(orderItemDto: OrderItemDto): OrderItem {
-		return orderItemJpaRepository.save(OrderItem.from(orderItemDto))
+	override fun insert(orderItemDto: OrderItemDto): OrderItemEntity {
+		return orderItemJpaRepository.save(OrderItemEntity.from(orderItemDto))
 	}
 
-	override fun insertAll(orderItemDtos: List<OrderItemDto>): List<OrderItem> {
+	override fun insertAll(orderItemDtos: List<OrderItemDto>): List<OrderItemEntity> {
 		return orderItemJpaRepository.saveAll(orderItemDtos.map { orderItemDto ->
-				OrderItem.from(orderItemDto)
+				OrderItemEntity.from(orderItemDto)
 			})
 	}
 

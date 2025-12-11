@@ -7,7 +7,8 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class UserTable(
+@Table(name = "USERTABLE")
+class UserTableEntity(
 	val name: String,
 	val email: String
 ) {

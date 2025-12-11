@@ -1,7 +1,7 @@
 package com.example.hhplus_ecommerce.domain.outbox.dto
 
 import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
-import com.example.hhplus_ecommerce.infrastructure.outbox.entity.ProductOrderEventOutbox
+import com.example.hhplus_ecommerce.infrastructure.outbox.entity.ProductOrderEventOutboxEntity
 import java.time.LocalDateTime
 
 data class ProductOrderEventOutboxDto(
@@ -13,19 +13,19 @@ data class ProductOrderEventOutboxDto(
 	val createdDate: LocalDateTime
 ) {
 	companion object {
-		fun from(productOrderEventOutbox: ProductOrderEventOutbox): ProductOrderEventOutboxDto {
+		fun from(productOrderEventOutboxEntity: ProductOrderEventOutboxEntity): ProductOrderEventOutboxDto {
 			return ProductOrderEventOutboxDto(
-				productOrderEventOutbox.id,
-				productOrderEventOutbox.userId,
-				productOrderEventOutbox.productDetailId,
-				productOrderEventOutbox.orderQuantity,
-				productOrderEventOutbox.eventStatus,
-				productOrderEventOutbox.createdDate
+				productOrderEventOutboxEntity.id,
+				productOrderEventOutboxEntity.userId,
+				productOrderEventOutboxEntity.productDetailId,
+				productOrderEventOutboxEntity.orderQuantity,
+				productOrderEventOutboxEntity.eventStatus,
+				productOrderEventOutboxEntity.createdDate
 			)
 		}
 
-		fun fromList(productOrderEventOutboxs: List<ProductOrderEventOutbox>): List<ProductOrderEventOutboxDto> {
-			return productOrderEventOutboxs.map(::from)
+		fun fromList(productOrderEventOutboxEntities: List<ProductOrderEventOutboxEntity>): List<ProductOrderEventOutboxDto> {
+			return productOrderEventOutboxEntities.map(::from)
 		}
 	}
 }

@@ -1,8 +1,8 @@
 package com.example.hhplus_ecommerce.infrastructure.balance
 
-import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance
+import com.example.hhplus_ecommerce.infrastructure.balance.entity.BalanceEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface BalanceJpaRepository : JpaRepository<Balance, Long> {
-	fun findByUserId(userId: Long): Balance?
+interface BalanceJpaRepository : JpaRepository<BalanceEntity, Long> {
+	fun findByUserId(userId: Long): BalanceEntity?
 }

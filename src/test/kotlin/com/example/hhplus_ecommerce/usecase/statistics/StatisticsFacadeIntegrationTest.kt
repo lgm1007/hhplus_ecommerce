@@ -11,8 +11,8 @@ import com.example.hhplus_ecommerce.infrastructure.order.OrderItemJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.order.OrderJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository
-import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
-import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductEntity
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetailEntity
 import mu.KotlinLogging
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy
@@ -68,19 +68,19 @@ class StatisticsFacadeIntegrationTest {
 	}
 
 	private fun givenOrderItems() {
-		val productId1 = productRepository.save(Product("상품A", "상품A 설명")).id
-		val productId2 = productRepository.save(Product("상품B", "상품B 설명")).id
-		val productId3 = productRepository.save(Product("상품C", "상품C 설명")).id
-		val productId4 = productRepository.save(Product("상품D", "상품D 설명")).id
-		val productId5 = productRepository.save(Product("상품E", "상품E 설명")).id
-		val productId6 = productRepository.save(Product("상품F", "상품F 설명")).id
+		val productId1 = productRepository.save(ProductEntity("상품A", "상품A 설명")).id
+		val productId2 = productRepository.save(ProductEntity("상품B", "상품B 설명")).id
+		val productId3 = productRepository.save(ProductEntity("상품C", "상품C 설명")).id
+		val productId4 = productRepository.save(ProductEntity("상품D", "상품D 설명")).id
+		val productId5 = productRepository.save(ProductEntity("상품E", "상품E 설명")).id
+		val productId6 = productRepository.save(ProductEntity("상품F", "상품F 설명")).id
 
-		val detailId1 = productDetailRepository.save(ProductDetail(productId1, 50000, 100, ProductCategory.CLOTHES)).id
-		val detailId2 = productDetailRepository.save(ProductDetail(productId2, 30000, 100, ProductCategory.COSMETICS)).id
-		val detailId3 = productDetailRepository.save(ProductDetail(productId3, 100000, 100, ProductCategory.ELECTRONICS)).id
-		val detailId4 = productDetailRepository.save(ProductDetail(productId4, 1000, 100, ProductCategory.COSMETICS)).id
-		val detailId5 = productDetailRepository.save(ProductDetail(productId5, 1000, 100, ProductCategory.COSMETICS)).id
-		val detailId6 = productDetailRepository.save(ProductDetail(productId6, 2000, 100, ProductCategory.COSMETICS)).id
+		val detailId1 = productDetailRepository.save(ProductDetailEntity(productId1, 50000, 100, ProductCategory.CLOTHES)).id
+		val detailId2 = productDetailRepository.save(ProductDetailEntity(productId2, 30000, 100, ProductCategory.COSMETICS)).id
+		val detailId3 = productDetailRepository.save(ProductDetailEntity(productId3, 100000, 100, ProductCategory.ELECTRONICS)).id
+		val detailId4 = productDetailRepository.save(ProductDetailEntity(productId4, 1000, 100, ProductCategory.COSMETICS)).id
+		val detailId5 = productDetailRepository.save(ProductDetailEntity(productId5, 1000, 100, ProductCategory.COSMETICS)).id
+		val detailId6 = productDetailRepository.save(ProductDetailEntity(productId6, 2000, 100, ProductCategory.COSMETICS)).id
 
 		val orderItemDtos = listOf(
 			OrderItemDto(0, 1L, detailId1, 50, 2500000, LocalDateTime.now()),

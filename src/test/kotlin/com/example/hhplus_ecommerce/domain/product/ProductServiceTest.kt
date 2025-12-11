@@ -1,8 +1,8 @@
 package com.example.hhplus_ecommerce.domain.product
 
 import com.example.hhplus_ecommerce.application.product.ProductService
-import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
-import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductEntity
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetailEntity
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -33,16 +33,16 @@ class ProductServiceTest {
 		`when`(productRepository.getAllByPaging(any()))
 			.thenReturn(
 				listOf(
-					Product(1L, "상품A", "상품A 설명"),
-					Product(2L, "상품B", "상품B 설명"),
+					ProductEntity(1L, "상품A", "상품A 설명"),
+					ProductEntity(2L, "상품B", "상품B 설명"),
 				)
 			)
 
 		`when`(productDetailRepository.getAllByProductIdsIn(any()))
 			.thenReturn(
 				listOf(
-					ProductDetail(1L, 10000, 100, ProductCategory.CLOTHES),
-					ProductDetail(2L, 5000, 30, ProductCategory.COSMETICS),
+					ProductDetailEntity(1L, 10000, 100, ProductCategory.CLOTHES),
+					ProductDetailEntity(2L, 5000, 30, ProductCategory.COSMETICS),
 				)
 			)
 
@@ -63,7 +63,7 @@ class ProductServiceTest {
 	@DisplayName("특정 상품 조회 비즈니스 로직 단위 테스트")
 	fun getProductById() {
 		doAnswer { invocation ->
-			Product(
+			ProductEntity(
 				1L,
 				"상품A",
 				"상품A 설명",
@@ -71,7 +71,7 @@ class ProductServiceTest {
 		}.`when`(productRepository).getById(anyLong())
 
 		doAnswer { invocation ->
-			ProductDetail(
+			ProductDetailEntity(
 				1L,
 				10000,
 				100,

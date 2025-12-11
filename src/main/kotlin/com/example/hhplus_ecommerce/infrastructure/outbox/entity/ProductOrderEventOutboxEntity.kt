@@ -9,7 +9,8 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class ProductOrderEventOutbox(
+@Table(name = "PRODUCTORDEREVENTOUTBOX")
+class ProductOrderEventOutboxEntity(
 	val userId: Long,
 	val productDetailId: Long,
 	val orderQuantity: Int,
@@ -29,8 +30,8 @@ class ProductOrderEventOutbox(
 	}
 
 	companion object {
-		fun from(productOrderEventOutboxDto: ProductOrderEventOutboxDto): ProductOrderEventOutbox {
-			return ProductOrderEventOutbox(
+		fun from(productOrderEventOutboxDto: ProductOrderEventOutboxDto): ProductOrderEventOutboxEntity {
+			return ProductOrderEventOutboxEntity(
 				userId = productOrderEventOutboxDto.userId,
 				productDetailId = productOrderEventOutboxDto.productDetailId,
 				orderQuantity = productOrderEventOutboxDto.orderQuantity,
@@ -38,7 +39,7 @@ class ProductOrderEventOutbox(
 			)
 		}
 
-		fun fromList(productOrderEventOutboxDtos: List<ProductOrderEventOutboxDto>): List<ProductOrderEventOutbox> {
+		fun fromList(productOrderEventOutboxDtos: List<ProductOrderEventOutboxDto>): List<ProductOrderEventOutboxEntity> {
 			return productOrderEventOutboxDtos.map(::from)
 		}
 	}

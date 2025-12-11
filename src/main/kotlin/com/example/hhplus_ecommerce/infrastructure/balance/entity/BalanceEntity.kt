@@ -12,7 +12,7 @@ import javax.persistence.*
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 @Table(name = "BALANCE", indexes = [Index(name = "idx_balance_user_id", columnList = "userId")])
-class Balance(
+class BalanceEntity(
 	val userId: Long,
 	var amount: Int,
 ) {
@@ -48,8 +48,8 @@ class Balance(
 	}
 
 	companion object {
-		fun from(balanceDto: BalanceDto): Balance {
-			return Balance(
+		fun from(balanceDto: BalanceDto): BalanceEntity {
+			return BalanceEntity(
 				balanceDto.userId,
 				balanceDto.amount
 			)

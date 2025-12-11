@@ -5,7 +5,7 @@ import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
 import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
 import com.example.hhplus_ecommerce.infrastructure.cart.CartJpaRepository
-import com.example.hhplus_ecommerce.infrastructure.cart.entity.Cart
+import com.example.hhplus_ecommerce.infrastructure.cart.entity.CartEntity
 import mu.KotlinLogging
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy
@@ -44,7 +44,7 @@ class CartServiceIntegrationTest {
 
 	private fun givenCartDumpData(size: Int) {
 		for (i in 1..size) {
-			cartRepository.save(Cart(i.toLong(), i.toLong(), 1))
+			cartRepository.save(CartEntity(i.toLong(), i.toLong(), 1))
 		}
 	}
 

@@ -4,16 +4,16 @@ import com.example.hhplus_ecommerce.domain.share.exception.ErrorStatus
 import com.example.hhplus_ecommerce.domain.cart.CartRepository
 import com.example.hhplus_ecommerce.domain.cart.dto.CartDto
 import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
-import com.example.hhplus_ecommerce.infrastructure.cart.entity.Cart
+import com.example.hhplus_ecommerce.infrastructure.cart.entity.CartEntity
 import org.springframework.stereotype.Repository
 
 @Repository
 class CartRepositoryImpl(private val cartJpaRepository: CartJpaRepository) : CartRepository {
-	override fun insert(cartDto: CartDto): Cart {
-		return cartJpaRepository.save(Cart.from(cartDto))
+	override fun insert(cartDto: CartDto): CartEntity {
+		return cartJpaRepository.save(CartEntity.from(cartDto))
 	}
 
-	override fun deleteByUserIdAndProductId(userId: Long, productDetailId: Long): Cart {
+	override fun deleteByUserIdAndProductId(userId: Long, productDetailId: Long): CartEntity {
 		val cart = (cartJpaRepository.findByUserIdAndProductDetailId(userId, productDetailId)
 			?: throw NotFoundException(ErrorStatus.NOT_FOUND_CART))
 
@@ -22,7 +22,7 @@ class CartRepositoryImpl(private val cartJpaRepository: CartJpaRepository) : Car
 		return cart
 	}
 
-	override fun deleteAllByUserId(userId: Long): List<Cart> {
+	override fun deleteAllByUserId(userId: Long): List<CartEntity> {
 		val carts = cartJpaRepository.findAllByUserId(userId)
 
 		cartJpaRepository.deleteAll(carts)
@@ -30,7 +30,7 @@ class CartRepositoryImpl(private val cartJpaRepository: CartJpaRepository) : Car
 		return carts
 	}
 
-	override fun getAllByUserId(userId: Long): List<Cart> {
+	override fun getAllByUserId(userId: Long): List<CartEntity> {
 		val carts = cartJpaRepository.findAllByUserId(userId)
 
 		if (carts.isEmpty()) {

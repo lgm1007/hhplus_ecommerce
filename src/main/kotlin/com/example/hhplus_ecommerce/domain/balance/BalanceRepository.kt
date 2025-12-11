@@ -1,16 +1,16 @@
 package com.example.hhplus_ecommerce.domain.balance
 
 import com.example.hhplus_ecommerce.domain.balance.dto.BalanceDto
-import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance
+import com.example.hhplus_ecommerce.infrastructure.balance.entity.BalanceEntity
 
 interface BalanceRepository {
-	fun getByUserId(userId: Long): Balance
+	fun getByUserId(userId: Long): BalanceEntity
 
-	fun insert(balanceDto: BalanceDto): Balance
+	fun insert(balanceDto: BalanceDto): BalanceEntity
 
-	fun updateDecreaseAmount(userId: Long, amount: Int): Balance
+	fun updateDecreaseAmount(userId: Long, amount: Int): BalanceEntity
 
-	fun updateChargeAmount(userId: Long, amount: Int): Balance
+	fun updateChargeAmount(userId: Long, amount: Int): BalanceEntity
 
 	fun deleteAll()
 }

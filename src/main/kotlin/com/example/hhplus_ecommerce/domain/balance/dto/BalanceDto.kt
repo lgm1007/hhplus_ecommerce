@@ -1,6 +1,6 @@
 package com.example.hhplus_ecommerce.domain.balance.dto
 
-import com.example.hhplus_ecommerce.infrastructure.balance.entity.Balance
+import com.example.hhplus_ecommerce.infrastructure.balance.entity.BalanceEntity
 import java.time.LocalDateTime
 
 class BalanceDto(
@@ -12,13 +12,13 @@ class BalanceDto(
 ) {
 
 	companion object {
-		fun from(balance: Balance): BalanceDto {
+		fun from(balanceEntity: BalanceEntity): BalanceDto {
 			return BalanceDto(
-				balance.id,
-				balance.userId,
-				balance.amount,
-				balance.createdDate,
-				balance.lastModifiedDate
+				balanceEntity.id,
+				balanceEntity.userId,
+				balanceEntity.amount,
+				balanceEntity.createdDate,
+				balanceEntity.lastModifiedDate
 			)
 		}
 	}

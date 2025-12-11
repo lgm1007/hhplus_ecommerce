@@ -1,6 +1,6 @@
 package com.example.hhplus_ecommerce.domain.order.dto
 
-import com.example.hhplus_ecommerce.infrastructure.order.entity.OrderItem
+import com.example.hhplus_ecommerce.infrastructure.order.entity.OrderItemEntity
 import java.time.LocalDateTime
 
 class OrderItemDto(
@@ -12,19 +12,19 @@ class OrderItemDto(
 	val createdDate: LocalDateTime
 ) {
 	companion object {
-		fun from(orderItem: OrderItem): OrderItemDto {
+		fun from(orderItemEntity: OrderItemEntity): OrderItemDto {
 			return OrderItemDto(
-				orderItem.id,
-				orderItem.orderId,
-				orderItem.productDetailId,
-				orderItem.quantity,
-				orderItem.price,
-				orderItem.createdDate
+				orderItemEntity.id,
+				orderItemEntity.orderId,
+				orderItemEntity.productDetailId,
+				orderItemEntity.quantity,
+				orderItemEntity.price,
+				orderItemEntity.createdDate
 			)
 		}
 
-		fun fromList(orderItems: List<OrderItem>): List<OrderItemDto> {
-			return orderItems.map(::from)
+		fun fromList(orderItemEntities: List<OrderItemEntity>): List<OrderItemDto> {
+			return orderItemEntities.map(::from)
 		}
 
 		fun listOf(orderId: Long, orderItemDetailInfos: List<OrderItemDetailInfo>): List<OrderItemDto> {

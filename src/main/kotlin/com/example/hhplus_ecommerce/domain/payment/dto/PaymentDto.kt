@@ -2,7 +2,7 @@ package com.example.hhplus_ecommerce.domain.payment.dto
 
 import com.example.hhplus_ecommerce.domain.order.dto.OrderDto
 import com.example.hhplus_ecommerce.domain.payment.PaymentStatus
-import com.example.hhplus_ecommerce.infrastructure.payment.entity.Payment
+import com.example.hhplus_ecommerce.infrastructure.payment.entity.PaymentEntity
 import java.time.LocalDateTime
 
 class PaymentDto(
@@ -27,15 +27,15 @@ class PaymentDto(
 			)
 		}
 
-		fun from(payment: Payment): PaymentDto {
+		fun from(paymentEntity: PaymentEntity): PaymentDto {
 			return PaymentDto(
-				payment.id,
-				payment.userId,
-				payment.orderId,
-				payment.price,
-				payment.paymentStatus,
-				payment.createdDate,
-				payment.lastModifiedDate
+				paymentEntity.id,
+				paymentEntity.userId,
+				paymentEntity.orderId,
+				paymentEntity.price,
+				paymentEntity.paymentStatus,
+				paymentEntity.createdDate,
+				paymentEntity.lastModifiedDate
 			)
 		}
 	}

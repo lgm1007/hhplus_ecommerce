@@ -4,8 +4,8 @@ import com.example.hhplus_ecommerce.application.product.ProductService
 import com.example.hhplus_ecommerce.domain.share.exception.BadRequestException
 import com.example.hhplus_ecommerce.infrastructure.product.ProductDetailJpaRepository
 import com.example.hhplus_ecommerce.infrastructure.product.ProductJpaRepository
-import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
-import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetail
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductEntity
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetailEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -53,7 +53,7 @@ class ProductServiceIntegrationTest {
 
 	private fun givenProductDetails(size: Int) {
 		for (i in 1..size) {
-			productDetailRepository.save(ProductDetail(i.toLong(), 1234, 500, ProductCategory.CLOTHES))
+			productDetailRepository.save(ProductDetailEntity(i.toLong(), 1234, 500, ProductCategory.CLOTHES))
 		}
 	}
 
@@ -69,16 +69,16 @@ class ProductServiceIntegrationTest {
 
 	private fun givenProducts(size: Int) {
 		for (i in 1..size) {
-			val productId = productRepository.save(Product("상품${i}", "{i}번 상품")).id
-			productDetailRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES))
+			val productId = productRepository.save(ProductEntity("상품${i}", "{i}번 상품")).id
+			productDetailRepository.save(ProductDetailEntity(productId, 1000, 100, ProductCategory.CLOTHES))
 		}
 	}
 
 	@Test
 	@DisplayName("특정 상품 조회하기")
 	fun getProductInfo() {
-		val productId = productRepository.save(Product("상품 A", "A 상품")).id
-		productDetailRepository.save(ProductDetail(productId, 1000, 100, ProductCategory.CLOTHES))
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		productDetailRepository.save(ProductDetailEntity(productId, 1000, 100, ProductCategory.CLOTHES))
 
 		val startTime = System.currentTimeMillis()
 
@@ -97,8 +97,8 @@ class ProductServiceIntegrationTest {
 	fun quantityDecreaseConcurrency() {
 		// 상품 재고 3개에 대해 5번 동시 차감 요청 시
 		// 예상 성공 카운트 3, 실패 카운트 2, 남은 재고양 0
-		val productId = productRepository.save(Product("상품 A", "A 상품")).id
-		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 3, ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetailEntity(productId, 1000, 3, ProductCategory.CLOTHES)).id
 
 		val executor = Executors.newFixedThreadPool(5)
 		val countDownLatch = CountDownLatch(5)
@@ -136,8 +136,8 @@ class ProductServiceIntegrationTest {
 	fun quantityDecreaseConcurrencyWithCoroutine() {
 		// 상품 재고 3개에 대해 5번 동시 차감 요청 시
 		// 예상 성공 카운트 3, 실패 카운트 2, 남은 재고양 0
-		val productId = productRepository.save(Product("상품 A", "A 상품")).id
-		val detailId = productDetailRepository.save(ProductDetail(productId, 1000, 3, ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		val detailId = productDetailRepository.save(ProductDetailEntity(productId, 1000, 3, ProductCategory.CLOTHES)).id
 
 		val successCount = AtomicInteger(0) // 성공 카운트
 		val failCount = AtomicInteger(0)    // 실패 카운트

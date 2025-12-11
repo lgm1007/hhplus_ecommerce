@@ -4,7 +4,7 @@ import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
 import com.example.hhplus_ecommerce.domain.outbox.ProductOrderEventOutboxRepository
 import com.example.hhplus_ecommerce.domain.outbox.dto.ProductOrderEventOutboxDto
 import com.example.hhplus_ecommerce.domain.outbox.dto.ProductOrderEventOutboxRequestDto
-import com.example.hhplus_ecommerce.infrastructure.outbox.entity.ProductOrderEventOutbox
+import com.example.hhplus_ecommerce.infrastructure.outbox.entity.ProductOrderEventOutboxEntity
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -25,11 +25,11 @@ class ProductOrderEventOutboxRepositoryImpl(
 	}
 
 	override fun insert(productOrderEventOutboxDto: ProductOrderEventOutboxDto) {
-		jpaRepository.save(ProductOrderEventOutbox.from(productOrderEventOutboxDto))
+		jpaRepository.save(ProductOrderEventOutboxEntity.from(productOrderEventOutboxDto))
 	}
 
 	override fun insertAll(productOrderEventOutboxDtos: List<ProductOrderEventOutboxDto>) {
-		jpaRepository.saveAll(ProductOrderEventOutbox.fromList(productOrderEventOutboxDtos))
+		jpaRepository.saveAll(ProductOrderEventOutboxEntity.fromList(productOrderEventOutboxDtos))
 	}
 
 	override fun updateStatus(

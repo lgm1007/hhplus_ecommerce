@@ -1,6 +1,6 @@
 package com.example.hhplus_ecommerce.domain.product.dto
 
-import com.example.hhplus_ecommerce.infrastructure.product.entity.Product
+import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductEntity
 import java.time.LocalDateTime
 
 class ProductDto(
@@ -10,17 +10,17 @@ class ProductDto(
 	val createdDate: LocalDateTime
 ) {
 	companion object {
-		fun from(product: Product): ProductDto {
+		fun from(productEntity: ProductEntity): ProductDto {
 			return ProductDto(
-				product.id,
-				product.name,
-				product.description,
-				product.createdDate
+				productEntity.id,
+				productEntity.name,
+				productEntity.description,
+				productEntity.createdDate
 			)
 		}
 
-		fun fromList(products: List<Product>): List<ProductDto> {
-			return products.map(::from)
+		fun fromList(productEntities: List<ProductEntity>): List<ProductDto> {
+			return productEntities.map(::from)
 		}
 	}
 }

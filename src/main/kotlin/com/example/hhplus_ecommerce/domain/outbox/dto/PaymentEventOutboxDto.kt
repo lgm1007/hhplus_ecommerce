@@ -1,7 +1,7 @@
 package com.example.hhplus_ecommerce.domain.outbox.dto
 
 import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
-import com.example.hhplus_ecommerce.infrastructure.outbox.entity.PaymentEventOutbox
+import com.example.hhplus_ecommerce.infrastructure.outbox.entity.PaymentEventOutboxEntity
 import java.time.LocalDateTime
 
 data class PaymentEventOutboxDto(
@@ -12,18 +12,18 @@ data class PaymentEventOutboxDto(
 	val createdDate: LocalDateTime
 ) {
 	companion object {
-		fun from(paymentEventOutbox: PaymentEventOutbox): PaymentEventOutboxDto {
+		fun from(paymentEventOutboxEntity: PaymentEventOutboxEntity): PaymentEventOutboxDto {
 			return PaymentEventOutboxDto(
-				paymentEventOutbox.id,
-				paymentEventOutbox.userId,
-				paymentEventOutbox.orderId,
-				paymentEventOutbox.eventStatus,
-				paymentEventOutbox.createdDate
+				paymentEventOutboxEntity.id,
+				paymentEventOutboxEntity.userId,
+				paymentEventOutboxEntity.orderId,
+				paymentEventOutboxEntity.eventStatus,
+				paymentEventOutboxEntity.createdDate
 			)
 		}
 
-		fun fromList(paymentEventOutboxs: List<PaymentEventOutbox>): List<PaymentEventOutboxDto> {
-			return paymentEventOutboxs.map(::from)
+		fun fromList(paymentEventOutboxEntities: List<PaymentEventOutboxEntity>): List<PaymentEventOutboxDto> {
+			return paymentEventOutboxEntities.map(::from)
 		}
 	}
 }

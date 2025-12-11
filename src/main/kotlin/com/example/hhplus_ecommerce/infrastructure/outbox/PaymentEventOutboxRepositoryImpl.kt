@@ -6,7 +6,7 @@ import com.example.hhplus_ecommerce.domain.outbox.PaymentEventOutboxRepository
 import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxDto
 import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxRequestDto
 import com.example.hhplus_ecommerce.domain.share.exception.NotFoundException
-import com.example.hhplus_ecommerce.infrastructure.outbox.entity.PaymentEventOutbox
+import com.example.hhplus_ecommerce.infrastructure.outbox.entity.PaymentEventOutboxEntity
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -26,7 +26,7 @@ class PaymentEventOutboxRepositoryImpl(
 	}
 
 	override fun insert(paymentEventOutboxDto: PaymentEventOutboxDto) {
-		jpaRepository.save(PaymentEventOutbox.from(paymentEventOutboxDto))
+		jpaRepository.save(PaymentEventOutboxEntity.from(paymentEventOutboxDto))
 	}
 
 	override fun updateStatus(
