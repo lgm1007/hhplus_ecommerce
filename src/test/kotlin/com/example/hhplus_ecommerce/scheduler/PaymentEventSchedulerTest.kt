@@ -1,5 +1,6 @@
 package com.example.hhplus_ecommerce.scheduler
 
+import com.example.hhplus_ecommerce.application.scheduler.PaymentEventScheduler
 import com.example.hhplus_ecommerce.domain.balance.BalanceRepository
 import com.example.hhplus_ecommerce.domain.balance.dto.BalanceDto
 import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus

@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.filter
+package com.example.hhplus_ecommerce.web.filter
 
 import org.springframework.stereotype.Component
 import javax.servlet.Filter

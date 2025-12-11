@@ -1,5 +1,6 @@
 package com.example.hhplus_ecommerce.scheduler
 
+import com.example.hhplus_ecommerce.application.scheduler.ProductOrderEventScheduler
 import com.example.hhplus_ecommerce.domain.outbox.OutboxEventStatus
 import com.example.hhplus_ecommerce.domain.outbox.ProductOrderEventOutboxRepository
 import com.example.hhplus_ecommerce.domain.outbox.dto.ProductOrderEventOutboxDto

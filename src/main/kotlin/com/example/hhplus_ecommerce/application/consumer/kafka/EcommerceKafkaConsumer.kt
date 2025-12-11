@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.consumer.kafka
+package com.example.hhplus_ecommerce.application.consumer.kafka
 
 import com.example.hhplus_ecommerce.domain.messaging.producer.dto.PaymentDataMessage
 import com.example.hhplus_ecommerce.domain.messaging.producer.dto.ProductMessage

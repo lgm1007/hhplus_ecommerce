@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.scheduler
+package com.example.hhplus_ecommerce.application.scheduler
 
 import com.example.hhplus_ecommerce.domain.messaging.producer.MessageProducer
 import com.example.hhplus_ecommerce.domain.messaging.producer.dto.ProductMessage
