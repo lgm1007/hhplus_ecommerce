@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.config
+package com.example.hhplus_ecommerce.web.config
 
 import com.example.hhplus_ecommerce.web.interceptor.ApiLoggingInterceptor
 import org.springframework.context.annotation.Configuration

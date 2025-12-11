@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.config
+package com.example.hhplus_ecommerce.infrastructure.config
 
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean

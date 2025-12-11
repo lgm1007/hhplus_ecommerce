@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.config
+package com.example.hhplus_ecommerce.infrastructure.config
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig

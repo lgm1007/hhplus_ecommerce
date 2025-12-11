@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.config
+package com.example.hhplus_ecommerce.infrastructure.config
 
 import org.redisson.Redisson
 import org.redisson.api.RedissonClient

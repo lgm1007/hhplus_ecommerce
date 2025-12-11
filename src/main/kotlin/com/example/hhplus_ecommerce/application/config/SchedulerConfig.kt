@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.config
+package com.example.hhplus_ecommerce.application.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
