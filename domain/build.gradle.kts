@@ -1,0 +1,20 @@
+plugins {
+	kotlin("jvm")
+}
+
+group = "com.example"
+version = "1.0.0"
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation(kotlin("test"))
+	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+	useJUnitPlatform()
+}
