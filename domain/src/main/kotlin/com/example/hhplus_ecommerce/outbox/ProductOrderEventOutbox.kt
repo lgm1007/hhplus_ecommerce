@@ -9,4 +9,8 @@ data class ProductOrderEventOutbox(
 	val orderQuantity: Int,
 	var eventStatus: OutboxEventStatus,
 	var createdDate: LocalDateTime? = null
-)
+) {
+	fun modifyEventStatus(eventStatus: OutboxEventStatus) {
+		this.eventStatus = eventStatus
+	}
+}

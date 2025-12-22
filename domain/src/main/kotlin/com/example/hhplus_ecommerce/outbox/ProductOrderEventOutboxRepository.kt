@@ -9,7 +9,7 @@ interface ProductOrderEventOutboxRepository {
 
 	fun insertAll(productOrderEventOutboxes: List<ProductOrderEventOutbox>)
 
-	fun updateStatus(productOrderEventOutbox: ProductOrderEventOutbox, eventStatus: OutboxEventStatus): ProductOrderEventOutbox
+	fun updateStatus(productOrderEventOutboxPatch: ProductOrderEventOutboxPatch): ProductOrderEventOutbox
 
 	fun deleteById(outboxId: Long)
 

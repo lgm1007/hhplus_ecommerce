@@ -8,4 +8,8 @@ data class PaymentEventOutbox(
 	val orderId: Long,
 	var eventStatus: OutboxEventStatus,
 	var createdDate: LocalDateTime? = null
-)
+) {
+	fun modifyEventStatus(eventStatus: OutboxEventStatus) {
+		this.eventStatus = eventStatus
+	}
+}

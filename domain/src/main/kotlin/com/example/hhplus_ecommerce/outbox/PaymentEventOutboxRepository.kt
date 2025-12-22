@@ -7,7 +7,7 @@ interface PaymentEventOutboxRepository {
 
 	fun insert(paymentEventOutbox: PaymentEventOutbox)
 
-	fun updateStatus(paymentEventOutbox: PaymentEventOutbox, eventStatus: OutboxEventStatus): PaymentEventOutbox
+	fun updateStatus(paymentEventOutboxPatch: PaymentEventOutboxPatch): PaymentEventOutbox
 
 	fun deleteById(outboxId: Long)
 

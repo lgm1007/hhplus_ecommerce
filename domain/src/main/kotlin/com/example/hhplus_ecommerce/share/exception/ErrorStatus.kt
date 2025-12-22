@@ -8,6 +8,7 @@ enum class ErrorStatus(val message: String) {
 	NOT_FOUND_ORDER("주문 정보 없음"),
 	NOT_FOUND_CART("장바구니 없음"),
 	NOT_FOUND_PAYMENT_OUTBOX("결제 이벤트 아웃박스 데이터 없음"),
+	NOT_FOUND_PRODUCT_ORDER_OUTBOX("상품 주문 이벤트 아웃박스 데이터 없음"),
 	NOT_ENOUGH_BALANCE("잔액 부족"),
 	NOT_ENOUGH_QUANTITY("재고 부족")
 }
