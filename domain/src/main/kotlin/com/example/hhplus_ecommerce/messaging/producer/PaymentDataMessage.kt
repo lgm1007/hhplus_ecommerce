@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.messaging.producer.dto
+package com.example.hhplus_ecommerce.messaging.producer
 
 import com.example.hhplus_ecommerce.domain.payment.dto.AfterPaymentEventInfo
 import java.time.LocalDateTime

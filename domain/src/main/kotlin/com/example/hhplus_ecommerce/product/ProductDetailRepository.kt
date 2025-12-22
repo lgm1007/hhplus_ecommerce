@@ -1,22 +1,19 @@
 package com.example.hhplus_ecommerce.product
 
-import com.example.hhplus_ecommerce.domain.product.dto.ProductDetailDto
-import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductDetailEntity
-
 interface ProductDetailRepository {
-	fun insert(productDetailDto: ProductDetailDto): ProductDetailEntity
+	fun insert(productDetail: ProductDetail): ProductDetail
 
-	fun getAllByProductIdsIn(productIds: List<Long>): List<ProductDetailEntity>
+	fun getAllByProductIdsIn(productIds: List<Long>): List<ProductDetail>
 
-	fun getByProductId(productId: Long): ProductDetailEntity
+	fun getByProductId(productId: Long): ProductDetail
 
-	fun getByIdWithWriteLock(id: Long): ProductDetailEntity
+	fun getByIdWithWriteLock(id: Long): ProductDetail
 
-	fun getAllByIdsInWithLock(ids: List<Long>): List<ProductDetailEntity>
+	fun getAllByIdsInWithLock(ids: List<Long>): List<ProductDetail>
 
-	fun getAllByIdsIn(ids: List<Long>): List<ProductDetailEntity>
+	fun getAllByIdsIn(ids: List<Long>): List<ProductDetail>
 
-	fun updateProductQuantityDecreaseWithLock(id: Long, orderQuantity: Int): ProductDetailEntity
+	fun updateProductQuantityDecreaseWithLock(id: Long, orderQuantity: Int): ProductDetail
 
-	fun updateProductQuantityDecrease(id: Long, orderQuantity: Int): ProductDetailEntity
+	fun updateProductQuantityDecrease(id: Long, orderQuantity: Int): ProductDetail
 }

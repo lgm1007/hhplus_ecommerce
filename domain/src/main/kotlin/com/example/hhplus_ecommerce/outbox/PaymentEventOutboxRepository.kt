@@ -1,16 +1,13 @@
 package com.example.hhplus_ecommerce.outbox
 
-import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxDto
-import com.example.hhplus_ecommerce.domain.outbox.dto.PaymentEventOutboxRequestDto
-
 interface PaymentEventOutboxRepository {
-	fun getAllByEventStatus(eventStatus: OutboxEventStatus): List<PaymentEventOutboxDto>
+	fun getAllByEventStatus(eventStatus: OutboxEventStatus): List<PaymentEventOutbox>
 
-	fun getByUserIdAndOrderId(userId: Long, orderId: Long): PaymentEventOutboxDto
+	fun getByUserIdAndOrderId(userId: Long, orderId: Long): PaymentEventOutbox
 
-	fun insert(paymentEventOutboxDto: PaymentEventOutboxDto)
+	fun insert(paymentEventOutbox: PaymentEventOutbox)
 
-	fun updateStatus(paymentEventOutboxRequest: PaymentEventOutboxRequestDto, eventStatus: OutboxEventStatus): PaymentEventOutboxDto
+	fun updateStatus(paymentEventOutbox: PaymentEventOutbox, eventStatus: OutboxEventStatus): PaymentEventOutbox
 
 	fun deleteById(outboxId: Long)
 

@@ -1,15 +1,11 @@
 package com.example.hhplus_ecommerce.product
 
-import com.example.hhplus_ecommerce.domain.product.dto.ProductDto
-import com.example.hhplus_ecommerce.infrastructure.product.entity.ProductEntity
-import org.springframework.data.domain.Pageable
-
 interface ProductRepository {
-	fun insert(productDto: ProductDto): ProductEntity
+	fun insert(product: Product): Product
 
-	fun getAllByPaging(pageable: Pageable): List<ProductEntity>
+	fun getAllByPaging(page: Int, itemSize: Int): List<Product>
 
-	fun getById(id: Long): ProductEntity
+	fun getById(id: Long): Product
 
-	fun getAllByIds(ids: List<Long>): List<ProductEntity>
+	fun getAllByIds(ids: List<Long>): List<Product>
 }

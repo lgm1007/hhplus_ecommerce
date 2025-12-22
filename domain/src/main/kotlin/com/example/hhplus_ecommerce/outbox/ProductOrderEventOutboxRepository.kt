@@ -1,18 +1,15 @@
 package com.example.hhplus_ecommerce.outbox
 
-import com.example.hhplus_ecommerce.domain.outbox.dto.ProductOrderEventOutboxDto
-import com.example.hhplus_ecommerce.domain.outbox.dto.ProductOrderEventOutboxRequestDto
-
 interface ProductOrderEventOutboxRepository {
-	fun getAllByEventStatus(eventStatus: OutboxEventStatus): List<ProductOrderEventOutboxDto>
+	fun getAllByEventStatus(eventStatus: OutboxEventStatus): List<ProductOrderEventOutbox>
 
-	fun getAllByUserIdAndProductDetailId(userId: Long, productDetailId: Long): List<ProductOrderEventOutboxDto>
+	fun getAllByUserIdAndProductDetailId(userId: Long, productDetailId: Long): List<ProductOrderEventOutbox>
 
-	fun insert(productOrderEventOutboxDto: ProductOrderEventOutboxDto)
+	fun insert(productOrderEventOutbox: ProductOrderEventOutbox)
 
-	fun insertAll(productOrderEventOutboxDtos: List<ProductOrderEventOutboxDto>)
+	fun insertAll(productOrderEventOutboxes: List<ProductOrderEventOutbox>)
 
-	fun updateStatus(outboxRequestDto: ProductOrderEventOutboxRequestDto, eventStatus: OutboxEventStatus): ProductOrderEventOutboxDto
+	fun updateStatus(productOrderEventOutbox: ProductOrderEventOutbox, eventStatus: OutboxEventStatus): ProductOrderEventOutbox
 
 	fun deleteById(outboxId: Long)
 

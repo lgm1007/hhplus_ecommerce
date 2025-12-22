@@ -1,4 +1,4 @@
-package com.example.hhplus_ecommerce.messaging.producer.dto
+package com.example.hhplus_ecommerce.messaging.producer
 
 data class ProductMessage(
 	val userId: Long,
