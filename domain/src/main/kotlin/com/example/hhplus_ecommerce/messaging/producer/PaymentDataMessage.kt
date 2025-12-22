@@ -1,6 +1,5 @@
 package com.example.hhplus_ecommerce.messaging.producer
 
-import com.example.hhplus_ecommerce.domain.payment.dto.AfterPaymentEventInfo
 import java.time.LocalDateTime
 
 data class PaymentDataMessage(
@@ -8,15 +7,4 @@ data class PaymentDataMessage(
 	val orderId: Long,
 	val currentBalance: Int,
 	val paymentDate: LocalDateTime
-) {
-	companion object {
-		fun from(paymentInfo: AfterPaymentEventInfo): PaymentDataMessage {
-			return PaymentDataMessage(
-				paymentInfo.userId,
-				paymentInfo.orderId,
-				paymentInfo.currentBalance,
-				paymentInfo.paymentDate
-			)
-		}
-	}
-}
+)

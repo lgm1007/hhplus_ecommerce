@@ -12,6 +12,7 @@ repositories {
 dependencies {
 	testImplementation(kotlin("test"))
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testImplementation("org.assertj:assertj-core:3.22.0")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
