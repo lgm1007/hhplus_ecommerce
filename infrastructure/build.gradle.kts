@@ -28,9 +28,13 @@ dependencies {
 	testImplementation(kotlin("test"))
 }
 
-tasks.test {
-	useJUnitPlatform()
-}
 kotlin {
 	jvmToolchain(17)
+	compilerOptions {
+		freeCompilerArgs.addAll("-Xjsr305=strict")
+	}
+}
+
+tasks.test {
+	useJUnitPlatform()
 }
