@@ -8,5 +8,6 @@ data class Payment(
 	val orderId: Long,
 	val price: Int,
 	val paymentStatus: PaymentStatus,
-	var createdDate: LocalDateTime? = null
+	var createdDate: LocalDateTime? = null,
+	var lastModifiedDate: LocalDateTime? = null
 )
