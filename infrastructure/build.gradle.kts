@@ -25,6 +25,7 @@ dependencies {
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	runtimeOnly("com.h2database:h2")
 	testImplementation(kotlin("test"))
 }
 

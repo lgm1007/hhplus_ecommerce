@@ -6,6 +6,7 @@ import com.example.hhplus_ecommerce.order.dto.OrderItemDto
 import com.example.hhplus_ecommerce.order.dto.OrderQuantityStatisticsInfoDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class OrderService(
@@ -20,12 +21,24 @@ class OrderService(
 		userId: Long,
 		orderItemDetailInfoDtos: List<OrderItemDetailInfoDto>
 	): Pair<OrderDto, List<OrderItemDto>> {
-		val totalPrices = orderItemDetailInfoDtos.map { orderItemDetailInfo -> orderItemDetailInfo.calculateOrderPrice() }
-		val orderDto = OrderDto.from(userId)
+		val totalPrices = orderItemDetailInfoDtos.map { orderItemDetailInfoDto ->
+			val orderItemDetailInfo = OrderItemDetailInfo(
+				productDetailId = orderItemDetailInfoDto.productDetailId,
+				quantity = orderItemDetailInfoDto.quantity,
+				price = orderItemDetailInfoDto.price
+			)
+			orderItemDetailInfo.calculateOrderPrice()
+		}
+		val order = Order(
+			userId = userId,
+			orderDate = LocalDateTime.now(),
+			totalPrice = 0,
+			orderStatus = OrderStatus.ORDER_WAIT
+		)
 
-		orderDto.addTotalPrice(totalPrices)
-		orderDto.updateOrderStatus(OrderStatus.ORDER_COMPLETE)
-		val savedOrder = insertOrder(orderDto)
+		order.addTotalPrice(totalPrices)
+		order.updateOrderStatus(OrderStatus.ORDER_COMPLETE)
+		val savedOrder = insertOrder(OrderDto.from(order))
 
 		val orderItemDtos = OrderItemDto.listOf(savedOrder.orderId!!, orderItemDetailInfoDtos)
 		val savedOrderItems = insertAllOrderItems(orderItemDtos)

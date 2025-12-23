@@ -25,14 +25,17 @@ dependencies {
 	}
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("io.github.microutils:kotlin-logging:3.0.5")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	testImplementation(kotlin("test"))
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.assertj:assertj-core:3.22.0")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testRuntimeOnly("com.h2database:h2")
 }
 
 kotlin {

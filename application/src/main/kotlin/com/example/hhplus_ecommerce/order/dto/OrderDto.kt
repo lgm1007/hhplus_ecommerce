@@ -8,21 +8,11 @@ data class OrderDto(
 	val orderId: Long? = null,
 	val userId: Long,
 	val orderDate: LocalDateTime,
-	var totalPrice: Int,
-	var orderStatus: OrderStatus,
+	val totalPrice: Int,
+	val orderStatus: OrderStatus,
 	val createdDate: LocalDateTime? = null,
 	val lastModifiedDate: LocalDateTime? = null
 ) {
-	fun addTotalPrice(prices: List<Int>) {
-		prices.forEach {price ->
-			this.totalPrice += price
-		}
-	}
-
-	fun updateOrderStatus(orderStatus: OrderStatus) {
-		this.orderStatus = orderStatus
-	}
-
 	companion object {
 		fun from(order: Order): OrderDto {
 			return OrderDto(

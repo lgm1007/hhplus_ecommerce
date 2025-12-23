@@ -1,33 +1,33 @@
 package com.example.hhplus_ecommerce.balance.dto
 
-import com.example.hhplus_ecommerce.infrastructure.balance.entity.BalanceHistoryEntity
+import com.example.hhplus_ecommerce.balance.BalanceHistory
 import java.time.LocalDateTime
 
 class BalanceHistoryDto(
-	val id: Long,
+	val balanceHistoryId: Long? = null,
 	val balanceId: Long,
 	val userId: Long,
 	val updateAmount: Int,
-	val createdDate: LocalDateTime
+	val createdDate: LocalDateTime? = null
 ) {
 	companion object {
-		fun from(balanceHistory: BalanceHistoryEntity): BalanceHistoryDto {
+		fun from(balanceHistory: BalanceHistory): BalanceHistoryDto {
 			return BalanceHistoryDto(
-				balanceHistory.id,
-				balanceHistory.balanceId,
-				balanceHistory.userId,
-				balanceHistory.updateAmount,
-				balanceHistory.createdDate
+				balanceHistoryId = balanceHistory.balanceHistoryId,
+				balanceId = balanceHistory.balanceId,
+				userId = balanceHistory.userId,
+				updateAmount = balanceHistory.updateAmount,
+				createdDate = balanceHistory.createdDate
 			)
 		}
 
 		fun of(balanceId: Long, userId: Long, updateAmount: Int): BalanceHistoryDto {
 			return BalanceHistoryDto(
-				0,
-				balanceId,
-				userId,
-				updateAmount,
-				LocalDateTime.now()
+				balanceHistoryId = 0,
+				balanceId = balanceId,
+				userId = userId,
+				updateAmount = updateAmount,
+				createdDate = LocalDateTime.now()
 			)
 		}
 	}
