@@ -18,31 +18,58 @@
 ### 🗃️ 프로젝트 구조
 ```
 hhplusecommerce
-├─api
-│  ├─balance
-│  ├─cart
-│  ├─order
-│  ├─product
-│  └─statistic
+├─application
+│  └─src.main.kotlin.com.example.hhplus_ecommerce
+│    ├─balance
+│    ├─cart
+│    ├─config
+│    ├─consumer
+│    ├─order
+│    ├─outbox
+│    ├─payment
+│    ├─product
+│    ├─scheduler
+│    └─statistic
 ├─domain
-│  ├─balance
-│  ├─cart
-│  ├─order
-│  ├─product
-│  └─statistic
+│  └─src.main.kotlin.com.example.hhplus_ecommerce
+│    ├─balance
+│    ├─cart
+│    ├─messaging
+│    ├─order
+│    ├─outbox
+│    ├─payment
+│    ├─product
+│    ├─share
+│    └─user
 ├─infrastructure
-│  ├─balance
-│  ├─cart
-│  ├─order
-│  ├─product
-│  └─statistic
-└─usecase
-    ├─balance
-    ├─cart
-    ├─order
-    ├─product
-    └─statistic
+│  └─src.main.kotlin.com.example.hhplus_ecommerce
+│    ├─balance
+│    ├─cart
+│    ├─config
+│    ├─external
+│    ├─kafka
+│    ├─lock
+│    ├─order
+│    ├─outbox
+│    ├─payment
+│    ├─product
+│    └─user
+└─web
+   └─src.main.kotlin.com.example.hhplus_ecommerce
+     ├─advice
+     ├─balance
+     ├─cart
+     ├─config
+     ├─filter
+     ├─interceptor
+     ├─order
+     ├─payment
+     ├─product
+     └─statistics
 ```
+
+#### 아키텍처 구성도
+<img src="https://private-user-images.githubusercontent.com/57981691/529932326-28f2a847-0db3-40c1-b23a-33d63979009b.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjY1NjQwMDIsIm5iZiI6MTc2NjU2MzcwMiwicGF0aCI6Ii81Nzk4MTY5MS81Mjk5MzIzMjYtMjhmMmE4NDctMGRiMy00MGMxLWIyM2EtMzNkNjM5NzkwMDliLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTEyMjQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMjI0VDA4MDgyMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWI2ZDIwYmU2NmFkNGY5ODVmOTY2YjBiYmZhMzRmNjUzNjQ3OWJhNzY2MDk2MjQwMmFmNTgwMWU0ZTdmYzkxYjcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.UBCtADoqSISU2nfR8VGVQ6kji0UG8_hMSp-gzZRAi9A" width="400rem">
 
 ### 🚀 애플리케이션 실행
 #### Gradle 기반 로컬 실행 방법
