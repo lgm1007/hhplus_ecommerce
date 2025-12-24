@@ -52,8 +52,8 @@ class OrderFacadeIntegrationTest {
 		val productInfo = productService.getProductInfoById(productId)
 
 		assertThat(orderInfo.totalPrice).isEqualTo(50000)
-		assertThat(orderInfo.orderItems.size).isEqualTo(1)
-		assertThat(orderInfo.orderItems[0].quantity).isEqualTo(50)
+		assertThat(orderInfo.orderItemDetailInfos.size).isEqualTo(1)
+		assertThat(orderInfo.orderItemDetailInfos[0].quantity).isEqualTo(50)
 		assertThat(productInfo.stockQuantity).isEqualTo(50)
 	}
 
@@ -67,8 +67,8 @@ class OrderFacadeIntegrationTest {
 		val productInfo = productService.getProductInfoById(productId)
 
 		assertThat(orderInfo.totalPrice).isEqualTo(50000)
-		assertThat(orderInfo.orderItems.size).isEqualTo(1)
-		assertThat(orderInfo.orderItems[0].quantity).isEqualTo(50)
+		assertThat(orderInfo.orderItemDetailInfos.size).isEqualTo(1)
+		assertThat(orderInfo.orderItemDetailInfos[0].quantity).isEqualTo(50)
 		assertThat(productInfo.stockQuantity).isEqualTo(50)
 	}
 

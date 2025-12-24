@@ -4,7 +4,7 @@ import com.example.hhplus_ecommerce.order.dto.OrderQuantityStatisticsInfoDto
 import com.example.hhplus_ecommerce.product.dto.ProductStatisticsInfoDto
 import java.io.Serializable
 
-class OrderProductStatisticsResponseDto(
+data class OrderProductStatisticsResponseDto(
 	val productId: Long,
 	val name: String,
 	val totalSold: Int

@@ -45,6 +45,6 @@ class OrderInfoTest {
 		assertThat(actual.userId).isEqualTo(123L)
 		assertThat(actual.totalPrice).isEqualTo(10000)
 		assertThat(actual.status).isEqualTo(OrderStatus.ORDER_COMPLETE)
-		assertThat(actual.orderItems.size).isEqualTo(2)
+		assertThat(actual.orderItemDetailInfos.size).isEqualTo(2)
 	}
 }

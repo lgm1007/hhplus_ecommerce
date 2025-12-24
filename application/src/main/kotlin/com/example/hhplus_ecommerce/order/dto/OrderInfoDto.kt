@@ -9,7 +9,7 @@ data class OrderInfoDto(
 	val orderDate: LocalDateTime,
 	val totalPrice: Int,
 	val status: OrderStatus,
-	val orderItems: List<OrderItemDetailInfoDto>
+	val orderItemDetailInfos: List<OrderItemDetailInfoDto>
 ) {
 	companion object {
 		fun of(orderDto: OrderDto, orderItemDtos: List<OrderItemDto>): OrderInfoDto {
