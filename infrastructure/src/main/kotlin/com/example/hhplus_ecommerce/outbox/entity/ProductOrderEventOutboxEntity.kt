@@ -1,21 +1,14 @@
 package com.example.hhplus_ecommerce.outbox.entity
 
+import com.example.hhplus_ecommerce.BaseEntity
 import com.example.hhplus_ecommerce.outbox.OutboxEventStatus
 import com.example.hhplus_ecommerce.outbox.ProductOrderEventOutbox
-import org.springframework.data.annotation.CreatedDate
-import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import java.time.LocalDateTime
 import javax.persistence.Entity
-import javax.persistence.EntityListeners
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
 import javax.persistence.Table
 
 @Entity
-@EntityListeners(AuditingEntityListener::class)
 @Table(name = "PRODUCTORDEREVENTOUTBOX")
 class ProductOrderEventOutboxEntity(
 	val userId: Long,
@@ -23,15 +16,7 @@ class ProductOrderEventOutboxEntity(
 	val orderQuantity: Int,
 	@Enumerated(EnumType.STRING)
 	var eventStatus: OutboxEventStatus
-) {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	val id: Long = 0
-
-	@CreatedDate
-	var createdDate: LocalDateTime = LocalDateTime.now()
-		private set
-
+) : BaseEntity() {
 	companion object {
 		fun from(productOrderEventOutbox: ProductOrderEventOutbox): ProductOrderEventOutboxEntity {
 			return ProductOrderEventOutboxEntity(
