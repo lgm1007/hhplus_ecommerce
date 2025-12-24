@@ -45,6 +45,10 @@ kotlin {
 	}
 }
 
+tasks.bootJar {
+	enabled = false
+}
+
 tasks.test {
 	useJUnitPlatform()
 }
