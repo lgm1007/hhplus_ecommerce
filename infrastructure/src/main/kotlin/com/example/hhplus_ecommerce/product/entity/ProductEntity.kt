@@ -1,17 +1,33 @@
 package com.example.hhplus_ecommerce.product.entity
 
-import com.example.hhplus_ecommerce.BaseEntity
 import com.example.hhplus_ecommerce.product.Product
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
+import java.time.LocalDateTime
 import javax.persistence.Entity
+import javax.persistence.EntityListeners
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
 import javax.persistence.Table
 
 @Entity
+@EntityListeners(AuditingEntityListener::class)
 @Table(name = "PRODUCT")
 class ProductEntity(
 	val name: String,
 	val description: String,
-) : Serializable, BaseEntity() {
+) : Serializable {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	var id: Long? = null
+		private set
+
+	@CreatedDate
+	var createdDate: LocalDateTime? = null
+		private set
+
 	constructor(id: Long, name: String, description: String) : this(name, description) {
 		this.id = id
 	}

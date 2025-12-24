@@ -65,7 +65,7 @@ class ProductServiceIntegrationTest {
 
 	private fun givenProducts(size: Int) {
 		for (i in 1..size) {
-			val productId = productRepository.save(ProductEntity("상품${i}", "{i}번 상품")).id
+			val productId = productRepository.save(ProductEntity("상품${i}", "{i}번 상품")).id!!
 			productDetailRepository.save(ProductDetailEntity(productId, 1000, 100, ProductCategory.CLOTHES))
 		}
 	}
@@ -73,7 +73,7 @@ class ProductServiceIntegrationTest {
 	@Test
 	@DisplayName("특정 상품 조회하기")
 	fun getProductInfo() {
-		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id
+		val productId = productRepository.save(ProductEntity("상품 A", "A 상품")).id!!
 		productDetailRepository.save(ProductDetailEntity(productId, 1000, 100, ProductCategory.CLOTHES))
 
 		val startTime = System.currentTimeMillis()
@@ -93,8 +93,8 @@ class ProductServiceIntegrationTest {
 	fun quantityDecreaseConcurrency() {
 		// 상품 재고 3개에 대해 5번 동시 차감 요청 시
 		// 예상 성공 카운트 3, 실패 카운트 2, 남은 재고양 0
-		val productId = productRepository.save(ProductEntity(name = "상품 A", description = "A 상품")).id
-		val detailId = productDetailRepository.save(ProductDetailEntity(productId, price = 1000, stockQuantity = 3, productCategory = ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity(name = "상품 A", description = "A 상품")).id!!
+		val detailId = productDetailRepository.save(ProductDetailEntity(productId, price = 1000, stockQuantity = 3, productCategory = ProductCategory.CLOTHES)).id!!
 
 		val executor = Executors.newFixedThreadPool(5)
 		val countDownLatch = CountDownLatch(5)
@@ -132,8 +132,8 @@ class ProductServiceIntegrationTest {
 	fun quantityDecreaseConcurrencyWithCoroutine() {
 		// 상품 재고 3개에 대해 5번 동시 차감 요청 시
 		// 예상 성공 카운트 3, 실패 카운트 2, 남은 재고양 0
-		val productId = productRepository.save(ProductEntity(name = "상품 A", description = "A 상품")).id
-		val productDetailId = productDetailRepository.save(ProductDetailEntity(productId, price = 1000, stockQuantity = 3, productCategory = ProductCategory.CLOTHES)).id
+		val productId = productRepository.save(ProductEntity(name = "상품 A", description = "A 상품")).id!!
+		val productDetailId = productDetailRepository.save(ProductDetailEntity(productId, price = 1000, stockQuantity = 3, productCategory = ProductCategory.CLOTHES)).id!!
 
 		val successCount = AtomicInteger(0) // 성공 카운트
 		val failCount = AtomicInteger(0)    // 실패 카운트

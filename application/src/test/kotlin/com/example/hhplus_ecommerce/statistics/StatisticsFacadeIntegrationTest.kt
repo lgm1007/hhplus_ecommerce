@@ -67,19 +67,19 @@ class StatisticsFacadeIntegrationTest {
 	}
 
 	private fun givenOrderItems() {
-		val productId1 = productRepository.save(ProductEntity(name = "상품A", description = "상품A 설명")).id
-		val productId2 = productRepository.save(ProductEntity(name = "상품B", description = "상품B 설명")).id
-		val productId3 = productRepository.save(ProductEntity(name = "상품C", description = "상품C 설명")).id
-		val productId4 = productRepository.save(ProductEntity(name = "상품D", description = "상품D 설명")).id
-		val productId5 = productRepository.save(ProductEntity(name = "상품E", description = "상품E 설명")).id
-		val productId6 = productRepository.save(ProductEntity(name = "상품F", description = "상품F 설명")).id
+		val productId1 = productRepository.save(ProductEntity(name = "상품A", description = "상품A 설명")).id!!
+		val productId2 = productRepository.save(ProductEntity(name = "상품B", description = "상품B 설명")).id!!
+		val productId3 = productRepository.save(ProductEntity(name = "상품C", description = "상품C 설명")).id!!
+		val productId4 = productRepository.save(ProductEntity(name = "상품D", description = "상품D 설명")).id!!
+		val productId5 = productRepository.save(ProductEntity(name = "상품E", description = "상품E 설명")).id!!
+		val productId6 = productRepository.save(ProductEntity(name = "상품F", description = "상품F 설명")).id!!
 
-		val detailId1 = productDetailRepository.save(ProductDetailEntity(productId = productId1, price = 50000, stockQuantity = 100, productCategory = ProductCategory.CLOTHES)).id
-		val detailId2 = productDetailRepository.save(ProductDetailEntity(productId = productId2, price = 30000, stockQuantity = 100, productCategory = ProductCategory.COSMETICS)).id
-		val detailId3 = productDetailRepository.save(ProductDetailEntity(productId = productId3, price = 100000, stockQuantity = 100, productCategory = ProductCategory.ELECTRONICS)).id
-		val detailId4 = productDetailRepository.save(ProductDetailEntity(productId = productId4, price = 1000, stockQuantity = 100, productCategory = ProductCategory.COSMETICS)).id
-		val detailId5 = productDetailRepository.save(ProductDetailEntity(productId = productId5, price = 1000, stockQuantity = 100, productCategory = ProductCategory.COSMETICS)).id
-		val detailId6 = productDetailRepository.save(ProductDetailEntity(productId = productId6, price = 2000, stockQuantity = 100, productCategory = ProductCategory.COSMETICS)).id
+		val detailId1 = productDetailRepository.save(ProductDetailEntity(productId = productId1, price = 50000, stockQuantity = 100, productCategory = ProductCategory.CLOTHES)).id!!
+		val detailId2 = productDetailRepository.save(ProductDetailEntity(productId = productId2, price = 30000, stockQuantity = 100, productCategory = ProductCategory.COSMETICS)).id!!
+		val detailId3 = productDetailRepository.save(ProductDetailEntity(productId = productId3, price = 100000, stockQuantity = 100, productCategory = ProductCategory.ELECTRONICS)).id!!
+		val detailId4 = productDetailRepository.save(ProductDetailEntity(productId = productId4, price = 1000, stockQuantity = 100, productCategory = ProductCategory.COSMETICS)).id!!
+		val detailId5 = productDetailRepository.save(ProductDetailEntity(productId = productId5, price = 1000, stockQuantity = 100, productCategory = ProductCategory.COSMETICS)).id!!
+		val detailId6 = productDetailRepository.save(ProductDetailEntity(productId = productId6, price = 2000, stockQuantity = 100, productCategory = ProductCategory.COSMETICS)).id!!
 
 		val orderItemDtos = listOf(
 			OrderItemDto(orderItemId = 0, orderId = 1L, productDetailId = detailId1, quantity = 50, price = 2500000, createdDate = LocalDateTime.now()),

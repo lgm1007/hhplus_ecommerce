@@ -50,7 +50,7 @@ class PaymentFacadeIntegrationTest {
 	@DisplayName("결제 요청 - 외부 데이터 플랫폼 통신 중 예외 발생해도 트랜잭션 적용 영향 없는지 테스트")
 	fun orderPaymentOnce() {
 		val userId = 1L
-		val orderId = orderRepository.save(OrderEntity(userId, orderDate = LocalDateTime.now(), totalPrice = 10000, orderStatus = OrderStatus.ORDER_COMPLETE)).id
+		val orderId = orderRepository.save(OrderEntity(userId, orderDate = LocalDateTime.now(), totalPrice = 10000, orderStatus = OrderStatus.ORDER_COMPLETE)).id!!
 		balanceRepository.save(BalanceEntity(userId, amount = 10000))
 
 		paymentFacade.orderPayment(userId, orderId)
@@ -70,7 +70,7 @@ class PaymentFacadeIntegrationTest {
 		// 같은 주문에 대해 동시에 결제 요청이 들어오는 경우 한 번만 성공시키며 나머지는 실패 처리한다.
 		// 예상 성공 카운트 1, 실패 카운트 9, 남은 잔액 38,000
 		val userId = 1L
-		val orderId = orderRepository.save(OrderEntity(userId, orderDate = LocalDateTime.now(), totalPrice = 12000, orderStatus = OrderStatus.ORDER_COMPLETE)).id
+		val orderId = orderRepository.save(OrderEntity(userId, orderDate = LocalDateTime.now(), totalPrice = 12000, orderStatus = OrderStatus.ORDER_COMPLETE)).id!!
 		balanceRepository.save(BalanceEntity(userId, amount = 50000))
 
 		val executor = Executors.newFixedThreadPool(10)
@@ -110,7 +110,7 @@ class PaymentFacadeIntegrationTest {
 		// 같은 주문에 대해 동시에 결제 요청이 들어오는 경우 한 번만 성공시키며 나머지는 실패 처리한다.
 		// 예상 성공 카운트 1, 실패 카운트 9, 남은 잔액 38,000
 		val userId = 1L
-		val orderId = orderRepository.save(OrderEntity(userId, orderDate = LocalDateTime.now(), totalPrice = 12000, orderStatus = OrderStatus.ORDER_COMPLETE)).id
+		val orderId = orderRepository.save(OrderEntity(userId, orderDate = LocalDateTime.now(), totalPrice = 12000, orderStatus = OrderStatus.ORDER_COMPLETE)).id!!
 		balanceRepository.save(BalanceEntity(userId, amount = 50000))
 
 		val successCount = AtomicInteger(0) // 성공 카운트
@@ -141,7 +141,7 @@ class PaymentFacadeIntegrationTest {
 	@DisplayName("결제 요청 정상 처리 후 outbox 메시지 상태가 COMPLETE 인지 확인한다")
 	fun outboxStatusUpdateCompleteAfterPayment() {
 		val userId = 1L
-		val orderId = orderRepository.save(OrderEntity(userId, orderDate = LocalDateTime.now(), totalPrice = 10000, orderStatus = OrderStatus.ORDER_COMPLETE)).id
+		val orderId = orderRepository.save(OrderEntity(userId, orderDate = LocalDateTime.now(), totalPrice = 10000, orderStatus = OrderStatus.ORDER_COMPLETE)).id!!
 		balanceRepository.save(BalanceEntity(userId, amount = 10000))
 
 		paymentFacade.orderPayment(userId, orderId)
