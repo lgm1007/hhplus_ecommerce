@@ -10,7 +10,7 @@ FROM bellsoft/liberica-openjdk-alpine:17
 
 WORKDIR /app
 
-COPY --from=builder /app/build/libs/hhplus_ecommerce-1.0.0.jar app.jar
+COPY --from=builder /app/web/build/libs/app.jar app.jar
 
 EXPOSE 8080
 

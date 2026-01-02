@@ -32,6 +32,10 @@ kotlin {
 	}
 }
 
+tasks.bootJar {
+	archiveFileName.set("app.jar") // 빌드 후 jar 파일명 지정
+}
+
 tasks.test {
 	useJUnitPlatform()
 }
